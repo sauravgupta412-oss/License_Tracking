@@ -360,6 +360,71 @@
         grid-column: 1 / -1;
     }
 
+    /* Distribution Tables */
+    .dist-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .dist-card {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+        padding: 18px;
+        box-shadow: 0 4px 12px rgba(15,23,42,0.05);
+    }
+
+    .dist-card h3 {
+        font-size: 14px;
+        color: #1f2937;
+        margin-bottom: 4px;
+        text-align: center;
+    }
+    
+    .dist-card p {
+        font-size: 11px;
+        color: #64748b;
+        text-align: center;
+        margin-bottom: 12px;
+    }
+
+    .dist-table-wrapper {
+        max-height: 250px;
+        overflow-y: auto;
+        border: 1px solid #eef2f7;
+        border-radius: 8px;
+    }
+
+    .dist-table-wrapper table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: unset; 
+    }
+
+    .dist-table-wrapper th {
+        position: sticky;
+        top: 0;
+        background: #f8fafc;
+        padding: 10px 12px;
+        font-size: 11px;
+        text-align: center;
+        z-index: 1;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .dist-table-wrapper td {
+        padding: 10px 12px;
+        font-size: 12px;
+        text-align: center;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .dist-table-wrapper tr:hover td {
+        background: #f8fafc;
+    }
+
     /* Filters */
     .filter-section {
         background: white;
@@ -395,7 +460,7 @@
         box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
     }
 
-    /* Table */
+    /* Main Table */
     .table-section {
         background: white;
         border-radius: 14px;
@@ -580,12 +645,14 @@
     @media (max-width: 1100px) {
         .category-grid { grid-template-columns: repeat(2, 1fr); }
         .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        .dist-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 650px) {
         .landing-title { font-size: 28px; }
         .category-grid { grid-template-columns: 1fr; }
         .kpi-grid { grid-template-columns: 1fr; }
+        .dist-grid { grid-template-columns: 1fr; }
         .filter-grid { grid-template-columns: 1fr; }
         .dashboard-header { padding: 15px; }
         .dashboard-content { padding: 16px; }
@@ -834,6 +901,37 @@
             <div id="crossCategoryCards" style="display: contents;"></div>
 
         </section>
+
+
+        <!-- DISTRIBUTION TABLES -->
+        <section>
+            <div class="section-label">📈 Distribution Analysis</div>
+            <div class="dist-grid">
+                
+                <!-- Table 1: COMPGUIDs per Subscription -->
+                <div class="dist-card">
+                    <h3>COMPGUIDs per Subscription</h3>
+                    <p>How many Subscriptions have exactly X COMPGUIDs?</p>
+                    <div class="dist-table-wrapper" id="distSubToComp"></div>
+                </div>
+
+                <!-- Table 2: Subscriptions per COMPGUID -->
+                <div class="dist-card">
+                    <h3>Subscriptions per COMPGUID</h3>
+                    <p>How many COMPGUIDs are linked to exactly X Subscriptions?</p>
+                    <div class="dist-table-wrapper" id="distCompToSub"></div>
+                </div>
+
+                <!-- Table 3: Subscriptions per GSTIN -->
+                <div class="dist-card">
+                    <h3>Subscriptions per GSTIN</h3>
+                    <p>How many GSTINs are linked to exactly X Subscriptions?</p>
+                    <div class="dist-table-wrapper" id="distGstToSub"></div>
+                </div>
+
+            </div>
+        </section>
+
 
         <!-- FILTERS -->
         <section class="filter-section">
@@ -1112,18 +1210,18 @@ function showLoading(show, text = "Loading...") {
    COMPUTE KPIs
    ============================================================== */
 function computeKPIs(category) {
-    // 1. Calculate UNIQUE COMPGUIDs and GSTINs directly from all rows
+    
+    // -------------------------------------------------------------
+    // SECTION 1: Calculate Unique KPI Cards
+    // -------------------------------------------------------------
     const uniqueCompguids = new Set(categoryRecords.map(r => r.compguid).filter(Boolean));
     const uniqueGstins    = new Set(categoryRecords.map(r => r.gstin).filter(Boolean));
 
-    // 2. Collapse data down to UNIQUE Subscription IDs for Subscription KPIs
     const uniqueSubsMap = new Map();
     categoryRecords.forEach(r => {
         const id = r.subscriptionId;
         if (!id) return;
         
-        // If we haven't seen this SubID, add it.
-        // If we have, keep the one with the latest BLS Expiry for determining active/expired.
         if (!uniqueSubsMap.has(id)) {
             uniqueSubsMap.set(id, r);
         } else {
@@ -1134,7 +1232,6 @@ function computeKPIs(category) {
         }
     });
     
-    // Array of just the unique subscriptions (1 row per subscription)
     const uniqueRecords = Array.from(uniqueSubsMap.values());
 
     const totalSubs = uniqueRecords.length;
@@ -1148,7 +1245,7 @@ function computeKPIs(category) {
     document.getElementById("totalCompguid").textContent        = formatNumber(uniqueCompguids.size);
     document.getElementById("totalGstin").textContent           = formatNumber(uniqueGstins.size);
 
-    // --- License Type Breakdown (Per Unique Subscription) ---
+    // --- License Type Breakdown ---
     const perpetualData    = uniqueRecords.filter(r => r.licenseType === "Perpetual");
     const subscriptionData = uniqueRecords.filter(r => r.licenseType === "Subscription");
     const magicData        = uniqueRecords.filter(r => r.licenseType === "Magic");
@@ -1160,7 +1257,7 @@ function computeKPIs(category) {
     document.getElementById("magicCount").textContent        = formatNumber(magicData.length);
     document.getElementById("magicPct").textContent          = pct(magicData.length, totalSubs) + " of total";
 
-    // --- Installation Insights (Per Unique Subscription) ---
+    // --- Installation Insights ---
     const installs30 = uniqueRecords.filter(r => {
         const d = daysAgo(r.installDate);
         return d !== null && d >= 0 && d <= 30;
@@ -1181,7 +1278,7 @@ function computeKPIs(category) {
     const installDates = uniqueRecords.map(r => r.installDate).filter(Boolean).sort();
     document.getElementById("oldestInstall").textContent = installDates.length > 0 ? formatDate(installDates[0]) : "N/A";
 
-    // --- Usage Insights (Per Unique Subscription) ---
+    // --- Usage Insights ---
     const usedLast30 = uniqueRecords.filter(r => {
         const d = daysAgo(r.lastUsed);
         return d !== null && d >= 0 && d <= 30;
@@ -1206,7 +1303,7 @@ function computeKPIs(category) {
     const neverUsed = uniqueRecords.filter(r => !r.lastUsed || r.lastUsed === "").length;
     document.getElementById("neverUsedCount").textContent = formatNumber(neverUsed);
 
-    // --- Pre-calculated Cross-Category Overlaps ---
+    // --- Cross-Category Overlaps ---
     const crossContainer = document.getElementById("crossCategoryCards");
     crossContainer.innerHTML = "";
 
@@ -1227,6 +1324,76 @@ function computeKPIs(category) {
             </div>
         `);
     });
+
+    // -------------------------------------------------------------
+    // SECTION 2: Calculate Distribution Tables
+    // -------------------------------------------------------------
+    
+    // Create maps to hold relationships
+    const subToComp = new Map();
+    const compToSub = new Map();
+    const gstToSub  = new Map();
+
+    categoryRecords.forEach(r => {
+        const sub  = r.subscriptionId;
+        const comp = r.compguid;
+        const gst  = r.gstin;
+
+        if (sub && comp) {
+            if (!subToComp.has(sub)) subToComp.set(sub, new Set());
+            subToComp.get(sub).add(comp);
+
+            if (!compToSub.has(comp)) compToSub.set(comp, new Set());
+            compToSub.get(comp).add(sub);
+        }
+
+        if (sub && gst) {
+            if (!gstToSub.has(gst)) gstToSub.set(gst, new Set());
+            gstToSub.get(gst).add(sub);
+        }
+    });
+
+    // Function to calculate Frequency (How many times did a size of X occur?)
+    function getFrequency(relationMap) {
+        const freq = {};
+        relationMap.forEach(set => {
+            const size = set.size;
+            if (size > 0) {
+                freq[size] = (freq[size] || 0) + 1;
+            }
+        });
+        return freq;
+    }
+
+    const freqSubToComp = getFrequency(subToComp);
+    const freqCompToSub = getFrequency(compToSub);
+    const freqGstToSub  = getFrequency(gstToSub);
+
+    // Function to render table
+    function renderDistTable(freqData, containerId, leftLabel, rightLabel) {
+        const container = document.getElementById(containerId);
+        let html = `<table><thead><tr><th>${leftLabel}</th><th>${rightLabel}</th></tr></thead><tbody>`;
+        
+        // Sort keys (1, 2, 3...)
+        const keys = Object.keys(freqData).map(Number).sort((a, b) => a - b);
+        
+        if (keys.length === 0) {
+            html += `<tr><td colspan="2" style="text-align:center; color:#94a3b8; padding:20px;">No data</td></tr>`;
+        } else {
+            keys.forEach(k => {
+                html += `<tr>
+                            <td><strong>${k}</strong></td>
+                            <td>${formatNumber(freqData[k])}</td>
+                         </tr>`;
+            });
+        }
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    }
+
+    renderDistTable(freqSubToComp, "distSubToComp", "COMPGUID Count", "Total Subscriptions");
+    renderDistTable(freqCompToSub, "distCompToSub", "Subscription Count", "Total COMPGUIDs");
+    renderDistTable(freqGstToSub,  "distGstToSub",  "Subscription Count", "Total GSTINs");
 }
 
 /* ==============================================================
