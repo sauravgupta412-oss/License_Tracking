@@ -16,34 +16,50 @@
        LANDING PAGE
        ========================= */
     .landing-page {
-        min-height: 100vh; background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
         display: flex; align-items: center; justify-content: center; padding: 40px 20px;
     }
     .landing-container { width: 100%; max-width: 1300px; text-align: center; }
     .logo {
-        width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 18px; background: rgba(255,255,255,0.15);
-        display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: bold;
+        width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 18px;
+        background: rgba(255,255,255,0.15); display: flex; align-items: center;
+        justify-content: center; color: white; font-size: 28px; font-weight: bold;
         backdrop-filter: blur(10px);
     }
     .landing-title { color: white; font-size: 42px; font-weight: 700; margin-bottom: 12px; }
     .landing-subtitle { color: #cbd5e1; font-size: 17px; margin-bottom: 25px; }
     
-    .data-status { margin-bottom: 30px; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; display: inline-block; }
+    .data-status {
+        margin-bottom: 30px; padding: 12px 24px; border-radius: 12px;
+        font-size: 14px; font-weight: 600; display: inline-block;
+    }
     .data-status.loading { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
     .data-status.success { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
     .data-status.error { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
+    /* Category Grid */
     .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
     .category-grid.disabled { opacity: 0.4; pointer-events: none; }
-    .category-card { background: white; border-radius: 18px; padding: 30px 22px; cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; box-shadow: 0 15px 35px rgba(0,0,0,0.18); }
+    .category-card {
+        background: white; border-radius: 18px; padding: 30px 22px; cursor: pointer;
+        transition: all 0.25s ease; border: 2px solid transparent; box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+    }
     .category-card:hover { transform: translateY(-8px); border-color: #60a5fa; box-shadow: 0 20px 45px rgba(0,0,0,0.25); }
-    .category-icon { width: 62px; height: 62px; margin: 0 auto 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
-    .ca-icon { background: #dbeafe; color: #2563eb; } .accountant-icon { background: #dcfce7; color: #16a34a; }
-    .gstp-icon { background: #fef3c7; color: #d97706; } .regular-icon { background: #f3e8ff; color: #9333ea; }
+    .category-icon {
+        width: 62px; height: 62px; margin: 0 auto 16px; border-radius: 16px;
+        display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;
+    }
+    .ca-icon { background: #dbeafe; color: #2563eb; }
+    .accountant-icon { background: #dcfce7; color: #16a34a; }
+    .gstp-icon { background: #fef3c7; color: #d97706; }
+    .regular-icon { background: #f3e8ff; color: #9333ea; }
     .category-card h2 { font-size: 20px; margin-bottom: 8px; }
     .category-card p { color: #64748b; font-size: 13px; line-height: 1.5; }
     .card-stats { margin-top: 14px; padding-top: 14px; border-top: 1px solid #e5e7eb; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .card-stat-item { text-align: center; } .card-stat-value { font-size: 18px; font-weight: 700; color: #111827; } .card-stat-label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+    .card-stat-item { text-align: center; }
+    .card-stat-value { font-size: 18px; font-weight: 700; color: #111827; }
+    .card-stat-label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
 
     /* =========================
        DASHBOARD
@@ -66,11 +82,20 @@
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 25px; }
     .kpi-card { background: white; border-radius: 14px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(15,23,42,0.05); position: relative; overflow: hidden; }
     .kpi-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #2563eb; }
-    .kpi-card.expired::before { background: #ef4444; } .kpi-card.active::before { background: #22c55e; } .kpi-card.comp::before { background: #8b5cf6; } .kpi-card.gstin-card::before { background: #f59e0b; }
-    .kpi-card.perpetual::before { background: #0891b2; } .kpi-card.subscription::before { background: #7c3aed; } .kpi-card.magic::before { background: #db2777; }
-    .kpi-card.install::before { background: #0d9488; } .kpi-card.usage::before { background: #ea580c; } .kpi-card.dormant::before { background: #64748b; } .kpi-card.new-install::before { background: #059669; }
+    .kpi-card.expired::before { background: #ef4444; }
+    .kpi-card.active::before { background: #22c55e; }
+    .kpi-card.comp::before { background: #8b5cf6; }
+    .kpi-card.gstin-card::before { background: #f59e0b; }
+    .kpi-card.perpetual::before { background: #0891b2; }
+    .kpi-card.subscription::before { background: #7c3aed; }
+    .kpi-card.magic::before { background: #db2777; }
+    .kpi-card.install::before { background: #0d9488; }
+    .kpi-card.usage::before { background: #ea580c; }
+    .kpi-card.dormant::before { background: #64748b; }
+    .kpi-card.new-install::before { background: #059669; }
     .kpi-label { color: #64748b; font-size: 12px; line-height: 1.4; margin-bottom: 8px; }
-    .kpi-value { font-size: 28px; font-weight: 700; color: #111827; } .kpi-value.small { font-size: 22px; }
+    .kpi-value { font-size: 28px; font-weight: 700; color: #111827; }
+    .kpi-value.small { font-size: 22px; }
     .kpi-icon { position: absolute; right: 16px; top: 16px; font-size: 18px; opacity: 0.5; }
     .kpi-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
     .section-label { font-size: 14px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; grid-column: 1 / -1; }
@@ -184,7 +209,7 @@
   </div>
 </div>
 
-<!-- LANDING -->
+<!-- LANDING PAGE -->
 <div id="landingPage" class="landing-page">
   <div class="landing-container">
     <div class="logo">LD</div>
@@ -228,7 +253,7 @@
   </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- DASHBOARD PAGE -->
 <div id="dashboardPage" class="dashboard-page">
   <header class="dashboard-header">
     <div class="header-left">
@@ -373,6 +398,13 @@ function getTypeBadgeClass(type){if(!type)return"type-subscription";const t=Stri
 function escapeHtml(str){if(!str)return"";const d=document.createElement("div");d.textContent=str;return d.innerHTML}
 function showDebug(msg, isError=true){ const el=document.getElementById("dataDebug"); el.className="data-debug show"; el.innerHTML=msg; if(!isError) el.style.background="#dcfce7", el.style.borderColor="#22c55e", el.style.color="#166534"; }
 function hideDebug(){document.getElementById("dataDebug").className="data-debug"}
+
+function showLoading(show, text = "Loading...") {
+    const overlay = document.getElementById("loadingOverlay");
+    const textEl = document.getElementById("loadingText");
+    if (textEl && text) textEl.textContent = text;
+    if (overlay) overlay.classList.toggle("show", !!show);
+}
 
 function parseCSVLine(line){
   const result=[]; let cur=""; let inQ=false;
@@ -782,6 +814,7 @@ function createRowHTML(row,index){
     <td>${statusBadge}</td><td>${usage}</td>`;
   return tr;
 }
+
 function renderPopupTable(){
   const tbody=document.getElementById("popupTableBody"); tbody.innerHTML="";
   const total=popupFilteredData.length; if(!total)return;
@@ -799,6 +832,7 @@ function renderPopupTable(){
   const next=document.createElement("button"); next.className="page-btn"; next.textContent="Next →"; next.disabled=popupCurrentPage===pages;
   next.onclick=()=>{popupCurrentPage++;renderPopupTable();document.getElementById("modalBody").scrollTo(0,0)}; box.appendChild(next);
 }
+
 function exportPopupCSV(){
   if(!popupFilteredData.length)return;
   const headers=["Subscription ID","License Category","License Type","COMPGUID","GSTIN","Install Date","Last Used","BLS Expiry","Status"];
@@ -824,6 +858,7 @@ function sortTable(field){
   });
   currentPage=1; renderTable();
 }
+
 function applyFilters(){
   const search=document.getElementById("searchInput").value.toLowerCase().trim();
   const status=document.getElementById("statusFilter").value;
@@ -840,6 +875,7 @@ function applyFilters(){
   else if(usage==="NeverUsed") filteredData=filteredData.filter(r=>!r.lastUsed||!String(r.lastUsed).trim());
   currentPage=1; renderTable();
 }
+
 function renderTable(){
   const tbody=document.getElementById("dataTableBody"); tbody.innerHTML="";
   const total=filteredData.length;
@@ -862,7 +898,9 @@ function renderTable(){
   const next=document.createElement("button"); next.className="page-btn"; next.textContent="Next →"; next.disabled=currentPage===pages;
   next.onclick=()=>{currentPage++;renderTable();scrollToTable()}; box.appendChild(next);
 }
+
 function scrollToTable(){const el=document.querySelector(".table-section");if(el)window.scrollTo(0,el.offsetTop-20)}
+
 function exportTableCSV(){
   if(!filteredData.length)return;
   const headers=["Subscription ID","License Category","License Type","COMPGUID","GSTIN","Install Date","Last Used","BLS Expiry","Status"];
@@ -870,6 +908,7 @@ function exportTableCSV(){
   filteredData.forEach(r=>{csv+=[r.subscriptionId,r.licenseCategory,r.licenseType||"N/A",r.compguid,r.gstin,r.installDate||"N/A",r.lastUsed||"N/A",r.blsExpiry,isExpired(r.blsExpiry)?"Expired":"Active"].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")+"\n"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download=`${currentCategory}_data.csv`; a.click();
 }
+
 document.addEventListener("DOMContentLoaded",()=>loadSummary());
 </script>
 </body>
