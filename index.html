@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>License Subscription Dashboard</title>
 
+<!-- JSZip Library CDN for rapid client-side decompressing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <style>
     * {
         box-sizing: border-box;
@@ -61,7 +64,7 @@
     .landing-subtitle {
         color: #cbd5e1;
         font-size: 17px;
-        margin-bottom: 15px;
+        margin-bottom: 25px;
     }
 
     .data-status {
@@ -103,9 +106,7 @@
         transition: all 0.2s;
     }
 
-    .refresh-btn:hover {
-        background: rgba(255,255,255,0.18);
-    }
+    .refresh-btn:hover { background: rgba(255,255,255,0.18); }
 
     /* Category Grid */
     .category-grid {
@@ -330,9 +331,7 @@
         color: #111827;
     }
 
-    .kpi-value.small {
-        font-size: 22px;
-    }
+    .kpi-value.small { font-size: 22px; }
 
     .kpi-icon {
         position: absolute;
@@ -549,7 +548,7 @@
         cursor: not-allowed;
     }
 
-    /* Loading */
+    /* Loading overlay */
     .loading-overlay {
         display: none;
         position: fixed;
@@ -581,7 +580,6 @@
     @media (max-width: 1100px) {
         .category-grid { grid-template-columns: repeat(2, 1fr); }
         .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-        .section-label { grid-column: 1 / -1; }
     }
 
     @media (max-width: 650px) {
@@ -592,7 +590,6 @@
         .dashboard-header { padding: 15px; }
         .dashboard-content { padding: 16px; }
         .header-title { font-size: 17px; }
-        .section-label { grid-column: 1 / -1; }
     }
 </style>
 </head>
@@ -603,7 +600,7 @@
 <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-spinner">
         <div class="spinner"></div>
-        <div style="font-size:16px;font-weight:600;" id="loadingText">Loading data from GitHub...</div>
+        <div style="font-size:16px;font-weight:600;" id="loadingText">Processing...</div>
     </div>
 </div>
 
@@ -616,12 +613,11 @@
         <div class="logo">LD</div>
         <h1 class="landing-title">License Dashboard</h1>
         <p class="landing-subtitle">
-            Select a license category to view its subscription dashboard
+            Enterprise analytics for license active state and usage tracking
         </p>
 
         <div class="data-status loading" id="dataStatus">
-            ⏳ Loading data from GitHub repository...
-            <button class="refresh-btn" onclick="fetchDataFromGitHub()" style="display:none" id="retryBtn">🔄 Retry</button>
+            ⏳ Connecting to server metrics...
         </div>
 
         <!-- Category Cards -->
@@ -721,7 +717,7 @@
             <div class="header-logo">LD</div>
             <div>
                 <div class="header-title">License Dashboard</div>
-                <div class="header-subtitle" id="headerCategory">CA Dashboard</div>
+                <div class="header-subtitle" id="headerCategory">Dashboard Overview</div>
             </div>
         </div>
         <div class="header-actions">
@@ -733,16 +729,15 @@
     <main class="dashboard-content">
 
         <section class="dashboard-title-section">
-            <h1 class="dashboard-title" id="dashboardTitle">CA Dashboard</h1>
+            <h1 class="dashboard-title" id="dashboardTitle">Dashboard</h1>
             <p class="dashboard-description">
-                Comprehensive subscription, usage, and license overview for the selected category.
+                Comprehensive active metrics, license models, and execution tracking overview.
             </p>
         </section>
 
         <!-- KPI CARDS -->
-        <section class="kpi-grid" id="kpiGrid">
+        <section class="kpi-grid">
 
-            <!-- Row 1: Core Subscription Metrics -->
             <div class="section-label">📊 Subscription Overview</div>
 
             <div class="kpi-card">
@@ -775,7 +770,6 @@
                 <div class="kpi-value" id="totalGstin">0</div>
             </div>
 
-            <!-- Row 2: License Type Breakdown -->
             <div class="section-label">🏷️ License Type Breakdown</div>
 
             <div class="kpi-card perpetual">
@@ -799,21 +793,20 @@
                 <div class="kpi-sub" id="magicPct">0%</div>
             </div>
 
-            <!-- Row 3: Installation & Usage Insights -->
             <div class="section-label">📅 Installation & Usage Insights</div>
 
             <div class="kpi-card install">
                 <div class="kpi-icon">📦</div>
                 <div class="kpi-label">New Installs (Last 30 Days)</div>
                 <div class="kpi-value" id="newInstalls30">0</div>
-                <div class="kpi-sub" id="newInstalls90Sub">Last 90 days: <span id="newInstalls90">0</span></div>
+                <div class="kpi-sub">Last 90 days: <span id="newInstalls90">0</span></div>
             </div>
 
             <div class="kpi-card new-install">
                 <div class="kpi-icon">📆</div>
                 <div class="kpi-label">Avg Days Since Install</div>
                 <div class="kpi-value small" id="avgDaysSinceInstall">0</div>
-                <div class="kpi-sub" id="oldestInstallSub">Oldest: <span id="oldestInstall">N/A</span></div>
+                <div class="kpi-sub">Oldest: <span id="oldestInstall">N/A</span></div>
             </div>
 
             <div class="kpi-card usage">
@@ -834,12 +827,10 @@
                 <div class="kpi-icon">🕐</div>
                 <div class="kpi-label">Avg Days Since Last Used</div>
                 <div class="kpi-value small" id="avgDaysSinceUsed">0</div>
-                <div class="kpi-sub" id="neverUsedSub">Never used: <span id="neverUsedCount">0</span></div>
+                <div class="kpi-sub">Never used: <span id="neverUsedCount">0</span></div>
             </div>
 
-            <!-- Row 4: Cross-Category -->
             <div class="section-label">🔗 Cross-Category COMPGUID Overlap</div>
-
             <div id="crossCategoryCards" style="display: contents;"></div>
 
         </section>
@@ -863,9 +854,9 @@
                     <option value="Magic">Magic</option>
                 </select>
                 <select id="usageFilter" class="filter-select" onchange="applyFilters()">
-                    <option value="All">All Usage</option>
-                    <option value="Last30">Used Last 30 Days</option>
-                    <option value="Last90">Used Last 90 Days</option>
+                    <option value="All">All Usage Statuses</option>
+                    <option value="Last30">Used in Last 30 Days</option>
+                    <option value="Last90">Used in Last 90 Days</option>
                     <option value="Dormant">Dormant (&gt;90 Days)</option>
                     <option value="NeverUsed">Never Used</option>
                 </select>
@@ -885,7 +876,7 @@
                             <th onclick="sortTable(null)">#</th>
                             <th onclick="sortTable('subscriptionId')">Subscription ID <span class="sort-arrow none" id="sort-subscriptionId"></span></th>
                             <th onclick="sortTable('licenseCategory')">Category <span class="sort-arrow none" id="sort-licenseCategory"></span></th>
-                            <th onclick="sortTable('licenseType')">License Type <span class="sort-arrow none" id="sort-licenseType"></span></th>
+                            <th onclick="sortTable('licenseType')">Type <span class="sort-arrow none" id="sort-licenseType"></span></th>
                             <th onclick="sortTable('compguid')">COMPGUID <span class="sort-arrow none" id="sort-compguid"></span></th>
                             <th onclick="sortTable('gstin')">GSTIN <span class="sort-arrow none" id="sort-gstin"></span></th>
                             <th onclick="sortTable('installDate')">Install Date <span class="sort-arrow none" id="sort-installDate"></span></th>
@@ -906,42 +897,17 @@
 
 <script>
 /* ==============================================================
-   CONFIGURATION — UPDATE THESE VALUES
-   ============================================================== */
-
-/*
-   ╔══════════════════════════════════════════════════════════════╗
-   ║  IMPORTANT: Update the URL below to point to YOUR CSV file  ║
-   ║  on YOUR GitHub repository.                                  ║
-   ║                                                              ║
-   ║  Format for raw GitHub file URL:                             ║
-   ║  https://raw.githubusercontent.com/USERNAME/REPO/BRANCH/FILE ║
-   ╚══════════════════════════════════════════════════════════════╝
-*/
-
-const CSV_URL = "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/data.csv";
-
-/*
-   If your CSV file is named differently, update the filename above.
-   Examples:
-   - https://raw.githubusercontent.com/johndoe/license-dashboard/main/data.csv
-   - https://raw.githubusercontent.com/johndoe/license-dashboard/main/rawdata.csv
-   - https://raw.githubusercontent.com/johndoe/license-dashboard/main/licenses.csv
-*/
-
-
-/* ==============================================================
    GLOBAL STATE
    ============================================================== */
 const allCategories = ["CA", "Accountant", "GSTP", "Regular"];
-let rawData          = [];
+let summaryData      = null; 
+let categoryRecords  = [];    // Records for currently loaded category
 let currentCategory  = "";
 let filteredData     = [];
 let currentPage      = 1;
 const rowsPerPage    = 30;
 let sortField        = null;
 let sortDir          = "asc";
-let dataLoaded       = false;
 
 /* ==============================================================
    UTILITY HELPERS
@@ -953,20 +919,15 @@ function todayStr() {
 
 function isExpired(dateStr) {
     if (!dateStr) return true;
-    return dateStr.trim() <= todayStr();
-}
-
-function daysBetween(dateStr1, dateStr2) {
-    if (!dateStr1 || !dateStr2) return null;
-    const d1 = new Date(dateStr1 + "T00:00:00");
-    const d2 = new Date(dateStr2 + "T00:00:00");
-    if (isNaN(d1) || isNaN(d2)) return null;
-    return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+    return dateStr.strip ? dateStr.strip() <= todayStr() : dateStr <= todayStr();
 }
 
 function daysAgo(dateStr) {
-    if (!dateStr) return null;
-    return daysBetween(dateStr, todayStr());
+    if (!dateStr || dateStr === "N/A" || dateStr === "") return null;
+    const t = new Date(todayStr() + "T00:00:00");
+    const d = new Date(dateStr + "T00:00:00");
+    if (isNaN(d)) return null;
+    return Math.floor((t - d) / (1000 * 60 * 60 * 24));
 }
 
 function formatDate(dateStr) {
@@ -981,8 +942,7 @@ function formatDate(dateStr) {
 }
 
 function formatNumber(n) {
-    if (n === null || n === undefined) return "0";
-    return Number(n).toLocaleString("en-IN");
+    return Number(n || 0).toLocaleString("en-IN");
 }
 
 function pct(part, total) {
@@ -1018,243 +978,108 @@ function escapeHtml(str) {
 }
 
 /* ==============================================================
-   CSV PARSER
+   INITIAL LOAD & DECOMPRESSION (Relative Path Structure)
    ============================================================== */
-function parseCSV(csvText) {
-    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
-    if (lines.length < 2) throw new Error("CSV must have a header and at least one data row.");
-
-    const headers = parseCSVLine(lines[0]).map(h => h.trim());
-
-    // Flexible column mapping
-    const aliases = {
-        'subscriptionid': 'subscriptionId', 'subscription_id': 'subscriptionId',
-        'subscription id': 'subscriptionId', 'sub_id': 'subscriptionId',
-        'subid': 'subscriptionId',
-        'licensecategory': 'licenseCategory', 'license_category': 'licenseCategory',
-        'license category': 'licenseCategory', 'category': 'licenseCategory',
-        'compguid': 'compguid', 'comp_guid': 'compguid', 'comp guid': 'compguid',
-        'gstin': 'gstin', 'gst_number': 'gstin', 'gstnumber': 'gstin',
-        'blsexpiry': 'blsExpiry', 'bls_expiry': 'blsExpiry', 'bls expiry': 'blsExpiry',
-        'blsexpirydate': 'blsExpiry', 'bls_expiry_date': 'blsExpiry',
-        'expiry': 'blsExpiry', 'expirydate': 'blsExpiry', 'expiry_date': 'blsExpiry',
-        'installdate': 'installDate', 'install_date': 'installDate',
-        'install date': 'installDate', 'installedon': 'installDate',
-        'installed_on': 'installDate', 'installationdate': 'installDate',
-        'installation_date': 'installDate',
-        'lastused': 'lastUsed', 'last_used': 'lastUsed', 'last used': 'lastUsed',
-        'last-used': 'lastUsed', 'lastusedon': 'lastUsed', 'last_used_on': 'lastUsed',
-        'lastuseddate': 'lastUsed', 'last_used_date': 'lastUsed',
-        'licensetype': 'licenseType', 'license_type': 'licenseType',
-        'license type': 'licenseType', 'type': 'licenseType',
-        'lic_type': 'licenseType', 'lictype': 'licenseType'
-    };
-
-    const colMap = {};
-    headers.forEach((h, idx) => {
-        const normalized = h.toLowerCase().replace(/[^a-z0-9_\- ]/g, '').trim();
-        // Try exact match first
-        if (aliases[normalized]) {
-            colMap[aliases[normalized]] = idx;
-        } else {
-            // Try removing all special chars
-            const stripped = normalized.replace(/[^a-z0-9]/g, '');
-            if (aliases[stripped]) {
-                colMap[aliases[stripped]] = idx;
-            }
-        }
-    });
-
-    const requiredCols = ['subscriptionId', 'licenseCategory', 'compguid', 'gstin', 'blsExpiry'];
-    const missing = requiredCols.filter(c => colMap[c] === undefined);
-    if (missing.length > 0) {
-        throw new Error(`Missing required columns: ${missing.join(', ')}\n\nFound columns: ${headers.join(', ')}\n\nRequired: subscriptionId, licenseCategory, compguid, gstin, blsExpiry\nOptional: installDate, lastUsed, licenseType`);
-    }
-
-    const data = [];
-    for (let i = 1; i < lines.length; i++) {
-        const values = parseCSVLine(lines[i]);
-        if (values.length < 3) continue;
-
-        const row = {
-            subscriptionId:  (values[colMap.subscriptionId] || "").trim(),
-            licenseCategory: (values[colMap.licenseCategory] || "").trim(),
-            compguid:        (values[colMap.compguid] || "").trim(),
-            gstin:           (values[colMap.gstin] || "").trim(),
-            blsExpiry:       normalizeDate((values[colMap.blsExpiry] || "").trim()),
-            installDate:     colMap.installDate !== undefined ? normalizeDate((values[colMap.installDate] || "").trim()) : "",
-            lastUsed:        colMap.lastUsed !== undefined ? normalizeDate((values[colMap.lastUsed] || "").trim()) : "",
-            licenseType:     colMap.licenseType !== undefined ? (values[colMap.licenseType] || "").trim() : ""
-        };
-
-        // Normalize license category
-        const catLower = row.licenseCategory.toLowerCase();
-        if (catLower === 'ca') row.licenseCategory = 'CA';
-        else if (catLower === 'accountant') row.licenseCategory = 'Accountant';
-        else if (catLower === 'gstp') row.licenseCategory = 'GSTP';
-        else if (catLower === 'regular') row.licenseCategory = 'Regular';
-
-        // Normalize license type
-        if (row.licenseType) {
-            const typeLower = row.licenseType.toLowerCase();
-            if (typeLower === 'perpetual') row.licenseType = 'Perpetual';
-            else if (typeLower === 'subscription') row.licenseType = 'Subscription';
-            else if (typeLower === 'magic') row.licenseType = 'Magic';
-        }
-
-        if (row.subscriptionId && allCategories.includes(row.licenseCategory)) {
-            data.push(row);
-        }
-    }
-
-    if (data.length === 0) {
-        throw new Error("No valid data rows found. Ensure licenseCategory is one of: CA, Accountant, GSTP, Regular");
-    }
-
-    return data;
-}
-
-function parseCSVLine(line) {
-    const result = [];
-    let current = '';
-    let inQuotes = false;
-
-    for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (inQuotes) {
-            if (ch === '"') {
-                if (i + 1 < line.length && line[i + 1] === '"') {
-                    current += '"';
-                    i++;
-                } else {
-                    inQuotes = false;
-                }
-            } else {
-                current += ch;
-            }
-        } else {
-            if (ch === '"') {
-                inQuotes = true;
-            } else if (ch === ',') {
-                result.push(current);
-                current = '';
-            } else {
-                current += ch;
-            }
-        }
-    }
-    result.push(current);
-    return result;
-}
-
-function normalizeDate(dateStr) {
-    if (!dateStr || dateStr.toLowerCase() === 'na' || dateStr === '-' || dateStr === '') return "";
-
-    // Already YYYY-MM-DD
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-
-    // DD-MM-YYYY or DD/MM/YYYY
-    let m = dateStr.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
-    if (m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
-
-    // YYYY/MM/DD
-    m = dateStr.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
-    if (m) return `${m[1]}-${m[2]}-${m[3]}`;
-
-    // Try Date parse as fallback
-    try {
-        const d = new Date(dateStr);
-        if (!isNaN(d)) {
-            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        }
-    } catch {}
-
-    return dateStr;
-}
-
-/* ==============================================================
-   FETCH DATA FROM GITHUB
-   ============================================================== */
-async function fetchDataFromGitHub() {
+async function loadSummary() {
     const statusEl = document.getElementById("dataStatus");
-    const retryBtn = document.getElementById("retryBtn");
-
-    statusEl.className = "data-status loading";
-    statusEl.innerHTML = "⏳ Loading data from GitHub repository...";
-    retryBtn.style.display = "none";
-    showLoading(true);
-
     try {
-        const response = await fetch(CSV_URL, {
-            cache: "no-cache"
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}. Check if the CSV URL is correct and the repository is public.`);
-        }
-
-        const csvText = await response.text();
-
-        if (!csvText || csvText.trim().length === 0) {
-            throw new Error("CSV file is empty.");
-        }
-
-        rawData = parseCSV(csvText);
-        dataLoaded = true;
-
+        // Reads summary.json file located in the same relative path on GitHub Pages
+        const res = await fetch("./summary.json", { cache: "no-cache" });
+        if (!res.ok) throw new Error("Could not download pre-calculated summary.json file.");
+        
+        summaryData = await res.json();
+        
         statusEl.className = "data-status success";
-        statusEl.innerHTML = `✓ Loaded ${formatNumber(rawData.length)} records successfully &nbsp;|&nbsp; Last refreshed: ${new Date().toLocaleTimeString("en-IN")}`;
-
-        const refreshBtn = document.createElement("button");
-        refreshBtn.className = "refresh-btn";
-        refreshBtn.textContent = "🔄 Refresh";
-        refreshBtn.onclick = fetchDataFromGitHub;
-        statusEl.appendChild(refreshBtn);
-
+        statusEl.innerHTML = `✓ Connected successfully &nbsp;|&nbsp; Sync Complete`;
+        
         document.getElementById("categoryGrid").classList.remove("disabled");
         populateLandingCounts();
-
     } catch (err) {
         statusEl.className = "data-status error";
-        statusEl.innerHTML = `✕ Failed to load data: ${err.message} `;
-        retryBtn.style.display = "inline-block";
-        statusEl.appendChild(retryBtn);
-        console.error("Data fetch error:", err);
+        statusEl.innerHTML = `✕ Initialization Error: ${err.message}`;
+        console.error(err);
     }
-
-    showLoading(false);
 }
 
-function showLoading(show) {
-    document.getElementById("loadingOverlay").classList.toggle("show", show);
+function populateLandingCounts() {
+    if (!summaryData) return;
+    allCategories.forEach(cat => {
+        const catKey = cat.toLowerCase();
+        const info = summaryData.categories[cat];
+        if (info) {
+            document.getElementById(`landing-${catKey}-total`).textContent = formatNumber(info.total);
+            document.getElementById(`landing-${catKey}-active`).textContent = formatNumber(info.active);
+            document.getElementById(`landing-${catKey}-expired`).textContent = formatNumber(info.expired);
+        }
+    });
 }
 
 /* ==============================================================
-   LANDING PAGE COUNTS
+   FETCH, DECOMPRESS, & LOAD TARGET CATEGORY DATA
    ============================================================== */
-function populateLandingCounts() {
-    allCategories.forEach(cat => {
-        const catKey  = cat.toLowerCase();
-        const catData = rawData.filter(r => r.licenseCategory === cat);
-        const total   = catData.length;
-        const expired = catData.filter(r => isExpired(r.blsExpiry)).length;
-        const active  = total - expired;
+async function fetchCategoryData(category) {
+    showLoading(true, `Downloading and unpacking zipped metrics for ${category}...`);
+    try {
+        // Fetches compressed packages directly from relative path in GitHub Pages
+        const zipUrl = `./${category.toLowerCase()}.csv.zip`;
+        const res = await fetch(zipUrl);
+        if (!res.ok) throw new Error(`Server returned HTTP ${res.status}`);
+        
+        const blob = await res.blob();
+        
+        // Load into JSZip Client-side
+        const zip = await JSZip.loadAsync(blob);
+        const fileName = `${category.toLowerCase()}.csv`;
+        const csvFile = zip.file(fileName);
+        if (!csvFile) throw new Error(`Missing ${fileName} within package archive.`);
+        
+        const rawText = await csvFile.async("text");
+        parseCategoryCSV(rawText);
+        
+        showLoading(false);
+        return true;
+    } catch (err) {
+        showLoading(false);
+        alert(`Failed to load data package: ${err.message}`);
+        return false;
+    }
+}
 
-        const elTotal   = document.getElementById(`landing-${catKey}-total`);
-        const elActive  = document.getElementById(`landing-${catKey}-active`);
-        const elExpired = document.getElementById(`landing-${catKey}-expired`);
-
-        if (elTotal)   elTotal.textContent   = formatNumber(total);
-        if (elActive)  elActive.textContent  = formatNumber(active);
-        if (elExpired) elExpired.textContent  = formatNumber(expired);
-    });
+function parseCategoryCSV(csvText) {
+    const lines = csvText.split(/\r?\n/).filter(l => l.trim() !== "");
+    if (lines.length < 2) {
+        categoryRecords = [];
+        return;
+    }
+    
+    // Split header row
+    const headers = lines[0].split(",").map(h => h.trim());
+    
+    categoryRecords = [];
+    for (let i = 1; i < lines.length; i++) {
+        // Faster regex-free comma split assuming clean standard outputs from python script
+        const values = lines[i].split(",");
+        if (values.length < headers.length) continue;
+        
+        categoryRecords.push({
+            subscriptionId:  values[0],
+            licenseCategory: values[1],
+            licenseType:     values[2],
+            compguid:        values[3],
+            gstin:           values[4],
+            installDate:     values[5],
+            lastUsed:        values[6],
+            blsExpiry:       values[7]
+        });
+    }
 }
 
 /* ==============================================================
    OPEN / CLOSE DASHBOARD
    ============================================================== */
-function openDashboard(category) {
-    if (!dataLoaded) return;
+async function openDashboard(category) {
+    const success = await fetchCategoryData(category);
+    if (!success) return;
 
     currentCategory = category;
     document.getElementById("landingPage").style.display   = "none";
@@ -1262,7 +1087,7 @@ function openDashboard(category) {
     document.getElementById("headerCategory").textContent  = category + " Dashboard";
     document.getElementById("dashboardTitle").textContent   = category + " Dashboard";
 
-    // Reset
+    // Reset components
     document.getElementById("searchInput").value   = "";
     document.getElementById("statusFilter").value  = "All";
     document.getElementById("typeFilter").value    = "All";
@@ -1280,19 +1105,25 @@ function goBack() {
     document.getElementById("dashboardPage").style.display = "none";
     document.getElementById("landingPage").style.display   = "flex";
     currentCategory = "";
+    categoryRecords = [];
+}
+
+function showLoading(show, text = "Loading...") {
+    const el = document.getElementById("loadingOverlay");
+    document.getElementById("loadingText").textContent = text;
+    el.classList.toggle("show", show);
 }
 
 /* ==============================================================
-   COMPUTE KPIs
+   COMPUTE KPIs (Combines local with pre-calculated JSON values)
    ============================================================== */
 function computeKPIs(category) {
-    const catData   = rawData.filter(r => r.licenseCategory === category);
-    const totalSubs = catData.length;
-    const expSubs   = catData.filter(r => isExpired(r.blsExpiry)).length;
+    const totalSubs = categoryRecords.length;
+    const expSubs   = categoryRecords.filter(r => isExpired(r.blsExpiry)).length;
     const actSubs   = totalSubs - expSubs;
 
-    const uniqueCompguids = new Set(catData.map(r => r.compguid).filter(Boolean));
-    const uniqueGstins    = new Set(catData.map(r => r.gstin).filter(Boolean));
+    const uniqueCompguids = new Set(categoryRecords.map(r => r.compguid).filter(Boolean));
+    const uniqueGstins    = new Set(categoryRecords.map(r => r.gstin).filter(Boolean));
 
     document.getElementById("totalSubscriptions").textContent  = formatNumber(totalSubs);
     document.getElementById("expiredSubscriptions").textContent = formatNumber(expSubs);
@@ -1300,10 +1131,10 @@ function computeKPIs(category) {
     document.getElementById("totalCompguid").textContent        = formatNumber(uniqueCompguids.size);
     document.getElementById("totalGstin").textContent           = formatNumber(uniqueGstins.size);
 
-    // --- License Type Breakdown ---
-    const perpetualData    = catData.filter(r => r.licenseType === "Perpetual");
-    const subscriptionData = catData.filter(r => r.licenseType === "Subscription");
-    const magicData        = catData.filter(r => r.licenseType === "Magic");
+    // --- License Type ---
+    const perpetualData    = categoryRecords.filter(r => r.licenseType === "Perpetual");
+    const subscriptionData = categoryRecords.filter(r => r.licenseType === "Subscription");
+    const magicData        = categoryRecords.filter(r => r.licenseType === "Magic");
 
     document.getElementById("perpetualCount").textContent    = formatNumber(perpetualData.length);
     document.getElementById("perpetualPct").textContent      = pct(perpetualData.length, totalSubs) + " of total";
@@ -1312,16 +1143,13 @@ function computeKPIs(category) {
     document.getElementById("magicCount").textContent        = formatNumber(magicData.length);
     document.getElementById("magicPct").textContent          = pct(magicData.length, totalSubs) + " of total";
 
-    // --- Installation Insights ---
-    const now = todayStr();
-
-    // New installs in last 30 and 90 days
-    const installs30 = catData.filter(r => {
+    // --- Installs ---
+    const installs30 = categoryRecords.filter(r => {
         const d = daysAgo(r.installDate);
         return d !== null && d >= 0 && d <= 30;
     }).length;
 
-    const installs90 = catData.filter(r => {
+    const installs90 = categoryRecords.filter(r => {
         const d = daysAgo(r.installDate);
         return d !== null && d >= 0 && d <= 90;
     }).length;
@@ -1329,25 +1157,15 @@ function computeKPIs(category) {
     document.getElementById("newInstalls30").textContent = formatNumber(installs30);
     document.getElementById("newInstalls90").textContent = formatNumber(installs90);
 
-    // Average days since install
-    const installDays = catData
-        .map(r => daysAgo(r.installDate))
-        .filter(d => d !== null && d >= 0);
-
-    const avgInstallDays = installDays.length > 0
-        ? Math.round(installDays.reduce((a, b) => a + b, 0) / installDays.length)
-        : 0;
-
+    const installDays = categoryRecords.map(r => daysAgo(r.installDate)).filter(d => d !== null && d >= 0);
+    const avgInstallDays = installDays.length > 0 ? Math.round(installDays.reduce((a, b) => a + b, 0) / installDays.length) : 0;
     document.getElementById("avgDaysSinceInstall").textContent = formatNumber(avgInstallDays);
 
-    // Oldest install
-    const installDates = catData.map(r => r.installDate).filter(Boolean).sort();
-    document.getElementById("oldestInstall").textContent =
-        installDates.length > 0 ? formatDate(installDates[0]) : "N/A";
+    const installDates = categoryRecords.map(r => r.installDate).filter(Boolean).sort();
+    document.getElementById("oldestInstall").textContent = installDates.length > 0 ? formatDate(installDates[0]) : "N/A";
 
-    // --- Usage Insights ---
-    // Used in last 30 days
-    const usedLast30 = catData.filter(r => {
+    // --- Usage ---
+    const usedLast30 = categoryRecords.filter(r => {
         const d = daysAgo(r.lastUsed);
         return d !== null && d >= 0 && d <= 30;
     }).length;
@@ -1355,9 +1173,8 @@ function computeKPIs(category) {
     document.getElementById("usedLast30").textContent    = formatNumber(usedLast30);
     document.getElementById("usedLast30Pct").textContent = pct(usedLast30, totalSubs) + " of total";
 
-    // Dormant (>90 days no use)
-    const dormant = catData.filter(r => {
-        if (!r.lastUsed) return true; // never used = dormant
+    const dormant = categoryRecords.filter(r => {
+        if (!r.lastUsed) return true;
         const d = daysAgo(r.lastUsed);
         return d !== null && d > 90;
     }).length;
@@ -1365,37 +1182,20 @@ function computeKPIs(category) {
     document.getElementById("dormantCount").textContent = formatNumber(dormant);
     document.getElementById("dormantPct").textContent    = pct(dormant, totalSubs) + " of total";
 
-    // Avg days since last used
-    const usageDays = catData
-        .map(r => daysAgo(r.lastUsed))
-        .filter(d => d !== null && d >= 0);
-
-    const avgUsageDays = usageDays.length > 0
-        ? Math.round(usageDays.reduce((a, b) => a + b, 0) / usageDays.length)
-        : 0;
-
+    const usageDays = categoryRecords.map(r => daysAgo(r.lastUsed)).filter(d => d !== null && d >= 0);
+    const avgUsageDays = usageDays.length > 0 ? Math.round(usageDays.reduce((a, b) => a + b, 0) / usageDays.length) : 0;
     document.getElementById("avgDaysSinceUsed").textContent = formatNumber(avgUsageDays);
 
-    // Never used
-    const neverUsed = catData.filter(r => !r.lastUsed || r.lastUsed.trim() === "").length;
+    const neverUsed = categoryRecords.filter(r => !r.lastUsed || r.lastUsed === "").length;
     document.getElementById("neverUsedCount").textContent = formatNumber(neverUsed);
 
-    // --- Cross-Category COMPGUIDs ---
+    // --- Pre-calculated Cross-Category Overlaps ---
     const crossContainer = document.getElementById("crossCategoryCards");
     crossContainer.innerHTML = "";
 
     const otherCategories = allCategories.filter(c => c !== category);
-
     otherCategories.forEach(otherCat => {
-        const otherCompguids = new Set(
-            rawData.filter(r => r.licenseCategory === otherCat).map(r => r.compguid).filter(Boolean)
-        );
-
-        let crossCount = 0;
-        uniqueCompguids.forEach(cg => {
-            if (otherCompguids.has(cg)) crossCount++;
-        });
-
+        const crossCount = summaryData.overlaps[category][otherCat] || 0;
         const cardClass = "cross-" + otherCat.toLowerCase();
 
         crossContainer.insertAdjacentHTML("beforeend", `
@@ -1406,7 +1206,7 @@ function computeKPIs(category) {
                     <br><small>Shared with ${otherCat} licenses</small>
                 </div>
                 <div class="kpi-value">${formatNumber(crossCount)}</div>
-                <div class="kpi-sub">${pct(crossCount, uniqueCompguids.size)} of ${category} COMPGUIDs</div>
+                <div class="kpi-sub">${pct(crossCount, uniqueCompguids.size)} of unique tags</div>
             </div>
         `);
     });
@@ -1414,11 +1214,9 @@ function computeKPIs(category) {
 
 /* ==============================================================
    SORTING
-   ============================================================== */
+   ============================================================= */
 function resetSortArrows() {
-    document.querySelectorAll('.sort-arrow').forEach(el => {
-        el.className = 'sort-arrow none';
-    });
+    document.querySelectorAll('.sort-arrow').forEach(el => el.className = 'sort-arrow none');
 }
 
 function sortTable(field) {
@@ -1441,8 +1239,8 @@ function sortTable(field) {
             valA = isExpired(a.blsExpiry) ? "Expired" : "Active";
             valB = isExpired(b.blsExpiry) ? "Expired" : "Active";
         } else if (field === "daysSinceUsed") {
-            valA = daysAgo(a.lastUsed) ?? 99999;
-            valB = daysAgo(b.lastUsed) ?? 99999;
+            valA = daysAgo(a.lastUsed) ?? 999999;
+            valB = daysAgo(b.lastUsed) ?? 999999;
         } else {
             valA = a[field] || "";
             valB = b[field] || "";
@@ -1465,7 +1263,7 @@ function applyFilters() {
     const type   = document.getElementById("typeFilter").value;
     const usage  = document.getElementById("usageFilter").value;
 
-    filteredData = rawData.filter(r => r.licenseCategory === currentCategory);
+    filteredData = categoryRecords;
 
     if (search) {
         filteredData = filteredData.filter(r =>
@@ -1500,26 +1298,6 @@ function applyFilters() {
         filteredData = filteredData.filter(r => !r.lastUsed || r.lastUsed.trim() === "");
     }
 
-    // Re-apply sort
-    if (sortField) {
-        filteredData.sort((a, b) => {
-            let valA, valB;
-            if (sortField === "status") {
-                valA = isExpired(a.blsExpiry) ? "Expired" : "Active";
-                valB = isExpired(b.blsExpiry) ? "Expired" : "Active";
-            } else if (sortField === "daysSinceUsed") {
-                valA = daysAgo(a.lastUsed) ?? 99999;
-                valB = daysAgo(b.lastUsed) ?? 99999;
-            } else {
-                valA = a[sortField] || "";
-                valB = b[sortField] || "";
-            }
-            if (valA < valB) return sortDir === "asc" ? -1 : 1;
-            if (valA > valB) return sortDir === "asc" ? 1 : -1;
-            return 0;
-        });
-    }
-
     currentPage = 1;
     renderTable();
 }
@@ -1529,8 +1307,7 @@ function renderTable() {
     tbody.innerHTML = "";
 
     const totalRecords = filteredData.length;
-    document.getElementById("recordCount").textContent =
-        formatNumber(totalRecords) + " record" + (totalRecords !== 1 ? "s" : "");
+    document.getElementById("recordCount").textContent = formatNumber(totalRecords) + " records mapped";
 
     if (totalRecords === 0) {
         tbody.innerHTML = `
@@ -1598,11 +1375,11 @@ function renderPagination(totalPages) {
     container.innerHTML = "";
     if (totalPages <= 1) return;
 
-    const prevBtn       = document.createElement("button");
-    prevBtn.className   = "page-btn";
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "page-btn";
     prevBtn.textContent = "← Prev";
-    prevBtn.disabled    = (currentPage === 1);
-    prevBtn.onclick     = () => { currentPage--; renderTable(); scrollToTable(); };
+    prevBtn.disabled = (currentPage === 1);
+    prevBtn.onclick = () => { currentPage--; renderTable(); scrollToTable(); };
     container.appendChild(prevBtn);
 
     const maxVisible = 7;
@@ -1610,44 +1387,22 @@ function renderPagination(totalPages) {
     let endP   = Math.min(totalPages, startP + maxVisible - 1);
     if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
 
-    if (startP > 1) {
-        container.appendChild(createPageBtn(1));
-        if (startP > 2) appendDots(container);
-    }
-
     for (let p = startP; p <= endP; p++) container.appendChild(createPageBtn(p));
 
-    if (endP < totalPages) {
-        if (endP < totalPages - 1) appendDots(container);
-        container.appendChild(createPageBtn(totalPages));
-    }
-
-    const nextBtn       = document.createElement("button");
-    nextBtn.className   = "page-btn";
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "page-btn";
     nextBtn.textContent = "Next →";
-    nextBtn.disabled    = (currentPage === totalPages);
-    nextBtn.onclick     = () => { currentPage++; renderTable(); scrollToTable(); };
+    nextBtn.disabled = (currentPage === totalPages);
+    nextBtn.onclick = () => { currentPage++; renderTable(); scrollToTable(); };
     container.appendChild(nextBtn);
-
-    const info       = document.createElement("span");
-    info.style.cssText = "color:#94a3b8;font-size:12px;margin-left:12px;";
-    info.textContent = `Page ${currentPage} of ${totalPages}`;
-    container.appendChild(info);
 }
 
 function createPageBtn(pageNum) {
-    const btn       = document.createElement("button");
-    btn.className   = "page-btn" + (pageNum === currentPage ? " active-page" : "");
+    const btn = document.createElement("button");
+    btn.className = "page-btn" + (pageNum === currentPage ? " active-page" : "");
     btn.textContent = pageNum;
-    btn.onclick     = () => { currentPage = pageNum; renderTable(); };
+    btn.onclick = () => { currentPage = pageNum; renderTable(); };
     return btn;
-}
-
-function appendDots(container) {
-    const dots = document.createElement("span");
-    dots.textContent = "…";
-    dots.style.cssText = "padding:8px 4px;color:#94a3b8;";
-    container.appendChild(dots);
 }
 
 function scrollToTable() {
@@ -1656,46 +1411,32 @@ function scrollToTable() {
 }
 
 /* ==============================================================
-   EXPORT CSV
+   EXPORT TARGET SUB-METRICS TO LOCAL CSV
    ============================================================== */
 function exportTableCSV() {
-    if (filteredData.length === 0) {
-        alert("No data to export.");
-        return;
-    }
-
-    const headers = [
-        "Subscription ID", "License Category", "License Type",
-        "COMPGUID", "GSTIN", "Install Date", "Last Used",
-        "BLS Expiry", "Status", "Days Since Last Used"
-    ];
-
+    if (filteredData.length === 0) return;
+    const headers = ["Subscription ID", "License Category", "License Type", "COMPGUID", "GSTIN", "Install Date", "Last Used", "BLS Expiry", "Status"];
     const rows = filteredData.map(r => [
-        r.subscriptionId, r.licenseCategory, r.licenseType || "N/A",
-        r.compguid, r.gstin, r.installDate || "N/A", r.lastUsed || "N/A",
-        r.blsExpiry, isExpired(r.blsExpiry) ? "Expired" : "Active",
-        daysAgo(r.lastUsed) ?? "Never"
+        r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.compguid, r.gstin, r.installDate || "N/A", r.lastUsed || "N/A", r.blsExpiry, isExpired(r.blsExpiry) ? "Expired" : "Active"
     ]);
 
     let csv = headers.join(",") + "\n";
-    rows.forEach(row => {
-        csv += row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n";
-    });
+    rows.forEach(r => csv += r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n");
 
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement("a");
     a.href     = url;
-    a.download = `${currentCategory}_subscriptions_${todayStr()}.csv`;
+    a.download = `${currentCategory}_extracted_metrics.csv`;
     a.click();
     URL.revokeObjectURL(url);
 }
 
 /* ==============================================================
-   INIT — Auto-load data on page open
+   INIT
    ============================================================== */
 document.addEventListener("DOMContentLoaded", () => {
-    fetchDataFromGitHub();
+    loadSummary();
 });
 </script>
 
