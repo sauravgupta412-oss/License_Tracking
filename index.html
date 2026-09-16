@@ -136,6 +136,11 @@
     .kpi-card.usage::before { background: #ea580c; } 
     .kpi-card.dormant::before { background: #64748b; } 
     .kpi-card.new-install::before { background: #10b981; }
+    /* New KPI Colors */
+    .kpi-card.rdp::before { background: #0ea5e9; }
+    .kpi-card.ren::before { background: #3b82f6; }
+    .kpi-card.edition::before { background: #d946ef; }
+    .kpi-card.model::before { background: #8b5cf6; }
     
     .kpi-label { color: #64748b; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
     .kpi-value { font-size: 32px; font-weight: 800; color: #0f172a; line-height: 1.1; } 
@@ -179,7 +184,7 @@
 
     .filter-section { background: white; padding: 24px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
     .filter-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #0f172a; }
-    .filter-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 16px; }
+    .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
     .filter-input, .filter-select { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px 16px; font-size: 14px; outline: none; background-color: #fff; color: #0f172a; transition: border-color 0.15s, box-shadow 0.15s; }
     .filter-input:focus, .filter-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
 
@@ -188,7 +193,7 @@
     .table-title { font-size: 16px; font-weight: 700; color: #0f172a; } 
     .record-count { color: #64748b; font-size: 13px; font-weight: 500; }
     .table-wrapper { overflow-x: auto; } 
-    .table-wrapper > table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+    .table-wrapper > table { width: 100%; border-collapse: collapse; min-width: 2200px; }
     .table-wrapper th { 
         background: #f8fafc; color: #475569; font-size: 11px; font-weight: 700; text-transform: uppercase; 
         letter-spacing: 0.5px; padding: 14px 18px; text-align: left; white-space: nowrap; 
@@ -290,17 +295,25 @@
     <div class="modal-body" id="modalBody">
       <div class="table-section" style="box-shadow:none; border:1px solid #e2e8f0">
         <div class="table-wrapper">
-          <table>
+          <table style="min-width: 2200px;">
             <thead>
               <tr>
                 <th>#</th>
                 <th>Subscription ID</th>
                 <th>Category</th>
                 <th>Type</th>
+                <th>Model</th>
+                <th>Edition</th>
+                <th>RDP</th>
+                <th>Renewals</th>
                 <th>COMPGUID</th>
                 <th>GSTIN</th>
+                <th>Partner Cluster</th>
+                <th>Cust Cluster</th>
+                <th>Owner Partner</th>
                 <th>Install Date</th>
                 <th>Last Used</th>
+                <th>Last Expiry</th>
                 <th>BLS Expiry</th>
                 <th>Status</th>
                 <th>Days Idle</th>
@@ -439,6 +452,12 @@
       <div class="kpi-card comp"><div class="kpi-icon">◈</div><div class="kpi-label">Unique COMPGUIDs</div><div class="kpi-value" id="totalCompguid">0</div></div>
       <div class="kpi-card gstin-card"><div class="kpi-icon">G</div><div class="kpi-label">Unique GSTINs</div><div class="kpi-value" id="totalGstin">0</div></div>
 
+      <div class="section-label">💼 Commercial & Edition Breakdown</div>
+      <div class="kpi-card rdp"><div class="kpi-icon">🌐</div><div class="kpi-label">RDP Active (Add-On)</div><div class="kpi-value" id="rdpActiveCount">0</div><div class="kpi-sub">Remote environments deployed</div></div>
+      <div class="kpi-card ren"><div class="kpi-icon">🔄</div><div class="kpi-label">Total System Renewals</div><div class="kpi-value" id="totalRenewals">0</div><div class="kpi-sub" id="avgRenewals">Avg: 0 per sub</div></div>
+      <div class="kpi-card edition"><div class="kpi-icon">👤</div><div class="kpi-label">Top Edition (User)</div><div class="kpi-value small" id="topEdition">N/A</div><div class="kpi-sub">Most common license edition</div></div>
+      <div class="kpi-card model"><div class="kpi-icon">📦</div><div class="kpi-label">Top Model</div><div class="kpi-value small" id="topModel">N/A</div><div class="kpi-sub">Highest performing commercial tier</div></div>
+
       <div class="section-label">🏷️ License Deployment Breakdown</div>
       <div class="kpi-card perpetual"><div class="kpi-icon">∞</div><div class="kpi-label">Perpetual Model</div><div class="kpi-value" id="perpetualCount">0</div><div class="kpi-sub" id="perpetualPct">0%</div></div>
       <div class="kpi-card subscription"><div class="kpi-icon">🔄</div><div class="kpi-label">Subscription Model</div><div class="kpi-value" id="subscriptionCount">0</div><div class="kpi-sub" id="subscriptionPct">0%</div></div>
@@ -484,7 +503,7 @@
     <section class="filter-section">
       <div class="filter-title">🔍 Contextual Filter Array</div>
       <div class="filter-grid">
-        <input type="text" id="searchInput" class="filter-input" placeholder="Search Subscription, COMPGUID, or GSTIN..." oninput="applyFilters()">
+        <input type="text" id="searchInput" class="filter-input" placeholder="Search Subscription, COMPGUID, GSTIN, Partner..." oninput="applyFilters()">
         <select id="statusFilter" class="filter-select" onchange="applyFilters()">
           <option value="All">All Execution States</option>
           <option value="Active">Active (Valid BLS)</option>
@@ -503,6 +522,17 @@
           <option value="Dormant">Dormant (&gt;90 Days)</option>
           <option value="NeverUsed">Never Electronically Logged</option>
         </select>
+        <select id="modelFilter" class="filter-select" onchange="applyFilters()">
+          <option value="All">All Models</option>
+        </select>
+        <select id="editionFilter" class="filter-select" onchange="applyFilters()">
+          <option value="All">All User Editions</option>
+        </select>
+        <select id="rdpFilter" class="filter-select" onchange="applyFilters()">
+          <option value="All">RDP Status (All)</option>
+          <option value="Active">RDP Active (>0)</option>
+          <option value="Inactive">RDP Inactive (0)</option>
+        </select>
       </div>
     </section>
 
@@ -516,15 +546,23 @@
           <thead>
             <tr>
               <th onclick="sortTable(null)">#</th>
-              <th onclick="sortTable('subscriptionId')">Subscription ID <span class="sort-arrow none" id="sort-subscriptionId"></span></th>
+              <th onclick="sortTable('subscriptionId')">Sub ID <span class="sort-arrow none" id="sort-subscriptionId"></span></th>
               <th onclick="sortTable('licenseCategory')">Category <span class="sort-arrow none" id="sort-licenseCategory"></span></th>
               <th onclick="sortTable('licenseType')">Type <span class="sort-arrow none" id="sort-licenseType"></span></th>
+              <th onclick="sortTable('model')">Model <span class="sort-arrow none" id="sort-model"></span></th>
+              <th onclick="sortTable('userEdition')">Edition <span class="sort-arrow none" id="sort-userEdition"></span></th>
+              <th onclick="sortTable('rdpCount')">RDP <span class="sort-arrow none" id="sort-rdpCount"></span></th>
+              <th onclick="sortTable('totalRenewal')">Renewals <span class="sort-arrow none" id="sort-totalRenewal"></span></th>
               <th onclick="sortTable('compguid')">COMPGUID <span class="sort-arrow none" id="sort-compguid"></span></th>
               <th onclick="sortTable('gstin')">GSTIN <span class="sort-arrow none" id="sort-gstin"></span></th>
+              <th onclick="sortTable('partnerCluster')">Partner Cluster <span class="sort-arrow none" id="sort-partnerCluster"></span></th>
+              <th onclick="sortTable('custCluster')">Cust Cluster <span class="sort-arrow none" id="sort-custCluster"></span></th>
+              <th onclick="sortTable('ownerPartner')">Owner Partner <span class="sort-arrow none" id="sort-ownerPartner"></span></th>
               <th onclick="sortTable('installDate')">Install Date <span class="sort-arrow none" id="sort-installDate"></span></th>
               <th onclick="sortTable('lastUsed')">Last Used <span class="sort-arrow none" id="sort-lastUsed"></span></th>
+              <th onclick="sortTable('lastExpiry')">Last Expiry <span class="sort-arrow none" id="sort-lastExpiry"></span></th>
               <th onclick="sortTable('blsExpiry')">BLS Expiry <span class="sort-arrow none" id="sort-blsExpiry"></span></th>
-              <th onclick="sortTable('status')">BLS State <span class="sort-arrow none" id="sort-status"></span></th>
+              <th onclick="sortTable('status')">Status <span class="sort-arrow none" id="sort-status"></span></th>
               <th onclick="sortTable('daysSinceUsed')">Days Idle <span class="sort-arrow none" id="sort-daysSinceUsed"></span></th>
             </tr>
           </thead>
@@ -616,6 +654,29 @@ function escapeHtml(str){
     return d.innerHTML;
 }
 
+function getMostFrequent(arr) {
+    const clean = arr.filter(Boolean);
+    if (!clean.length) return "N/A";
+    const map = {};
+    let maxCount = 0;
+    let res = "N/A";
+    for (let item of clean) {
+        map[item] = (map[item] || 0) + 1;
+        if (map[item] > maxCount) { maxCount = map[item]; res = item; }
+    }
+    return res;
+}
+
+function populateDropdownOptions(selectId, valueArray) {
+    const select = document.getElementById(selectId);
+    const current = select.value;
+    const uniqueVals = Array.from(new Set(valueArray.filter(Boolean))).sort();
+    select.innerHTML = `<option value="All">${select.options[0].text}</option>` + 
+        uniqueVals.map(v => `<option value="${v}">${escapeHtml(v)}</option>`).join('');
+    if (uniqueVals.includes(current)) select.value = current;
+    else select.value = "All";
+}
+
 function showLoading(show, text = "Processing...") {
     const overlay = document.getElementById("loadingOverlay");
     const textEl = document.getElementById("loadingText");
@@ -676,15 +737,11 @@ async function loadSummary(){
     }
 }
 
-/* ============================================================
-   FIXED: Reads exact keys from your summary.json structure
-   ============================================================ */
 function populateLandingCounts(){
     if(!summaryData) return;
     
     let globalTot = 0, globalAct = 0, globalExp = 0;
 
-    // Category cards + health bars + overlap badges
     allCategories.forEach(cat => {
         const k = cat.toLowerCase();
         const info = summaryData.categories && summaryData.categories[cat];
@@ -708,13 +765,11 @@ function populateLandingCounts(){
         }
     });
 
-    // Prefer authoritative totals block if present
     if (summaryData.totals) {
         globalTot = summaryData.totals.total ?? globalTot;
         globalAct = summaryData.totals.active ?? globalAct;
         globalExp = summaryData.totals.expired ?? globalExp;
     } else {
-        // Root-level fallbacks
         if (summaryData.total != null) globalTot = summaryData.total;
         if (summaryData.active != null) globalAct = summaryData.active;
         if (summaryData.expired != null) globalExp = summaryData.expired;
@@ -725,25 +780,11 @@ function populateLandingCounts(){
     document.getElementById('global-expired').textContent = formatNumber(globalExp);
     document.getElementById('global-rate').textContent = globalTot > 0 ? (globalAct / globalTot * 100).toFixed(1) + "%" : "0%";
 
-    // ---- FIXED KEY LOOKUP for COMPGUID & GSTIN ----
-    // Matches every variant present in your JSON:
-    //   root: total_unique_compguid, unique_compguid, totalUniqueCompguid
-    //   totals: total_unique_compguid, unique_compguid
-    let globalComps =
-        summaryData.total_unique_compguid ??
-        summaryData.unique_compguid ??
-        summaryData.totalUniqueCompguid ??
-        (summaryData.totals && (summaryData.totals.total_unique_compguid ?? summaryData.totals.unique_compguid)) ??
-        0;
+    let globalComps = summaryData.total_unique_compguid ?? summaryData.unique_compguid ?? summaryData.totalUniqueCompguid ??
+        (summaryData.totals && (summaryData.totals.total_unique_compguid ?? summaryData.totals.unique_compguid)) ?? 0;
+    let globalGstins = summaryData.total_unique_gstin ?? summaryData.unique_gstin ?? summaryData.totalUniqueGstin ??
+        (summaryData.totals && (summaryData.totals.total_unique_gstin ?? summaryData.totals.unique_gstin)) ?? 0;
 
-    let globalGstins =
-        summaryData.total_unique_gstin ??
-        summaryData.unique_gstin ??
-        summaryData.totalUniqueGstin ??
-        (summaryData.totals && (summaryData.totals.total_unique_gstin ?? summaryData.totals.unique_gstin)) ??
-        0;
-
-    // Last-resort fallback: sum per-category uniques (may overcount overlaps)
     if (!globalComps && summaryData.categories) {
         allCategories.forEach(cat => {
             const info = summaryData.categories[cat];
@@ -810,6 +851,7 @@ function parseCategoryCSV(csvText){
         return -1;
     };
     
+    // Core Columns
     const iSub = find("subscriptionid", "subid", "subscription_id"); 
     const iCat = find("licensecategory", "category", "license_category");
     const iType = find("licensetype", "type", "license_type"); 
@@ -819,19 +861,41 @@ function parseCategoryCSV(csvText){
     const iLast = find("lastused", "last_used"); 
     const iExp = find("blsexpiry", "bls_expiry", "expiry");
 
+    // New 8 Columns
+    const iModel = find("model", "license_model");
+    const iUser = find("user", "edition", "user_edition");
+    const iRdp = find("rdpcount", "rdp_count", "rdp", "rdp_active");
+    const iRen = find("totalrenewal", "total_renewals", "renewals");
+    const iPC = find("partnercluster", "partner_cluster");
+    const iCC = find("customercluster", "customer_cluster", "cust_cluster");
+    const iOP = find("ownerpartner", "owner_partner");
+    const iLE = find("lastexpiry", "last_expiry");
+
     if(iSub < 0 || iExp < 0) return;
 
     for(let i = 1; i < lines.length; i++){
         const v = parseCSVLine(lines[i]);
         if(v.length < 2) continue;
+
+        let rdpRaw = iRdp >= 0 ? String(v[iRdp]).trim() : "";
+        let rdpParsed = parseInt(rdpRaw) || (['active','true','1'].includes(rdpRaw.toLowerCase()) ? 1 : 0);
+
         const row = {
             subscriptionId: (v[iSub] || "").trim(), 
             licenseCategory: (iCat >= 0 ? v[iCat] : currentCategory || "").trim(),
             licenseType: (iType >= 0 ? v[iType] : "").trim(), 
+            model: (iModel >= 0 ? v[iModel] : "").trim(),
+            userEdition: (iUser >= 0 ? v[iUser] : "").trim(),
+            rdpCount: rdpParsed,
+            totalRenewal: iRen >= 0 ? parseInt(v[iRen]) || 0 : 0,
             compguid: (iComp >= 0 ? v[iComp] : "").trim(),
             gstin: (iGst >= 0 ? v[iGst] : "").trim(), 
+            partnerCluster: (iPC >= 0 ? v[iPC] : "").trim(),
+            custCluster: (iCC >= 0 ? v[iCC] : "").trim(),
+            ownerPartner: (iOP >= 0 ? v[iOP] : "").trim(),
             installDate: (iInst >= 0 ? v[iInst] : "").trim(),
             lastUsed: (iLast >= 0 ? v[iLast] : "").trim(), 
+            lastExpiry: (iLE >= 0 ? v[iLE] : "").trim(),
             blsExpiry: (v[iExp] || "").trim()
         };
         if(row.subscriptionId) categoryRecords.push(row);
@@ -852,6 +916,9 @@ async function openDashboard(category){
     document.getElementById("statusFilter").value = "All";
     document.getElementById("typeFilter").value = "All";
     document.getElementById("usageFilter").value = "All";
+    document.getElementById("modelFilter").value = "All";
+    document.getElementById("editionFilter").value = "All";
+    document.getElementById("rdpFilter").value = "All";
     
     sortField = null; 
     sortDir = "asc";
@@ -892,6 +959,21 @@ function computeKPIs(category){
     document.getElementById("activeSubscriptions").textContent = formatNumber(actSubs);
     document.getElementById("totalCompguid").textContent = formatNumber(uniqueCompguids.size);
     document.getElementById("totalGstin").textContent = formatNumber(uniqueGstins.size);
+
+    // Dynamic Options Population for Modals & Editions
+    populateDropdownOptions('modelFilter', uniqueRecords.map(r => r.model));
+    populateDropdownOptions('editionFilter', uniqueRecords.map(r => r.userEdition));
+
+    // Commercial Breakdown Calculations
+    const rdpActiveCount = uniqueRecords.filter(r => r.rdpCount > 0).length;
+    document.getElementById("rdpActiveCount").textContent = formatNumber(rdpActiveCount);
+
+    const sumRenewals = uniqueRecords.reduce((acc, r) => acc + r.totalRenewal, 0);
+    document.getElementById("totalRenewals").textContent = formatNumber(sumRenewals);
+    document.getElementById("avgRenewals").textContent = `Avg: ${totalSubs ? (sumRenewals/totalSubs).toFixed(1) : 0} per sub`;
+
+    document.getElementById("topEdition").textContent = getMostFrequent(uniqueRecords.map(r => r.userEdition));
+    document.getElementById("topModel").textContent = getMostFrequent(uniqueRecords.map(r => r.model));
 
     const perpetualData = uniqueRecords.filter(r => r.licenseType === "Perpetual"); 
     const subscriptionData = uniqueRecords.filter(r => r.licenseType === "Subscription"); 
@@ -1173,16 +1255,26 @@ function createRowHTML(row, index){
     const d = daysAgo(row.lastUsed);
     let usage = (!d && d !== 0) || row.lastUsed === "" ? '<span style="color:#94a3b8">Never Logged</span>' : d <= 30 ? `<span class="usage-indicator usage-active"></span>${d}d` : d <= 90 ? `<span class="usage-indicator usage-moderate"></span>${d}d` : `<span class="usage-indicator usage-dormant"></span>${d}d`;
     
+    const rdpDisplay = row.rdpCount > 0 ? `<span style="color:#2563eb; font-weight:700">Active (${row.rdpCount})</span>` : '<span style="color:#94a3b8">0</span>';
+
     const tr = document.createElement("tr");
     tr.innerHTML = `
     <td>${index}</td>
     <td><strong>${escapeHtml(row.subscriptionId)}</strong></td>
     <td><span class="license-badge ${getLicenseBadgeClass(row.licenseCategory)}">${escapeHtml(row.licenseCategory)}</span></td>
     <td><span class="type-badge ${getTypeBadgeClass(row.licenseType)}">${escapeHtml(row.licenseType || "N/A")}</span></td>
+    <td style="font-weight:600">${escapeHtml(row.model || "-")}</td>
+    <td>${escapeHtml(row.userEdition || "-")}</td>
+    <td>${rdpDisplay}</td>
+    <td style="font-weight:700">${row.totalRenewal}</td>
     <td>${escapeHtml(row.compguid)}</td>
     <td style="font-family:monospace; font-size:11px">${escapeHtml(row.gstin)}</td>
+    <td>${escapeHtml(row.partnerCluster || "-")}</td>
+    <td>${escapeHtml(row.custCluster || "-")}</td>
+    <td><strong>${escapeHtml(row.ownerPartner || "-")}</strong></td>
     <td>${formatDate(row.installDate)}</td>
     <td>${formatDate(row.lastUsed)}</td>
+    <td>${formatDate(row.lastExpiry)}</td>
     <td>${formatDate(row.blsExpiry)}</td>
     <td>${statusBadge}</td>
     <td>${usage}</td>`;
@@ -1230,12 +1322,17 @@ function renderPopupTable(){
 
 function exportPopupCSV(){
     if(!popupFilteredData.length) return;
-    const headers = ["Subscription ID", "License Category", "License Type", "COMPGUID", "GSTIN", "Install Date", "Last Used", "BLS Expiry", "Status"];
+    const headers = [
+        "Subscription ID", "License Category", "License Type", "Model", "Edition", "RDP Count", "Total Renewals", 
+        "COMPGUID", "GSTIN", "Partner Cluster", "Customer Cluster", "Owner Partner", 
+        "Install Date", "Last Used", "Last Expiry", "BLS Expiry", "Status"
+    ];
     let csv = headers.join(",") + "\n";
     popupFilteredData.forEach(r => {
         csv += [
-            r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.compguid, r.gstin, 
-            r.installDate || "N/A", r.lastUsed || "N/A", r.blsExpiry, 
+            r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.model || "N/A", r.userEdition || "N/A", r.rdpCount, r.totalRenewal,
+            r.compguid, r.gstin, r.partnerCluster || "N/A", r.custCluster || "N/A", r.ownerPartner || "N/A",
+            r.installDate || "N/A", r.lastUsed || "N/A", r.lastExpiry || "N/A", r.blsExpiry, 
             isExpired(r.blsExpiry) ? "Expired" : "Active"
         ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n";
     });
@@ -1262,6 +1359,8 @@ function sortTable(field){
         } else if(field === "daysSinceUsed"){
             A = daysAgo(a.lastUsed) ?? 999999;
             B = daysAgo(b.lastUsed) ?? 999999;
+        } else if (field === "rdpCount" || field === "totalRenewal") {
+            return sortDir === "asc" ? (a[field] - b[field]) : (b[field] - a[field]);
         } else {
             A = a[field] || "";
             B = b[field] || "";
@@ -1277,13 +1376,20 @@ function applyFilters(){
     const status = document.getElementById("statusFilter").value;
     const type = document.getElementById("typeFilter").value;
     const usage = document.getElementById("usageFilter").value;
+    const model = document.getElementById("modelFilter").value;
+    const edition = document.getElementById("editionFilter").value;
+    const rdp = document.getElementById("rdpFilter").value;
     
     filteredData = categoryRecords;
+
     if(search) {
         filteredData = filteredData.filter(r => 
             (r.subscriptionId || "").toLowerCase().includes(search) || 
             (r.compguid || "").toLowerCase().includes(search) || 
-            (r.gstin || "").toLowerCase().includes(search)
+            (r.gstin || "").toLowerCase().includes(search) ||
+            (r.ownerPartner || "").toLowerCase().includes(search) ||
+            (r.partnerCluster || "").toLowerCase().includes(search) ||
+            (r.custCluster || "").toLowerCase().includes(search)
         );
     }
     
@@ -1291,6 +1397,12 @@ function applyFilters(){
     else if(status === "Expired") filteredData = filteredData.filter(r => isExpired(r.blsExpiry));
     
     if(type !== "All") filteredData = filteredData.filter(r => r.licenseType === type);
+    if(model !== "All") filteredData = filteredData.filter(r => r.model === model);
+    if(edition !== "All") filteredData = filteredData.filter(r => r.userEdition === edition);
+    if(rdp !== "All") {
+        if(rdp === "Active") filteredData = filteredData.filter(r => r.rdpCount > 0);
+        else if(rdp === "Inactive") filteredData = filteredData.filter(r => r.rdpCount === 0);
+    }
     
     if(usage === "Last30") {
         filteredData = filteredData.filter(r => { const d = daysAgo(r.lastUsed); return d !== null && d >= 0 && d <= 30; });
@@ -1313,7 +1425,7 @@ function renderTable(){
     document.getElementById("recordCount").textContent = formatNumber(total) + " records matches filter";
     
     if(!total){
-        tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><div style="font-size:40px;margin-bottom:12px">📭</div><div style="font-size:16px;font-weight:600;margin-bottom:6px">No record matches filter parameters</div><div>Clear filters to show directory entries.</div></div></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="19"><div class="empty-state"><div style="font-size:40px;margin-bottom:12px">📭</div><div style="font-size:16px;font-weight:600;margin-bottom:6px">No record matches filter parameters</div><div>Clear filters to show directory entries.</div></div></td></tr>`;
         document.getElementById("pagination").innerHTML = ""; 
         return;
     }
@@ -1358,12 +1470,17 @@ function scrollToTable(){
 
 function exportTableCSV(){
     if(!filteredData.length) return;
-    const headers = ["Subscription ID", "License Category", "License Type", "COMPGUID", "GSTIN", "Install Date", "Last Used", "BLS Expiry", "Status"];
+    const headers = [
+        "Subscription ID", "License Category", "License Type", "Model", "Edition", "RDP Count", "Total Renewals", 
+        "COMPGUID", "GSTIN", "Partner Cluster", "Customer Cluster", "Owner Partner", 
+        "Install Date", "Last Used", "Last Expiry", "BLS Expiry", "Status"
+    ];
     let csv = headers.join(",") + "\n";
     filteredData.forEach(r => {
         csv += [
-            r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.compguid, r.gstin, 
-            r.installDate || "N/A", r.lastUsed || "N/A", r.blsExpiry, 
+            r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.model || "N/A", r.userEdition || "N/A", r.rdpCount, r.totalRenewal,
+            r.compguid, r.gstin, r.partnerCluster || "N/A", r.custCluster || "N/A", r.ownerPartner || "N/A",
+            r.installDate || "N/A", r.lastUsed || "N/A", r.lastExpiry || "N/A", r.blsExpiry, 
             isExpired(r.blsExpiry) ? "Expired" : "Active"
         ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n";
     });
