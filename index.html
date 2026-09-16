@@ -742,7 +742,7 @@
 
             <div class="kpi-card">
                 <div class="kpi-icon">▣</div>
-                <div class="kpi-label">Total Subscription IDs</div>
+                <div class="kpi-label">Unique Subscription IDs</div>
                 <div class="kpi-value" id="totalSubscriptions">0</div>
             </div>
 
@@ -770,7 +770,7 @@
                 <div class="kpi-value" id="totalGstin">0</div>
             </div>
 
-            <div class="section-label">🏷️ License Type Breakdown</div>
+            <div class="section-label">🏷️ License Type Breakdown (Per Subscription)</div>
 
             <div class="kpi-card perpetual">
                 <div class="kpi-icon">∞</div>
@@ -793,7 +793,7 @@
                 <div class="kpi-sub" id="magicPct">0%</div>
             </div>
 
-            <div class="section-label">📅 Installation & Usage Insights</div>
+            <div class="section-label">📅 Installation & Usage Insights (Per Subscription)</div>
 
             <div class="kpi-card install">
                 <div class="kpi-icon">📦</div>
@@ -866,7 +866,7 @@
         <!-- DATA TABLE -->
         <section class="table-section">
             <div class="table-header">
-                <div class="table-title">Subscription Details</div>
+                <div class="table-title">Company & Subscription Details</div>
                 <div class="record-count" id="recordCount">0 records</div>
             </div>
             <div class="table-wrapper">
@@ -901,7 +901,7 @@
    ============================================================== */
 const allCategories = ["CA", "Accountant", "GSTP", "Regular"];
 let summaryData      = null; 
-let categoryRecords  = [];    // Records for currently loaded category
+let categoryRecords  = [];    // All rows including multiple COMPGUIDs for one SubID
 let currentCategory  = "";
 let filteredData     = [];
 let currentPage      = 1;
@@ -983,7 +983,6 @@ function escapeHtml(str) {
 async function loadSummary() {
     const statusEl = document.getElementById("dataStatus");
     try {
-        // Reads summary.json file located in the same relative path on GitHub Pages
         const res = await fetch("./summary.json", { cache: "no-cache" });
         if (!res.ok) throw new Error("Could not download pre-calculated summary.json file.");
         
@@ -1020,14 +1019,12 @@ function populateLandingCounts() {
 async function fetchCategoryData(category) {
     showLoading(true, `Downloading and unpacking zipped metrics for ${category}...`);
     try {
-        // Fetches compressed packages directly from relative path in GitHub Pages
         const zipUrl = `./${category.toLowerCase()}.csv.zip`;
         const res = await fetch(zipUrl);
         if (!res.ok) throw new Error(`Server returned HTTP ${res.status}`);
         
         const blob = await res.blob();
         
-        // Load into JSZip Client-side
         const zip = await JSZip.loadAsync(blob);
         const fileName = `${category.toLowerCase()}.csv`;
         const csvFile = zip.file(fileName);
@@ -1052,12 +1049,10 @@ function parseCategoryCSV(csvText) {
         return;
     }
     
-    // Split header row
     const headers = lines[0].split(",").map(h => h.trim());
     
     categoryRecords = [];
     for (let i = 1; i < lines.length; i++) {
-        // Faster regex-free comma split assuming clean standard outputs from python script
         const values = lines[i].split(",");
         if (values.length < headers.length) continue;
         
@@ -1087,7 +1082,6 @@ async function openDashboard(category) {
     document.getElementById("headerCategory").textContent  = category + " Dashboard";
     document.getElementById("dashboardTitle").textContent   = category + " Dashboard";
 
-    // Reset components
     document.getElementById("searchInput").value   = "";
     document.getElementById("statusFilter").value  = "All";
     document.getElementById("typeFilter").value    = "All";
@@ -1115,26 +1109,49 @@ function showLoading(show, text = "Loading...") {
 }
 
 /* ==============================================================
-   COMPUTE KPIs (Combines local with pre-calculated JSON values)
+   COMPUTE KPIs
    ============================================================== */
 function computeKPIs(category) {
-    const totalSubs = categoryRecords.length;
-    const expSubs   = categoryRecords.filter(r => isExpired(r.blsExpiry)).length;
-    const actSubs   = totalSubs - expSubs;
-
+    // 1. Calculate UNIQUE COMPGUIDs and GSTINs directly from all rows
     const uniqueCompguids = new Set(categoryRecords.map(r => r.compguid).filter(Boolean));
     const uniqueGstins    = new Set(categoryRecords.map(r => r.gstin).filter(Boolean));
 
-    document.getElementById("totalSubscriptions").textContent  = formatNumber(totalSubs);
+    // 2. Collapse data down to UNIQUE Subscription IDs for Subscription KPIs
+    const uniqueSubsMap = new Map();
+    categoryRecords.forEach(r => {
+        const id = r.subscriptionId;
+        if (!id) return;
+        
+        // If we haven't seen this SubID, add it.
+        // If we have, keep the one with the latest BLS Expiry for determining active/expired.
+        if (!uniqueSubsMap.has(id)) {
+            uniqueSubsMap.set(id, r);
+        } else {
+            const old = uniqueSubsMap.get(id);
+            if ((r.blsExpiry || "") > (old.blsExpiry || "")) {
+                uniqueSubsMap.set(id, r);
+            }
+        }
+    });
+    
+    // Array of just the unique subscriptions (1 row per subscription)
+    const uniqueRecords = Array.from(uniqueSubsMap.values());
+
+    const totalSubs = uniqueRecords.length;
+    const expSubs   = uniqueRecords.filter(r => isExpired(r.blsExpiry)).length;
+    const actSubs   = totalSubs - expSubs;
+
+    document.getElementById("totalSubscriptions").textContent   = formatNumber(totalSubs);
     document.getElementById("expiredSubscriptions").textContent = formatNumber(expSubs);
     document.getElementById("activeSubscriptions").textContent  = formatNumber(actSubs);
+    
     document.getElementById("totalCompguid").textContent        = formatNumber(uniqueCompguids.size);
     document.getElementById("totalGstin").textContent           = formatNumber(uniqueGstins.size);
 
-    // --- License Type ---
-    const perpetualData    = categoryRecords.filter(r => r.licenseType === "Perpetual");
-    const subscriptionData = categoryRecords.filter(r => r.licenseType === "Subscription");
-    const magicData        = categoryRecords.filter(r => r.licenseType === "Magic");
+    // --- License Type Breakdown (Per Unique Subscription) ---
+    const perpetualData    = uniqueRecords.filter(r => r.licenseType === "Perpetual");
+    const subscriptionData = uniqueRecords.filter(r => r.licenseType === "Subscription");
+    const magicData        = uniqueRecords.filter(r => r.licenseType === "Magic");
 
     document.getElementById("perpetualCount").textContent    = formatNumber(perpetualData.length);
     document.getElementById("perpetualPct").textContent      = pct(perpetualData.length, totalSubs) + " of total";
@@ -1143,13 +1160,13 @@ function computeKPIs(category) {
     document.getElementById("magicCount").textContent        = formatNumber(magicData.length);
     document.getElementById("magicPct").textContent          = pct(magicData.length, totalSubs) + " of total";
 
-    // --- Installs ---
-    const installs30 = categoryRecords.filter(r => {
+    // --- Installation Insights (Per Unique Subscription) ---
+    const installs30 = uniqueRecords.filter(r => {
         const d = daysAgo(r.installDate);
         return d !== null && d >= 0 && d <= 30;
     }).length;
 
-    const installs90 = categoryRecords.filter(r => {
+    const installs90 = uniqueRecords.filter(r => {
         const d = daysAgo(r.installDate);
         return d !== null && d >= 0 && d <= 90;
     }).length;
@@ -1157,15 +1174,15 @@ function computeKPIs(category) {
     document.getElementById("newInstalls30").textContent = formatNumber(installs30);
     document.getElementById("newInstalls90").textContent = formatNumber(installs90);
 
-    const installDays = categoryRecords.map(r => daysAgo(r.installDate)).filter(d => d !== null && d >= 0);
+    const installDays = uniqueRecords.map(r => daysAgo(r.installDate)).filter(d => d !== null && d >= 0);
     const avgInstallDays = installDays.length > 0 ? Math.round(installDays.reduce((a, b) => a + b, 0) / installDays.length) : 0;
     document.getElementById("avgDaysSinceInstall").textContent = formatNumber(avgInstallDays);
 
-    const installDates = categoryRecords.map(r => r.installDate).filter(Boolean).sort();
+    const installDates = uniqueRecords.map(r => r.installDate).filter(Boolean).sort();
     document.getElementById("oldestInstall").textContent = installDates.length > 0 ? formatDate(installDates[0]) : "N/A";
 
-    // --- Usage ---
-    const usedLast30 = categoryRecords.filter(r => {
+    // --- Usage Insights (Per Unique Subscription) ---
+    const usedLast30 = uniqueRecords.filter(r => {
         const d = daysAgo(r.lastUsed);
         return d !== null && d >= 0 && d <= 30;
     }).length;
@@ -1173,7 +1190,7 @@ function computeKPIs(category) {
     document.getElementById("usedLast30").textContent    = formatNumber(usedLast30);
     document.getElementById("usedLast30Pct").textContent = pct(usedLast30, totalSubs) + " of total";
 
-    const dormant = categoryRecords.filter(r => {
+    const dormant = uniqueRecords.filter(r => {
         if (!r.lastUsed) return true;
         const d = daysAgo(r.lastUsed);
         return d !== null && d > 90;
@@ -1182,11 +1199,11 @@ function computeKPIs(category) {
     document.getElementById("dormantCount").textContent = formatNumber(dormant);
     document.getElementById("dormantPct").textContent    = pct(dormant, totalSubs) + " of total";
 
-    const usageDays = categoryRecords.map(r => daysAgo(r.lastUsed)).filter(d => d !== null && d >= 0);
+    const usageDays = uniqueRecords.map(r => daysAgo(r.lastUsed)).filter(d => d !== null && d >= 0);
     const avgUsageDays = usageDays.length > 0 ? Math.round(usageDays.reduce((a, b) => a + b, 0) / usageDays.length) : 0;
     document.getElementById("avgDaysSinceUsed").textContent = formatNumber(avgUsageDays);
 
-    const neverUsed = categoryRecords.filter(r => !r.lastUsed || r.lastUsed === "").length;
+    const neverUsed = uniqueRecords.filter(r => !r.lastUsed || r.lastUsed === "").length;
     document.getElementById("neverUsedCount").textContent = formatNumber(neverUsed);
 
     // --- Pre-calculated Cross-Category Overlaps ---
@@ -1195,7 +1212,7 @@ function computeKPIs(category) {
 
     const otherCategories = allCategories.filter(c => c !== category);
     otherCategories.forEach(otherCat => {
-        const crossCount = summaryData.overlaps[category][otherCat] || 0;
+        const crossCount = (summaryData && summaryData.overlaps[category] && summaryData.overlaps[category][otherCat]) || 0;
         const cardClass = "cross-" + otherCat.toLowerCase();
 
         crossContainer.insertAdjacentHTML("beforeend", `
@@ -1255,7 +1272,7 @@ function sortTable(field) {
 }
 
 /* ==============================================================
-   FILTERS & TABLE RENDERING
+   FILTERS & TABLE RENDERING (Shows all granular rows)
    ============================================================== */
 function applyFilters() {
     const search = document.getElementById("searchInput").value.toLowerCase().trim();
@@ -1263,13 +1280,14 @@ function applyFilters() {
     const type   = document.getElementById("typeFilter").value;
     const usage  = document.getElementById("usageFilter").value;
 
+    // Use all rows directly for the table to show multiple companies per Subscription
     filteredData = categoryRecords;
 
     if (search) {
         filteredData = filteredData.filter(r =>
-            r.subscriptionId.toLowerCase().includes(search) ||
-            r.compguid.toLowerCase().includes(search) ||
-            r.gstin.toLowerCase().includes(search)
+            (r.subscriptionId && r.subscriptionId.toLowerCase().includes(search)) ||
+            (r.compguid && r.compguid.toLowerCase().includes(search)) ||
+            (r.gstin && r.gstin.toLowerCase().includes(search))
         );
     }
 
