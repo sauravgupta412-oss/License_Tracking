@@ -16,50 +16,34 @@
        LANDING PAGE
        ========================= */
     .landing-page {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
+        min-height: 100vh; background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
         display: flex; align-items: center; justify-content: center; padding: 40px 20px;
     }
     .landing-container { width: 100%; max-width: 1300px; text-align: center; }
     .logo {
-        width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 18px;
-        background: rgba(255,255,255,0.15); display: flex; align-items: center;
-        justify-content: center; color: white; font-size: 28px; font-weight: bold;
+        width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 18px; background: rgba(255,255,255,0.15);
+        display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: bold;
         backdrop-filter: blur(10px);
     }
     .landing-title { color: white; font-size: 42px; font-weight: 700; margin-bottom: 12px; }
     .landing-subtitle { color: #cbd5e1; font-size: 17px; margin-bottom: 25px; }
     
-    .data-status {
-        margin-bottom: 30px; padding: 12px 24px; border-radius: 12px;
-        font-size: 14px; font-weight: 600; display: inline-block;
-    }
+    .data-status { margin-bottom: 30px; padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; display: inline-block; }
     .data-status.loading { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
     .data-status.success { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
     .data-status.error { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
-    /* Category Grid */
     .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
     .category-grid.disabled { opacity: 0.4; pointer-events: none; }
-    .category-card {
-        background: white; border-radius: 18px; padding: 30px 22px; cursor: pointer;
-        transition: all 0.25s ease; border: 2px solid transparent; box-shadow: 0 15px 35px rgba(0,0,0,0.18);
-    }
+    .category-card { background: white; border-radius: 18px; padding: 30px 22px; cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; box-shadow: 0 15px 35px rgba(0,0,0,0.18); }
     .category-card:hover { transform: translateY(-8px); border-color: #60a5fa; box-shadow: 0 20px 45px rgba(0,0,0,0.25); }
-    .category-icon {
-        width: 62px; height: 62px; margin: 0 auto 16px; border-radius: 16px;
-        display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;
-    }
-    .ca-icon { background: #dbeafe; color: #2563eb; }
-    .accountant-icon { background: #dcfce7; color: #16a34a; }
-    .gstp-icon { background: #fef3c7; color: #d97706; }
-    .regular-icon { background: #f3e8ff; color: #9333ea; }
+    .category-icon { width: 62px; height: 62px; margin: 0 auto 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+    .ca-icon { background: #dbeafe; color: #2563eb; } .accountant-icon { background: #dcfce7; color: #16a34a; }
+    .gstp-icon { background: #fef3c7; color: #d97706; } .regular-icon { background: #f3e8ff; color: #9333ea; }
     .category-card h2 { font-size: 20px; margin-bottom: 8px; }
     .category-card p { color: #64748b; font-size: 13px; line-height: 1.5; }
     .card-stats { margin-top: 14px; padding-top: 14px; border-top: 1px solid #e5e7eb; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .card-stat-item { text-align: center; }
-    .card-stat-value { font-size: 18px; font-weight: 700; color: #111827; }
-    .card-stat-label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+    .card-stat-item { text-align: center; } .card-stat-value { font-size: 18px; font-weight: 700; color: #111827; } .card-stat-label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
 
     /* =========================
        DASHBOARD
@@ -82,43 +66,51 @@
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 25px; }
     .kpi-card { background: white; border-radius: 14px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(15,23,42,0.05); position: relative; overflow: hidden; }
     .kpi-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #2563eb; }
-    .kpi-card.expired::before { background: #ef4444; }
-    .kpi-card.active::before { background: #22c55e; }
-    .kpi-card.comp::before { background: #8b5cf6; }
-    .kpi-card.gstin-card::before { background: #f59e0b; }
-    .kpi-card.perpetual::before { background: #0891b2; }
-    .kpi-card.subscription::before { background: #7c3aed; }
-    .kpi-card.magic::before { background: #db2777; }
-    .kpi-card.install::before { background: #0d9488; }
-    .kpi-card.usage::before { background: #ea580c; }
-    .kpi-card.dormant::before { background: #64748b; }
-    .kpi-card.new-install::before { background: #059669; }
+    .kpi-card.expired::before { background: #ef4444; } .kpi-card.active::before { background: #22c55e; } .kpi-card.comp::before { background: #8b5cf6; } .kpi-card.gstin-card::before { background: #f59e0b; }
+    .kpi-card.perpetual::before { background: #0891b2; } .kpi-card.subscription::before { background: #7c3aed; } .kpi-card.magic::before { background: #db2777; }
+    .kpi-card.install::before { background: #0d9488; } .kpi-card.usage::before { background: #ea580c; } .kpi-card.dormant::before { background: #64748b; } .kpi-card.new-install::before { background: #059669; }
     .kpi-label { color: #64748b; font-size: 12px; line-height: 1.4; margin-bottom: 8px; }
-    .kpi-value { font-size: 28px; font-weight: 700; color: #111827; }
-    .kpi-value.small { font-size: 22px; }
+    .kpi-value { font-size: 28px; font-weight: 700; color: #111827; } .kpi-value.small { font-size: 22px; }
     .kpi-icon { position: absolute; right: 16px; top: 16px; font-size: 18px; opacity: 0.5; }
     .kpi-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
     .section-label { font-size: 14px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; grid-column: 1 / -1; }
 
-    /* Distribution Tables (2x2 Fixed Grid) */
-    .dist-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
-    .dist-card { background: white; border-radius: 14px; border: 1px solid #e5e7eb; padding: 18px; box-shadow: 0 4px 12px rgba(15,23,42,0.05); display: flex; flex-direction: column; }
+    /* Distribution Tables (2x2 Compact Grid) */
+    .dist-grid { 
+        display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; 
+        align-items: start; /* Prevents empty stretching */
+    }
+    .dist-card { background: white; border-radius: 14px; border: 1px solid #e5e7eb; padding: 14px; box-shadow: 0 4px 12px rgba(15,23,42,0.05); display: flex; flex-direction: column; }
     .dist-card h3 { font-size: 14px; color: #1f2937; margin-bottom: 4px; text-align: center; }
     .dist-card p { font-size: 11px; color: #64748b; text-align: center; margin-bottom: 12px; }
-    .dist-table-wrapper { border: 1px solid #eef2f7; border-radius: 8px; overflow: hidden; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .dist-table-wrapper { border: 1px solid #eef2f7; border-radius: 8px; overflow: hidden; }
     .dist-table-wrapper table { width: 100%; border-collapse: collapse; }
-    .dist-table-wrapper th { background: #f8fafc; padding: 10px 12px; font-size: 11px; text-align: center; border-bottom: 1px solid #e5e7eb; color:#475569; }
-    .dist-table-wrapper td { padding: 10px 12px; font-size: 12px; text-align: center; border-bottom: 1px solid #eef2f7; }
+    
+    /* Clickable Sort Headers */
+    .dist-table-wrapper th { 
+        background: #f8fafc; padding: 8px 10px; font-size: 11px; text-align: center; 
+        border-bottom: 1px solid #e5e7eb; color:#475569; text-transform: uppercase;
+        cursor: pointer; user-select: none; transition: background 0.15s;
+    }
+    .dist-table-wrapper th:hover { background: #eef2f7; }
+    .dist-table-wrapper td { padding: 7px 10px; font-size: 12px; text-align: center; border-bottom: 1px solid #eef2f7; }
+    .dist-table-wrapper tr:last-child td { border-bottom: none; }
     
     .clickable-row { cursor: pointer; transition: background 0.15s; }
     .clickable-row:hover td { background: #eff6ff !important; }
     .clickable-link { color: #2563eb; font-weight: 600; }
     .clickable-link span { font-size: 10px; margin-left: 4px; opacity: 0.7; }
     
-    .mini-pag { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 8px; background: #f8fafc; border-top: 1px solid #e5e7eb; font-size: 11px; color: #64748b; font-weight: 600; }
+    .mini-pag { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 6px; background: #f8fafc; border-top: 1px solid #e5e7eb; font-size: 11px; color: #64748b; font-weight: 600; }
     .mini-pag button { background: none; border: none; cursor: pointer; color: #2563eb; font-weight: bold; font-size: 14px; padding: 2px 8px; border-radius: 4px; }
     .mini-pag button:disabled { color: #cbd5e1; cursor: not-allowed; }
     .mini-pag button:not(:disabled):hover { background: #e0f2fe; }
+
+    /* Sort Arrows */
+    .sort-arrow { margin-left: 4px; font-size: 9px; color: #94a3b8; display: inline-block; width: 10px; text-align: center;}
+    .sort-arrow.asc::after { content: "▲"; color: #2563eb; } 
+    .sort-arrow.desc::after { content: "▼"; color: #2563eb; } 
+    .sort-arrow.none::after { content: "↕"; }
 
     /* Filters */
     .filter-section { background: white; padding: 20px; border-radius: 14px; border: 1px solid #e5e7eb; margin-bottom: 22px; }
@@ -135,8 +127,6 @@
     table { width: 100%; border-collapse: collapse; min-width: 1200px; }
     th { background: #f8fafc; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; padding: 12px 14px; text-align: left; white-space: nowrap; cursor: pointer; user-select: none; }
     th:hover { background: #eef2f7; }
-    th .sort-arrow { margin-left: 4px; font-size: 9px; color: #94a3b8; }
-    th .sort-arrow.asc::after { content: "▲"; color: #2563eb; } th .sort-arrow.desc::after { content: "▼"; color: #2563eb; } th .sort-arrow.none::after { content: "↕"; }
     td { padding: 12px 14px; border-top: 1px solid #eef2f7; font-size: 12px; white-space: nowrap; }
     tr:hover td { background: #f8fafc; }
     
@@ -165,8 +155,6 @@
     .loading-overlay.show { display: flex; } .loading-spinner { text-align: center; color: white; }
     .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #60a5fa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .data-debug { background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px; font-size: 13px; display: none; }
-    .data-debug.show { display: block; } .data-debug code { background: rgba(0,0,0,.08); padding: 2px 6px; border-radius: 4px; }
 
     /* Responsive */
     @media (max-width: 1100px) { .category-grid, .kpi-grid { grid-template-columns: repeat(2, 1fr); } .dist-grid { grid-template-columns: 1fr; } }
@@ -272,7 +260,6 @@
   <main class="dashboard-content">
     <h1 class="dashboard-title" id="dashboardTitle">Dashboard</h1>
     <p class="dashboard-description">Comprehensive active metrics, license models, and execution tracking overview.</p>
-    <div class="data-debug" id="dataDebug"></div>
 
     <!-- KPI CARDS -->
     <section class="kpi-grid">
@@ -301,12 +288,12 @@
 
     <!-- DISTRIBUTION TABLES -->
     <section>
-      <div class="section-label">📈 Distribution Analysis <span style="font-size:11px;color:#64748b;font-weight:400;text-transform:none">(Click any row to view filtered data)</span></div>
+      <div class="section-label">📈 Distribution Analysis <span style="font-size:11px;color:#64748b;font-weight:400;text-transform:none">(Click headers to sort, rows to drill down)</span></div>
       <div class="dist-grid">
         <!-- Table 1 -->
         <div class="dist-card">
             <h3>COMPGUID & GSTIN per Subscription</h3>
-            <p>Leaderboard of Subscriptions mapped by count of associated tags.</p>
+            <p>Leaderboard of Subscriptions mapped by count of tags.</p>
             <div class="dist-table-wrapper" id="distT1"></div>
         </div>
         <!-- Table 2 -->
@@ -385,7 +372,18 @@ const rowsPerPage=30; let sortField=null, sortDir="asc";
 
 // Modal & Dist State
 let popupFilteredData=[], popupCurrentPage=1;
-window.distData={}; window.distPage={}; const DIST_ROWS=6;
+window.distData={}; window.distPage={}; window.distBuckets={};
+const DIST_ROWS=8; // Rows per page in mini tables
+
+// Distribution Sort State
+window.distSort = {
+    t1: { field: 'cCount', dir: 'desc' },
+    t2: { field: 'size', dir: 'asc' },
+    t3: { field: 'size', dir: 'asc' },
+    t4: { field: 'size', dir: 'asc' }
+};
+
+window.basePath = "./"; 
 
 function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
 function isExpired(dateStr){if(!dateStr)return true;return String(dateStr).trim()<=todayStr()}
@@ -396,8 +394,6 @@ function pct(part,total){return total?(part/total*100).toFixed(1)+"%":"0%"}
 function getLicenseBadgeClass(cat){return({CA:"license-badge-ca",Accountant:"license-badge-accountant",GSTP:"license-badge-gstp",Regular:"license-badge-regular"})[cat]||"license-badge-ca"}
 function getTypeBadgeClass(type){if(!type)return"type-subscription";const t=String(type).toLowerCase();return t==="perpetual"?"type-perpetual":t==="magic"?"type-magic":"type-subscription"}
 function escapeHtml(str){if(!str)return"";const d=document.createElement("div");d.textContent=str;return d.innerHTML}
-function showDebug(msg, isError=true){ const el=document.getElementById("dataDebug"); el.className="data-debug show"; el.innerHTML=msg; if(!isError) el.style.background="#dcfce7", el.style.borderColor="#22c55e", el.style.color="#166534"; }
-function hideDebug(){document.getElementById("dataDebug").className="data-debug"}
 
 function showLoading(show, text = "Loading...") {
     const overlay = document.getElementById("loadingOverlay");
@@ -423,21 +419,31 @@ function parseCSVLine(line){
   return result;
 }
 
+/* --- Smart Summary Loader --- */
 async function loadSummary(){
   const statusEl=document.getElementById("dataStatus");
-  try{
-    const res=await fetch("./summary.json",{cache:"no-cache"});
-    if(!res.ok) throw new Error(`summary.json HTTP ${res.status}. Is the file in the repo root?`);
-    summaryData=await res.json();
-    statusEl.className="data-status success";
-    statusEl.innerHTML=`✓ Connected successfully &nbsp;|&nbsp; Sync Complete`;
-    document.getElementById("categoryGrid").classList.remove("disabled");
-    populateLandingCounts();
-  }catch(err){
-    statusEl.className="data-status error";
-    statusEl.innerHTML=`✕ ${err.message}`;
+  const possiblePaths = ["./summary.json", "./processed_data/summary.json", "summary.json"];
+  let res = null; let loadedPath = "";
+
+  for (let p of possiblePaths) {
+      try { let r = await fetch(p, { cache: "no-cache" }); if (r.ok) { res = r; loadedPath = p; break; } } catch (e) {}
+  }
+  if (!res) {
+      statusEl.className = "data-status error";
+      statusEl.innerHTML = `✕ summary.json HTTP 404. Ensure summary.json is uploaded to GitHub!`;
+      return;
+  }
+  window.basePath = loadedPath.includes("processed_data/") ? "./processed_data/" : "./";
+  try {
+      summaryData = await res.json();
+      statusEl.className = "data-status success"; statusEl.innerHTML = `✓ Connected successfully &nbsp;|&nbsp; Sync Complete`;
+      document.getElementById("categoryGrid").classList.remove("disabled");
+      populateLandingCounts();
+  } catch(err) {
+      statusEl.className = "data-status error"; statusEl.innerHTML = `✕ Invalid summary.json: ${err.message}`;
   }
 }
+
 function populateLandingCounts(){
   if(!summaryData)return;
   allCategories.forEach(cat=>{
@@ -453,38 +459,25 @@ function populateLandingCounts(){
 async function fetchCategoryData(category){
   showLoading(true, `Downloading ${category.toLowerCase()}.csv.zip ...`);
   try{
-    const zipUrl=`./${category.toLowerCase()}.csv.zip`;
-    const res=await fetch(zipUrl,{cache:"no-cache"});
+    const zipUrl = `${window.basePath}${category.toLowerCase()}.csv.zip`;
+    const res = await fetch(zipUrl, {cache: "no-cache"});
     if(!res.ok) throw new Error(`Could not fetch ${zipUrl} (HTTP ${res.status}).`);
 
-    const blob=await res.blob();
-    if(blob.size<50) throw new Error(`Zip file is empty.`);
+    const blob = await res.blob();
+    if(blob.size < 50) throw new Error(`Zip file is empty.`);
 
-    const zip=await JSZip.loadAsync(blob);
-    const names=Object.keys(zip.files);
-    let csvFile=zip.file(`${category.toLowerCase()}.csv`);
-    if(!csvFile){
-      const csvName=names.find(n=>n.toLowerCase().endsWith(".csv") && !n.includes("/"));
-      if(csvName) csvFile=zip.file(csvName);
-    }
-    if(!csvFile){
-      const csvName=names.find(n=>n.toLowerCase().endsWith(".csv"));
-      if(csvName) csvFile=zip.file(csvName);
-    }
+    const zip = await JSZip.loadAsync(blob);
+    const names = Object.keys(zip.files);
+    let csvFile = zip.file(`${category.toLowerCase()}.csv`) || zip.file(names.find(n => n.toLowerCase().endsWith(".csv") && !n.includes("/"))) || zip.file(names.find(n => n.toLowerCase().endsWith(".csv")));
     if(!csvFile) throw new Error(`No .csv found inside zip.`);
 
-    const rawText=await csvFile.async("text");
+    const rawText = await csvFile.async("text");
     parseCategoryCSV(rawText);
     showLoading(false);
     
-    if(categoryRecords.length===0){
-      showDebug(`⚠️ Loaded zip OK but parsed <strong>0 rows</strong>.`);
-      return true;
-    }
-    hideDebug(); return true;
-  }catch(err){
-    showLoading(false); alert("Failed to load data:\n\n"+err.message); return false;
-  }
+    if(categoryRecords.length === 0){ alert("Loaded zip OK but parsed 0 rows."); return true; }
+    return true;
+  }catch(err){ showLoading(false); alert("Failed to load data:\n\n"+err.message); return false; }
 }
 
 function parseCategoryCSV(csvText){
@@ -496,14 +489,10 @@ function parseCategoryCSV(csvText){
   const headers=parseCSVLine(lines[0]).map(h=>h.trim().toLowerCase().replace(/[^a-z0-9]/g,""));
   const find=(...names)=>{for(const n of names){const i=headers.indexOf(n.replace(/[^a-z0-9]/g,""));if(i>=0)return i;}return -1;};
   
-  const iSub=find("subscriptionid","subid","subscription_id");
-  const iCat=find("licensecategory","category","license_category");
-  const iType=find("licensetype","type","license_type");
-  const iComp=find("compguid","comp_guid");
-  const iGst=find("gstin","gst");
-  const iInst=find("installdate","install_date");
-  const iLast=find("lastused","last_used","last-used");
-  const iExp=find("blsexpiry","bls_expiry","expiry");
+  const iSub=find("subscriptionid","subid","subscription_id"); const iCat=find("licensecategory","category","license_category");
+  const iType=find("licensetype","type","license_type"); const iComp=find("compguid","comp_guid");
+  const iGst=find("gstin","gst"); const iInst=find("installdate","install_date");
+  const iLast=find("lastused","last_used","last-used"); const iExp=find("blsexpiry","bls_expiry","expiry");
 
   if(iSub<0 || iExp<0) return;
 
@@ -511,14 +500,10 @@ function parseCategoryCSV(csvText){
     const v=parseCSVLine(lines[i]);
     if(v.length<2) continue;
     const row={
-      subscriptionId: (v[iSub]||"").trim(),
-      licenseCategory:(iCat>=0?v[iCat]:currentCategory||"").trim(),
-      licenseType:    (iType>=0?v[iType]:"").trim(),
-      compguid:       (iComp>=0?v[iComp]:"").trim(),
-      gstin:          (iGst>=0?v[iGst]:"").trim(),
-      installDate:    (iInst>=0?v[iInst]:"").trim(),
-      lastUsed:       (iLast>=0?v[iLast]:"").trim(),
-      blsExpiry:      (v[iExp]||"").trim()
+      subscriptionId: (v[iSub]||"").trim(), licenseCategory:(iCat>=0?v[iCat]:currentCategory||"").trim(),
+      licenseType: (iType>=0?v[iType]:"").trim(), compguid: (iComp>=0?v[iComp]:"").trim(),
+      gstin: (iGst>=0?v[iGst]:"").trim(), installDate: (iInst>=0?v[iInst]:"").trim(),
+      lastUsed: (iLast>=0?v[iLast]:"").trim(), blsExpiry: (v[iExp]||"").trim()
     };
     if(row.subscriptionId) categoryRecords.push(row);
   }
@@ -542,10 +527,11 @@ async function openDashboard(category){
   applyFilters();
   window.scrollTo(0,0);
 }
+
 function goBack(){
   document.getElementById("dashboardPage").style.display="none";
   document.getElementById("landingPage").style.display="flex";
-  currentCategory=""; categoryRecords=[]; hideDebug();
+  currentCategory=""; categoryRecords=[];
 }
 
 /* ==============================================================
@@ -558,15 +544,10 @@ function computeKPIs(category){
     if(r.gstin) uniqueGstins.add(r.gstin);
     if(!r.subscriptionId) return;
     if(!uniqueSubsMap.has(r.subscriptionId)) uniqueSubsMap.set(r.subscriptionId,r);
-    else {
-      const old=uniqueSubsMap.get(r.subscriptionId);
-      if((r.blsExpiry||"")>(old.blsExpiry||"")) uniqueSubsMap.set(r.subscriptionId,r);
-    }
+    else { const old=uniqueSubsMap.get(r.subscriptionId); if((r.blsExpiry||"")>(old.blsExpiry||"")) uniqueSubsMap.set(r.subscriptionId,r); }
   });
   const uniqueRecords=[...uniqueSubsMap.values()];
-  const totalSubs=uniqueRecords.length;
-  const expSubs=uniqueRecords.filter(r=>isExpired(r.blsExpiry)).length;
-  const actSubs=totalSubs-expSubs;
+  const totalSubs=uniqueRecords.length; const expSubs=uniqueRecords.filter(r=>isExpired(r.blsExpiry)).length; const actSubs=totalSubs-expSubs;
 
   document.getElementById("totalSubscriptions").textContent=formatNumber(totalSubs);
   document.getElementById("expiredSubscriptions").textContent=formatNumber(expSubs);
@@ -574,31 +555,23 @@ function computeKPIs(category){
   document.getElementById("totalCompguid").textContent=formatNumber(uniqueCompguids.size);
   document.getElementById("totalGstin").textContent=formatNumber(uniqueGstins.size);
 
-  const perpetualData=uniqueRecords.filter(r=>r.licenseType==="Perpetual");
-  const subscriptionData=uniqueRecords.filter(r=>r.licenseType==="Subscription");
-  const magicData=uniqueRecords.filter(r=>r.licenseType==="Magic");
-  document.getElementById("perpetualCount").textContent=formatNumber(perpetualData.length);
-  document.getElementById("perpetualPct").textContent=pct(perpetualData.length,totalSubs)+" of total";
-  document.getElementById("subscriptionCount").textContent=formatNumber(subscriptionData.length);
-  document.getElementById("subscriptionPct").textContent=pct(subscriptionData.length,totalSubs)+" of total";
-  document.getElementById("magicCount").textContent=formatNumber(magicData.length);
-  document.getElementById("magicPct").textContent=pct(magicData.length,totalSubs)+" of total";
+  const perpetualData=uniqueRecords.filter(r=>r.licenseType==="Perpetual"); const subscriptionData=uniqueRecords.filter(r=>r.licenseType==="Subscription"); const magicData=uniqueRecords.filter(r=>r.licenseType==="Magic");
+  document.getElementById("perpetualCount").textContent=formatNumber(perpetualData.length); document.getElementById("perpetualPct").textContent=pct(perpetualData.length,totalSubs)+" of total";
+  document.getElementById("subscriptionCount").textContent=formatNumber(subscriptionData.length); document.getElementById("subscriptionPct").textContent=pct(subscriptionData.length,totalSubs)+" of total";
+  document.getElementById("magicCount").textContent=formatNumber(magicData.length); document.getElementById("magicPct").textContent=pct(magicData.length,totalSubs)+" of total";
 
   const installs30=uniqueRecords.filter(r=>{const d=daysAgo(r.installDate);return d!==null&&d>=0&&d<=30}).length;
   const installs90=uniqueRecords.filter(r=>{const d=daysAgo(r.installDate);return d!==null&&d>=0&&d<=90}).length;
-  document.getElementById("newInstalls30").textContent=formatNumber(installs30);
-  document.getElementById("newInstalls90").textContent=formatNumber(installs90);
+  document.getElementById("newInstalls30").textContent=formatNumber(installs30); document.getElementById("newInstalls90").textContent=formatNumber(installs90);
   const installDays=uniqueRecords.map(r=>daysAgo(r.installDate)).filter(d=>d!==null&&d>=0);
   document.getElementById("avgDaysSinceInstall").textContent=formatNumber(installDays.length?Math.round(installDays.reduce((a,b)=>a+b,0)/installDays.length):0);
   const installDates=uniqueRecords.map(r=>r.installDate).filter(Boolean).sort();
   document.getElementById("oldestInstall").textContent=installDates.length?formatDate(installDates[0]):"N/A";
 
   const usedLast30=uniqueRecords.filter(r=>{const d=daysAgo(r.lastUsed);return d!==null&&d>=0&&d<=30}).length;
-  document.getElementById("usedLast30").textContent=formatNumber(usedLast30);
-  document.getElementById("usedLast30Pct").textContent=pct(usedLast30,totalSubs)+" of total";
+  document.getElementById("usedLast30").textContent=formatNumber(usedLast30); document.getElementById("usedLast30Pct").textContent=pct(usedLast30,totalSubs)+" of total";
   const dormant=uniqueRecords.filter(r=>{if(!r.lastUsed)return true;const d=daysAgo(r.lastUsed);return d!==null&&d>90}).length;
-  document.getElementById("dormantCount").textContent=formatNumber(dormant);
-  document.getElementById("dormantPct").textContent=pct(dormant,totalSubs)+" of total";
+  document.getElementById("dormantCount").textContent=formatNumber(dormant); document.getElementById("dormantPct").textContent=pct(dormant,totalSubs)+" of total";
   const usageDays=uniqueRecords.map(r=>daysAgo(r.lastUsed)).filter(d=>d!==null&&d>=0);
   document.getElementById("avgDaysSinceUsed").textContent=formatNumber(usageDays.length?Math.round(usageDays.reduce((a,b)=>a+b,0)/usageDays.length):0);
   document.getElementById("neverUsedCount").textContent=formatNumber(uniqueRecords.filter(r=>!r.lastUsed||r.lastUsed==="").length);
@@ -623,46 +596,70 @@ function computeKPIs(category){
   // T1: Sub -> Count of Comp & Count of GSTIN
   let t1Data = [];
   subToComp.forEach((cSet, sub) => {
-      t1Data.push({
-          sub: sub,
-          cCount: cSet.size,
-          gCount: subToGst.has(sub) ? subToGst.get(sub).size : 0
-      });
+      t1Data.push({ sub: sub, cCount: cSet.size, gCount: subToGst.has(sub) ? subToGst.get(sub).size : 0 });
   });
-  t1Data.sort((a,b) => b.cCount - a.cCount || b.gCount - a.gCount);
-  window.distData['t1'] = t1Data;
-  window.distPage['t1'] = 1;
+  window.distData['t1'] = t1Data; window.distPage['t1'] = 1;
 
   // Generic Frequency Grouper
   function buildFreqData(mapObj, keyName) {
       let buckets = {};
       mapObj.forEach((set, key) => {
           let size = set.size;
-          if(size > 0) {
-              if(!buckets[size]) buckets[size] = [];
-              buckets[size].push(key);
-          }
+          if(size > 0) { if(!buckets[size]) buckets[size] = []; buckets[size].push(key); }
       });
-      let arr = Object.keys(buckets).map(Number).sort((a,b)=>a-b).map(size => ({
-          size: size,
-          count: buckets[size].length,
-          keys: buckets[size]
-      }));
-      window.distData[keyName] = arr;
-      window.distPage[keyName] = 1;
+      window.distBuckets[keyName] = buckets;
+      let arr = Object.keys(buckets).map(Number).map(size => ({ size: size, count: buckets[size].length, keys: buckets[size] }));
+      window.distData[keyName] = arr; window.distPage[keyName] = 1;
   }
 
   buildFreqData(subToComp, 't2');
   buildFreqData(subToGst, 't3');
   buildFreqData(gstToSub, 't4');
 
-  renderDistT1();
-  renderDistT2();
-  renderDistT3();
-  renderDistT4();
+  // Trigger initial sorts and renders
+  sortDistData('t1', 'cCount', true);
+  sortDistData('t2', 'size', true);
+  sortDistData('t3', 'size', true);
+  sortDistData('t4', 'size', true);
 }
 
-/* --- Mini Pagination Renderers --- */
+/* ==============================================================
+   DISTRIBUTION TABLE SORTING & RENDERING
+   ============================================================== */
+function getDistArrow(tid, field) {
+    if(window.distSort[tid].field !== field) return '<span class="sort-arrow none"></span>';
+    return `<span class="sort-arrow ${window.distSort[tid].dir}"></span>`;
+}
+
+function sortDistData(tid, field, isInit = false) {
+    if(!isInit) {
+        if(window.distSort[tid].field === field) {
+            window.distSort[tid].dir = window.distSort[tid].dir === 'asc' ? 'desc' : 'asc';
+        } else {
+            window.distSort[tid].field = field;
+            window.distSort[tid].dir = 'desc'; 
+        }
+    }
+    const dir = window.distSort[tid].dir;
+    
+    window.distData[tid].sort((a, b) => {
+        let valA = a[field]; let valB = b[field];
+        if(typeof valA === 'string') {
+            if (valA < valB) return dir === 'asc' ? -1 : 1;
+            if (valA > valB) return dir === 'asc' ? 1 : -1;
+            return 0;
+        } else {
+            return dir === 'asc' ? valA - valB : valB - valA;
+        }
+    });
+
+    window.distPage[tid] = 1;
+    if(tid === 't1') renderDistT1();
+    if(tid === 't2') renderDistT2();
+    if(tid === 't3') renderDistT3();
+    if(tid === 't4') renderDistT4();
+}
+
 window.changeDistPage = function(tid, delta) {
     window.distPage[tid] += delta;
     if(tid === 't1') renderDistT1();
@@ -671,30 +668,24 @@ window.changeDistPage = function(tid, delta) {
     if(tid === 't4') renderDistT4();
 }
 
-function padRows(current, max, cols) {
-    let pad = "";
-    for(let i=current; i<max; i++) {
-        pad += `<tr style="pointer-events:none;"><td colspan="${cols}" style="color:transparent; border-bottom:1px solid transparent;">-</td></tr>`;
-    }
-    return pad;
-}
-
 function renderDistT1() {
-    const data = window.distData['t1']; const page = window.distPage['t1'];
+    const data = window.distData['t1'] || []; const page = window.distPage['t1'] || 1;
     const totalPages = Math.ceil(data.length / DIST_ROWS) || 1;
     const rows = data.slice((page-1)*DIST_ROWS, page*DIST_ROWS);
 
-    let html = `<table><thead><tr><th>Subscription ID</th><th>COMPGUIDs</th><th>GSTINs</th></tr></thead><tbody>`;
+    let html = `<table><thead><tr>
+        <th onclick="sortDistData('t1', 'sub')">Subscription ID ${getDistArrow('t1','sub')}</th>
+        <th onclick="sortDistData('t1', 'cCount')">COMPGUIDs ${getDistArrow('t1','cCount')}</th>
+        <th onclick="sortDistData('t1', 'gCount')">GSTINs ${getDistArrow('t1','gCount')}</th>
+    </tr></thead><tbody>`;
+    
     if(!data.length) html += `<tr><td colspan="3" style="text-align:center;padding:20px;color:#94a3b8">No Data</td></tr>`;
     else {
         rows.forEach(r => {
-            html += `<tr class="clickable-row" onclick="openRawModal('sub', ['${r.sub}'], 'Subscription = ${r.sub}')">
-                <td class="clickable-link">${r.sub}</td>
-                <td>${r.cCount}</td>
-                <td>${r.gCount}</td>
+            html += `<tr class="clickable-row" title="Click to view raw data" onclick="openRawModal('sub', ['${r.sub}'], 'Subscription = ${r.sub}')">
+                <td class="clickable-link">${r.sub}</td><td>${r.cCount}</td><td>${r.gCount}</td>
             </tr>`;
         });
-        html += padRows(rows.length, DIST_ROWS, 3);
     }
     html += `</tbody></table>
     <div class="mini-pag">
@@ -706,20 +697,23 @@ function renderDistT1() {
 }
 
 function renderDistT2() {
-    const data = window.distData['t2']; const page = window.distPage['t2'];
+    const data = window.distData['t2'] || []; const page = window.distPage['t2'] || 1;
     const totalPages = Math.ceil(data.length / DIST_ROWS) || 1;
     const rows = data.slice((page-1)*DIST_ROWS, page*DIST_ROWS);
 
-    let html = `<table><thead><tr><th>COMPGUID Count</th><th>Total Subscriptions</th></tr></thead><tbody>`;
+    let html = `<table><thead><tr>
+        <th onclick="sortDistData('t2', 'size')">COMPGUID Count ${getDistArrow('t2','size')}</th>
+        <th onclick="sortDistData('t2', 'count')">Total Subscriptions ${getDistArrow('t2','count')}</th>
+    </tr></thead><tbody>`;
+    
     if(!data.length) html += `<tr><td colspan="2" style="text-align:center;padding:20px;color:#94a3b8">No Data</td></tr>`;
     else {
         rows.forEach(r => {
-            html += `<tr class="clickable-row" onclick="openRawModal('sub', window.distData['t2'].find(x=>x.size===${r.size}).keys, 'Subscriptions with exactly ${r.size} COMPGUIDs')">
+            html += `<tr class="clickable-row" title="Click to view raw data" onclick="openRawModal('sub', window.distBuckets['t2'][${r.size}], 'Subscriptions with exactly ${r.size} COMPGUIDs')">
                 <td><strong>${r.size}</strong></td>
                 <td class="clickable-link">${formatNumber(r.count)} <span>↗</span></td>
             </tr>`;
         });
-        html += padRows(rows.length, DIST_ROWS, 2);
     }
     html += `</tbody></table>
     <div class="mini-pag">
@@ -731,20 +725,23 @@ function renderDistT2() {
 }
 
 function renderDistT3() {
-    const data = window.distData['t3']; const page = window.distPage['t3'];
+    const data = window.distData['t3'] || []; const page = window.distPage['t3'] || 1;
     const totalPages = Math.ceil(data.length / DIST_ROWS) || 1;
     const rows = data.slice((page-1)*DIST_ROWS, page*DIST_ROWS);
 
-    let html = `<table><thead><tr><th>GSTIN Count</th><th>Total Subscriptions</th></tr></thead><tbody>`;
+    let html = `<table><thead><tr>
+        <th onclick="sortDistData('t3', 'size')">GSTIN Count ${getDistArrow('t3','size')}</th>
+        <th onclick="sortDistData('t3', 'count')">Total Subscriptions ${getDistArrow('t3','count')}</th>
+    </tr></thead><tbody>`;
+    
     if(!data.length) html += `<tr><td colspan="2" style="text-align:center;padding:20px;color:#94a3b8">No Data</td></tr>`;
     else {
         rows.forEach(r => {
-            html += `<tr class="clickable-row" onclick="openRawModal('sub', window.distData['t3'].find(x=>x.size===${r.size}).keys, 'Subscriptions with exactly ${r.size} GSTINs')">
+            html += `<tr class="clickable-row" title="Click to view raw data" onclick="openRawModal('sub', window.distBuckets['t3'][${r.size}], 'Subscriptions with exactly ${r.size} GSTINs')">
                 <td><strong>${r.size}</strong></td>
                 <td class="clickable-link">${formatNumber(r.count)} <span>↗</span></td>
             </tr>`;
         });
-        html += padRows(rows.length, DIST_ROWS, 2);
     }
     html += `</tbody></table>
     <div class="mini-pag">
@@ -756,20 +753,23 @@ function renderDistT3() {
 }
 
 function renderDistT4() {
-    const data = window.distData['t4']; const page = window.distPage['t4'];
+    const data = window.distData['t4'] || []; const page = window.distPage['t4'] || 1;
     const totalPages = Math.ceil(data.length / DIST_ROWS) || 1;
     const rows = data.slice((page-1)*DIST_ROWS, page*DIST_ROWS);
 
-    let html = `<table><thead><tr><th>Subscription Count</th><th>Total GSTINs</th></tr></thead><tbody>`;
+    let html = `<table><thead><tr>
+        <th onclick="sortDistData('t4', 'size')">Subscription Count ${getDistArrow('t4','size')}</th>
+        <th onclick="sortDistData('t4', 'count')">Total GSTINs ${getDistArrow('t4','count')}</th>
+    </tr></thead><tbody>`;
+    
     if(!data.length) html += `<tr><td colspan="2" style="text-align:center;padding:20px;color:#94a3b8">No Data</td></tr>`;
     else {
         rows.forEach(r => {
-            html += `<tr class="clickable-row" onclick="openRawModal('gst', window.distData['t4'].find(x=>x.size===${r.size}).keys, 'GSTINs with exactly ${r.size} Subscriptions')">
+            html += `<tr class="clickable-row" title="Click to view raw data" onclick="openRawModal('gst', window.distBuckets['t4'][${r.size}], 'GSTINs with exactly ${r.size} Subscriptions')">
                 <td><strong>${r.size}</strong></td>
                 <td class="clickable-link">${formatNumber(r.count)} <span>↗</span></td>
             </tr>`;
         });
-        html += padRows(rows.length, DIST_ROWS, 2);
     }
     html += `</tbody></table>
     <div class="mini-pag">
@@ -847,7 +847,7 @@ function exportPopupCSV(){
 function sortTable(field){
   if(!field)return;
   if(sortField===field) sortDir=sortDir==="asc"?"desc":"asc"; else {sortField=field;sortDir="asc"}
-  document.querySelectorAll(".sort-arrow").forEach(el=>el.className="sort-arrow none");
+  document.querySelectorAll(".table-section .sort-arrow").forEach(el=>el.className="sort-arrow none");
   const ar=document.getElementById("sort-"+field); if(ar) ar.className="sort-arrow "+sortDir;
   filteredData.sort((a,b)=>{
     let A,B;
