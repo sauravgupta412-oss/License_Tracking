@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>License Subscription Dashboard</title>
 
 <style>
@@ -22,11 +21,9 @@
     /* =========================
        LANDING PAGE
        ========================= */
-
     .landing-page {
         min-height: 100vh;
-        background:
-            linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
+        background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -64,13 +61,155 @@
     .landing-subtitle {
         color: #cbd5e1;
         font-size: 17px;
-        margin-bottom: 45px;
+        margin-bottom: 25px;
     }
 
+    /* CSV Upload Section */
+    .upload-section {
+        background: rgba(255,255,255,0.08);
+        border: 2px dashed rgba(255,255,255,0.3);
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 35px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .upload-section:hover {
+        border-color: rgba(255,255,255,0.5);
+        background: rgba(255,255,255,0.12);
+    }
+
+    .upload-section.drag-over {
+        border-color: #60a5fa;
+        background: rgba(96,165,250,0.15);
+    }
+
+    .upload-section.loaded {
+        border-color: #22c55e;
+        background: rgba(34,197,94,0.1);
+        border-style: solid;
+    }
+
+    .upload-icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+    }
+
+    .upload-title {
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .upload-desc {
+        color: #94a3b8;
+        font-size: 14px;
+        margin-bottom: 16px;
+        line-height: 1.6;
+    }
+
+    .upload-btn-wrapper {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .upload-btn {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .upload-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .sample-btn {
+        background: transparent;
+        color: #93c5fd;
+        border: 1px solid rgba(147,197,253,0.4);
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .sample-btn:hover {
+        background: rgba(147,197,253,0.1);
+        border-color: #93c5fd;
+    }
+
+    .file-input {
+        display: none;
+    }
+
+    .upload-status {
+        margin-top: 14px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .upload-status.success {
+        color: #4ade80;
+    }
+
+    .upload-status.error {
+        color: #f87171;
+    }
+
+    .format-hint {
+        background: rgba(0,0,0,0.2);
+        border-radius: 10px;
+        padding: 14px 20px;
+        margin-top: 18px;
+        text-align: left;
+        display: none;
+    }
+
+    .format-hint.show {
+        display: block;
+    }
+
+    .format-hint-title {
+        color: #93c5fd;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .format-hint code {
+        color: #fbbf24;
+        font-size: 12px;
+        display: block;
+        padding: 6px 10px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 6px;
+        overflow-x: auto;
+        white-space: pre;
+    }
+
+    /* Category Grid */
     .category-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 22px;
+    }
+
+    .category-grid.disabled {
+        opacity: 0.4;
+        pointer-events: none;
     }
 
     .category-card {
@@ -101,25 +240,10 @@
         font-weight: bold;
     }
 
-    .ca-icon {
-        background: #dbeafe;
-        color: #2563eb;
-    }
-
-    .accountant-icon {
-        background: #dcfce7;
-        color: #16a34a;
-    }
-
-    .gstp-icon {
-        background: #fef3c7;
-        color: #d97706;
-    }
-
-    .regular-icon {
-        background: #f3e8ff;
-        color: #9333ea;
-    }
+    .ca-icon { background: #dbeafe; color: #2563eb; }
+    .accountant-icon { background: #dcfce7; color: #16a34a; }
+    .gstp-icon { background: #fef3c7; color: #d97706; }
+    .regular-icon { background: #f3e8ff; color: #9333ea; }
 
     .category-card h2 {
         font-size: 22px;
@@ -132,8 +256,7 @@
         line-height: 1.5;
     }
 
-    /* Landing card counts */
-    .category-card .card-stats {
+    .card-stats {
         margin-top: 15px;
         padding-top: 15px;
         border-top: 1px solid #e5e7eb;
@@ -141,9 +264,7 @@
         justify-content: space-around;
     }
 
-    .card-stat-item {
-        text-align: center;
-    }
+    .card-stat-item { text-align: center; }
 
     .card-stat-value {
         font-size: 20px;
@@ -157,10 +278,15 @@
         margin-top: 2px;
     }
 
+    .no-data-hint {
+        color: #94a3b8;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
     /* =========================
        DASHBOARD
        ========================= */
-
     .dashboard-page {
         display: none;
         min-height: 100vh;
@@ -174,6 +300,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
+        flex-wrap: wrap;
     }
 
     .header-left {
@@ -191,6 +318,8 @@
         align-items: center;
         justify-content: center;
         font-weight: bold;
+        color: white;
+        font-size: 14px;
     }
 
     .header-title {
@@ -204,7 +333,13 @@
         margin-top: 3px;
     }
 
-    .back-button {
+    .header-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .back-button, .export-button {
         background: rgba(255,255,255,0.1);
         color: white;
         border: 1px solid rgba(255,255,255,0.2);
@@ -212,9 +347,10 @@
         border-radius: 9px;
         cursor: pointer;
         font-size: 14px;
+        transition: background 0.2s;
     }
 
-    .back-button:hover {
+    .back-button:hover, .export-button:hover {
         background: rgba(255,255,255,0.18);
     }
 
@@ -224,11 +360,7 @@
         padding: 30px;
     }
 
-    /* Dashboard title */
-
-    .dashboard-title-section {
-        margin-bottom: 25px;
-    }
+    .dashboard-title-section { margin-bottom: 25px; }
 
     .dashboard-title {
         font-size: 28px;
@@ -242,7 +374,6 @@
     }
 
     /* KPI Cards */
-
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -270,41 +401,14 @@
         background: #2563eb;
     }
 
-    .kpi-card.expired::before {
-        background: #ef4444;
-    }
-
-    .kpi-card.active::before {
-        background: #22c55e;
-    }
-
-    .kpi-card.comp::before {
-        background: #8b5cf6;
-    }
-
-    .kpi-card.gstin::before {
-        background: #f59e0b;
-    }
-
-    .kpi-card.cross::before {
-        background: #06b6d4;
-    }
-
-    .kpi-card.cross-ca::before {
-        background: #2563eb;
-    }
-
-    .kpi-card.cross-accountant::before {
-        background: #16a34a;
-    }
-
-    .kpi-card.cross-gstp::before {
-        background: #d97706;
-    }
-
-    .kpi-card.cross-regular::before {
-        background: #9333ea;
-    }
+    .kpi-card.expired::before { background: #ef4444; }
+    .kpi-card.active::before { background: #22c55e; }
+    .kpi-card.comp::before { background: #8b5cf6; }
+    .kpi-card.gstin::before { background: #f59e0b; }
+    .kpi-card.cross-ca::before { background: #2563eb; }
+    .kpi-card.cross-accountant::before { background: #16a34a; }
+    .kpi-card.cross-gstp::before { background: #d97706; }
+    .kpi-card.cross-regular::before { background: #9333ea; }
 
     .kpi-label {
         color: #64748b;
@@ -328,7 +432,6 @@
     }
 
     /* Filters */
-
     .filter-section {
         background: white;
         padding: 20px;
@@ -349,8 +452,7 @@
         gap: 12px;
     }
 
-    .filter-input,
-    .filter-select {
+    .filter-input, .filter-select {
         width: 100%;
         border: 1px solid #d1d5db;
         border-radius: 8px;
@@ -359,14 +461,12 @@
         outline: none;
     }
 
-    .filter-input:focus,
-    .filter-select:focus {
+    .filter-input:focus, .filter-select:focus {
         border-color: #2563eb;
         box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
     }
 
     /* Table */
-
     .table-section {
         background: white;
         border-radius: 14px;
@@ -382,18 +482,14 @@
         border-bottom: 1px solid #e5e7eb;
     }
 
-    .table-title {
-        font-weight: 600;
-    }
+    .table-title { font-weight: 600; }
 
     .record-count {
         color: #64748b;
         font-size: 13px;
     }
 
-    .table-wrapper {
-        overflow-x: auto;
-    }
+    .table-wrapper { overflow-x: auto; }
 
     table {
         width: 100%;
@@ -410,7 +506,24 @@
         padding: 13px 15px;
         text-align: left;
         white-space: nowrap;
+        cursor: pointer;
+        user-select: none;
+        position: relative;
     }
+
+    th:hover {
+        background: #eef2f7;
+    }
+
+    th .sort-arrow {
+        margin-left: 5px;
+        font-size: 10px;
+        color: #94a3b8;
+    }
+
+    th .sort-arrow.asc::after { content: "▲"; }
+    th .sort-arrow.desc::after { content: "▼"; }
+    th .sort-arrow.none::after { content: "▲▼"; font-size: 8px; }
 
     td {
         padding: 14px 15px;
@@ -419,9 +532,7 @@
         white-space: nowrap;
     }
 
-    tr:hover td {
-        background: #f8fafc;
-    }
+    tr:hover td { background: #f8fafc; }
 
     .badge {
         padding: 5px 9px;
@@ -430,15 +541,8 @@
         font-weight: 600;
     }
 
-    .badge-active {
-        background: #dcfce7;
-        color: #15803d;
-    }
-
-    .badge-expired {
-        background: #fee2e2;
-        color: #b91c1c;
-    }
+    .badge-active { background: #dcfce7; color: #15803d; }
+    .badge-expired { background: #fee2e2; color: #b91c1c; }
 
     .license-badge {
         padding: 5px 9px;
@@ -447,27 +551,10 @@
         font-weight: 600;
     }
 
-    .license-badge-ca {
-        background: #dbeafe;
-        color: #1d4ed8;
-    }
-
-    .license-badge-accountant {
-        background: #dcfce7;
-        color: #15803d;
-    }
-
-    .license-badge-gstp {
-        background: #fef3c7;
-        color: #92400e;
-    }
-
-    .license-badge-regular {
-        background: #f3e8ff;
-        color: #7c3aed;
-    }
-
-    /* Empty */
+    .license-badge-ca { background: #dbeafe; color: #1d4ed8; }
+    .license-badge-accountant { background: #dcfce7; color: #15803d; }
+    .license-badge-gstp { background: #fef3c7; color: #92400e; }
+    .license-badge-regular { background: #f3e8ff; color: #7c3aed; }
 
     .empty-state {
         text-align: center;
@@ -480,9 +567,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         padding: 18px;
         border-top: 1px solid #e5e7eb;
+        flex-wrap: wrap;
     }
 
     .page-btn {
@@ -493,11 +581,10 @@
         cursor: pointer;
         font-size: 13px;
         color: #374151;
+        transition: all 0.15s;
     }
 
-    .page-btn:hover {
-        background: #f3f4f6;
-    }
+    .page-btn:hover { background: #f3f4f6; }
 
     .page-btn.active-page {
         background: #2563eb;
@@ -510,85 +597,129 @@
         cursor: not-allowed;
     }
 
+    /* Loading overlay */
+    .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15,23,42,0.7);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(4px);
+    }
+
+    .loading-overlay.show {
+        display: flex;
+    }
+
+    .loading-spinner {
+        text-align: center;
+        color: white;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255,255,255,0.2);
+        border-top-color: #60a5fa;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
     /* Responsive */
-
     @media (max-width: 1000px) {
-        .category-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .kpi-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        .category-grid { grid-template-columns: repeat(2, 1fr); }
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 650px) {
-        .landing-title {
-            font-size: 30px;
-        }
-
-        .category-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .kpi-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .filter-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .dashboard-header {
-            padding: 15px;
-        }
-
-        .dashboard-content {
-            padding: 18px;
-        }
-
-        .header-title {
-            font-size: 17px;
-        }
+        .landing-title { font-size: 30px; }
+        .category-grid { grid-template-columns: 1fr; }
+        .kpi-grid { grid-template-columns: 1fr; }
+        .filter-grid { grid-template-columns: 1fr; }
+        .dashboard-header { padding: 15px; }
+        .dashboard-content { padding: 18px; }
+        .header-title { font-size: 17px; }
     }
 </style>
 </head>
 
 <body>
 
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+        <div style="font-size:16px;font-weight:600;">Processing CSV data...</div>
+    </div>
+</div>
+
 <!-- ============================================================
      LANDING PAGE
      ============================================================ -->
-
 <div id="landingPage" class="landing-page">
-
     <div class="landing-container">
 
         <div class="logo">LD</div>
 
-        <h1 class="landing-title">
-            License Dashboard
-        </h1>
+        <h1 class="landing-title">License Dashboard</h1>
 
         <p class="landing-subtitle">
-            Select a license category to view its subscription dashboard
+            Upload your CSV data file, then select a license category to view its dashboard
         </p>
 
-        <div class="category-grid">
+        <!-- CSV Upload Section -->
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">Upload Your CSV Data File</div>
+            <div class="upload-desc">
+                Drag & drop your CSV file here, or click the button below to browse.<br>
+                Your data stays in the browser — nothing is uploaded to any server.
+            </div>
 
-            <!-- CA -->
-            <div class="category-card" onclick="openDashboard('CA')">
-                <div class="category-icon ca-icon">
-                    CA
+            <div class="upload-btn-wrapper">
+                <button class="upload-btn" onclick="document.getElementById('csvFileInput').click()">
+                    📁 Choose CSV File
+                </button>
+                <button class="sample-btn" onclick="loadSampleData()">
+                    ⚡ Load Sample Data
+                </button>
+                <button class="sample-btn" onclick="toggleFormatHint()">
+                    ❓ CSV Format
+                </button>
+            </div>
+
+            <input type="file" id="csvFileInput" class="file-input" accept=".csv" onchange="handleFileUpload(event)">
+
+            <div class="upload-status" id="uploadStatus"></div>
+
+            <div class="format-hint" id="formatHint">
+                <div class="format-hint-title">Required CSV Columns (header names must match exactly):</div>
+                <code>subscriptionId,licenseCategory,compguid,gstin,blsExpiry
+SUB1001,CA,COMP001,09AAAAA1111A1Z1,2026-12-31
+SUB1002,Accountant,COMP002,09BBBBB2222B1Z2,2024-06-15
+SUB1003,GSTP,COMP003,09CCCCC3333C1Z3,2025-09-20
+SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
+                <div style="color:#94a3b8;font-size:12px;margin-top:8px;">
+                    <strong>licenseCategory</strong> must be one of: <strong>CA</strong>, <strong>Accountant</strong>, <strong>GSTP</strong>, <strong>Regular</strong><br>
+                    <strong>blsExpiry</strong> date format: <strong>YYYY-MM-DD</strong> (e.g. 2026-12-31)
                 </div>
+            </div>
+        </div>
 
+        <!-- Category Cards -->
+        <div class="category-grid disabled" id="categoryGrid">
+
+            <div class="category-card" onclick="openDashboard('CA')">
+                <div class="category-icon ca-icon">CA</div>
                 <h2>CA</h2>
-
-                <p>
-                    View all subscriptions and COMPGUIDs
-                    tagged with CA licenses.
-                </p>
-
+                <p>View all subscriptions and COMPGUIDs tagged with CA licenses.</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-ca-total">0</div>
@@ -605,19 +736,10 @@
                 </div>
             </div>
 
-            <!-- Accountant -->
             <div class="category-card" onclick="openDashboard('Accountant')">
-                <div class="category-icon accountant-icon">
-                    AC
-                </div>
-
+                <div class="category-icon accountant-icon">AC</div>
                 <h2>Accountant</h2>
-
-                <p>
-                    View all subscriptions and COMPGUIDs
-                    tagged with Accountant licenses.
-                </p>
-
+                <p>View all subscriptions and COMPGUIDs tagged with Accountant licenses.</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-accountant-total">0</div>
@@ -634,19 +756,10 @@
                 </div>
             </div>
 
-            <!-- GSTP -->
             <div class="category-card" onclick="openDashboard('GSTP')">
-                <div class="category-icon gstp-icon">
-                    GP
-                </div>
-
+                <div class="category-icon gstp-icon">GP</div>
                 <h2>GSTP</h2>
-
-                <p>
-                    View all subscriptions and COMPGUIDs
-                    tagged with GSTP licenses.
-                </p>
-
+                <p>View all subscriptions and COMPGUIDs tagged with GSTP licenses.</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-gstp-total">0</div>
@@ -663,19 +776,10 @@
                 </div>
             </div>
 
-            <!-- Regular -->
             <div class="category-card" onclick="openDashboard('Regular')">
-                <div class="category-icon regular-icon">
-                    RG
-                </div>
-
+                <div class="category-icon regular-icon">RG</div>
                 <h2>Regular</h2>
-
-                <p>
-                    View all subscriptions and COMPGUIDs
-                    tagged with Regular licenses.
-                </p>
-
+                <p>View all subscriptions and COMPGUIDs tagged with Regular licenses.</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-regular-total">0</div>
@@ -691,311 +795,171 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="no-data-hint" id="noDataHint">
+            ↑ Upload a CSV file first to enable the dashboard categories
         </div>
 
     </div>
-
 </div>
-
 
 <!-- ============================================================
      DASHBOARD PAGE
      ============================================================ -->
-
 <div id="dashboardPage" class="dashboard-page">
 
     <header class="dashboard-header">
-
         <div class="header-left">
-
-            <div class="header-logo">
-                LD
-            </div>
-
+            <div class="header-logo">LD</div>
             <div>
-                <div class="header-title">
-                    License Dashboard
-                </div>
-
-                <div class="header-subtitle" id="headerCategory">
-                    CA Dashboard
-                </div>
+                <div class="header-title">License Dashboard</div>
+                <div class="header-subtitle" id="headerCategory">CA Dashboard</div>
             </div>
-
         </div>
-
-        <button class="back-button" onclick="goBack()">
-            ← Back to Categories
-        </button>
-
+        <div class="header-actions">
+            <button class="export-button" onclick="exportTableCSV()">📥 Export CSV</button>
+            <button class="back-button" onclick="goBack()">← Back to Categories</button>
+        </div>
     </header>
-
 
     <main class="dashboard-content">
 
         <section class="dashboard-title-section">
-
-            <h1 class="dashboard-title" id="dashboardTitle">
-                CA Dashboard
-            </h1>
-
+            <h1 class="dashboard-title" id="dashboardTitle">CA Dashboard</h1>
             <p class="dashboard-description">
                 Subscription, COMPGUID and GSTIN overview for the selected license category.
             </p>
-
         </section>
 
-
-        <!-- ====================================================
-             KPI CARDS
-             ==================================================== -->
-
+        <!-- KPI CARDS -->
         <section class="kpi-grid" id="kpiGrid">
 
             <div class="kpi-card">
                 <div class="kpi-icon">▣</div>
-                <div class="kpi-label">
-                    Total Subscription IDs
-                </div>
-                <div class="kpi-value" id="totalSubscriptions">
-                    0
-                </div>
+                <div class="kpi-label">Total Subscription IDs</div>
+                <div class="kpi-value" id="totalSubscriptions">0</div>
             </div>
-
 
             <div class="kpi-card expired">
                 <div class="kpi-icon">✕</div>
-                <div class="kpi-label">
-                    Expired Subscriptions
-                    <br>
-                    <small>BLS Expiry ≤ Today</small>
-                </div>
-
-                <div class="kpi-value" id="expiredSubscriptions">
-                    0
-                </div>
+                <div class="kpi-label">Expired Subscriptions<br><small>BLS Expiry ≤ Today</small></div>
+                <div class="kpi-value" id="expiredSubscriptions">0</div>
             </div>
-
 
             <div class="kpi-card active">
                 <div class="kpi-icon">✓</div>
-                <div class="kpi-label">
-                    Active Subscriptions
-                    <br>
-                    <small>BLS Expiry ≥ Today</small>
-                </div>
-
-                <div class="kpi-value" id="activeSubscriptions">
-                    0
-                </div>
+                <div class="kpi-label">Active Subscriptions<br><small>BLS Expiry ≥ Today</small></div>
+                <div class="kpi-value" id="activeSubscriptions">0</div>
             </div>
-
 
             <div class="kpi-card comp">
                 <div class="kpi-icon">◈</div>
-                <div class="kpi-label">
-                    Total COMPGUID
-                </div>
-
-                <div class="kpi-value" id="totalCompguid">
-                    0
-                </div>
+                <div class="kpi-label">Total COMPGUID</div>
+                <div class="kpi-value" id="totalCompguid">0</div>
             </div>
-
 
             <div class="kpi-card gstin">
                 <div class="kpi-icon">G</div>
-                <div class="kpi-label">
-                    Total GSTIN
-                </div>
-
-                <div class="kpi-value" id="totalGstin">
-                    0
-                </div>
+                <div class="kpi-label">Total GSTIN</div>
+                <div class="kpi-value" id="totalGstin">0</div>
             </div>
-
-
-            <!-- Cross-category cards are created dynamically -->
 
             <div id="crossCategoryCards" style="display: contents;"></div>
 
         </section>
 
-
-        <!-- ====================================================
-             FILTERS
-             ==================================================== -->
-
+        <!-- FILTERS -->
         <section class="filter-section">
-
-            <div class="filter-title">
-                Search & Filter
-            </div>
-
+            <div class="filter-title">Search & Filter</div>
             <div class="filter-grid">
-
-                <input
-                    type="text"
-                    id="searchInput"
-                    class="filter-input"
-                    placeholder="Search Subscription ID, COMPGUID or GSTIN..."
-                    oninput="applyFilters()"
-                >
-
-                <select
-                    id="statusFilter"
-                    class="filter-select"
-                    onchange="applyFilters()"
-                >
+                <input type="text" id="searchInput" class="filter-input"
+                       placeholder="Search Subscription ID, COMPGUID or GSTIN..."
+                       oninput="applyFilters()">
+                <select id="statusFilter" class="filter-select" onchange="applyFilters()">
                     <option value="All">All Statuses</option>
                     <option value="Active">Active</option>
                     <option value="Expired">Expired</option>
                 </select>
-
-                <select
-                    id="licenseFilter"
-                    class="filter-select"
-                    onchange="applyFilters()"
-                >
+                <select id="licenseFilter" class="filter-select" onchange="applyFilters()">
                     <option value="All">All License Categories</option>
                     <option value="CA">CA</option>
                     <option value="Accountant">Accountant</option>
                     <option value="GSTP">GSTP</option>
                     <option value="Regular">Regular</option>
                 </select>
-
             </div>
-
         </section>
 
-
-        <!-- ====================================================
-             DATA TABLE
-             ==================================================== -->
-
+        <!-- DATA TABLE -->
         <section class="table-section">
-
             <div class="table-header">
-
-                <div class="table-title">
-                    Subscription Details
-                </div>
-
-                <div class="record-count" id="recordCount">
-                    0 records
-                </div>
-
+                <div class="table-title">Subscription Details</div>
+                <div class="record-count" id="recordCount">0 records</div>
             </div>
-
             <div class="table-wrapper">
-
                 <table>
-
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Subscription ID</th>
-                            <th>License Category</th>
-                            <th>COMPGUID</th>
-                            <th>GSTIN</th>
-                            <th>BLS Expiry</th>
-                            <th>Status</th>
+                            <th onclick="sortTable(null)"># <span class="sort-arrow none" id="sort-idx"></span></th>
+                            <th onclick="sortTable('subscriptionId')">Subscription ID <span class="sort-arrow none" id="sort-subscriptionId"></span></th>
+                            <th onclick="sortTable('licenseCategory')">License Category <span class="sort-arrow none" id="sort-licenseCategory"></span></th>
+                            <th onclick="sortTable('compguid')">COMPGUID <span class="sort-arrow none" id="sort-compguid"></span></th>
+                            <th onclick="sortTable('gstin')">GSTIN <span class="sort-arrow none" id="sort-gstin"></span></th>
+                            <th onclick="sortTable('blsExpiry')">BLS Expiry <span class="sort-arrow none" id="sort-blsExpiry"></span></th>
+                            <th onclick="sortTable('status')">Status <span class="sort-arrow none" id="sort-status"></span></th>
                         </tr>
                     </thead>
-
-                    <tbody id="dataTableBody">
-                    </tbody>
-
+                    <tbody id="dataTableBody"></tbody>
                 </table>
-
             </div>
-
             <div class="pagination" id="pagination"></div>
-
         </section>
 
     </main>
-
 </div>
 
-
 <script>
-
-/* ==============================================================
-   SAMPLE RAW DATA
-
-   Replace this array with your actual data.
-
-   "licenseCategory" is the column from your raw data which
-   contains CA / Accountant / GSTP / Regular.
-   ============================================================== */
-
-const rawData = [
-    { subscriptionId: "SUB1001", licenseCategory: "CA",         compguid: "COMP001", gstin: "09AAAAA1111A1Z1", blsExpiry: "2026-12-31" },
-    { subscriptionId: "SUB1002", licenseCategory: "CA",         compguid: "COMP002", gstin: "09BBBBB2222B1Z2", blsExpiry: "2024-06-15" },
-    { subscriptionId: "SUB1003", licenseCategory: "CA",         compguid: "COMP003", gstin: "09CCCCC3333C1Z3", blsExpiry: "2025-09-20" },
-    { subscriptionId: "SUB1004", licenseCategory: "CA",         compguid: "COMP001", gstin: "09DDDDD4444D1Z4", blsExpiry: "2023-01-10" },
-    { subscriptionId: "SUB1005", licenseCategory: "Accountant", compguid: "COMP004", gstin: "09EEEEE5555E1Z5", blsExpiry: "2026-03-25" },
-    { subscriptionId: "SUB1006", licenseCategory: "Accountant", compguid: "COMP005", gstin: "09FFFFF6666F1Z6", blsExpiry: "2024-11-30" },
-    { subscriptionId: "SUB1007", licenseCategory: "Accountant", compguid: "COMP002", gstin: "09GGGGG7777G1Z7", blsExpiry: "2025-07-14" },
-    { subscriptionId: "SUB1008", licenseCategory: "Accountant", compguid: "COMP006", gstin: "09HHHHH8888H1Z8", blsExpiry: "2023-05-01" },
-    { subscriptionId: "SUB1009", licenseCategory: "GSTP",       compguid: "COMP007", gstin: "09IIIII9999I1Z9", blsExpiry: "2026-08-18" },
-    { subscriptionId: "SUB1010", licenseCategory: "GSTP",       compguid: "COMP003", gstin: "09JJJJJ1010J1Z0", blsExpiry: "2024-02-28" },
-    { subscriptionId: "SUB1011", licenseCategory: "GSTP",       compguid: "COMP008", gstin: "09KKKKK1111K1Z1", blsExpiry: "2025-12-01" },
-    { subscriptionId: "SUB1012", licenseCategory: "GSTP",       compguid: "COMP009", gstin: "09LLLLL1212L1Z2", blsExpiry: "2023-09-15" },
-    { subscriptionId: "SUB1013", licenseCategory: "Regular",    compguid: "COMP010", gstin: "09MMMMM1313M1Z3", blsExpiry: "2026-05-10" },
-    { subscriptionId: "SUB1014", licenseCategory: "Regular",    compguid: "COMP001", gstin: "09NNNNN1414N1Z4", blsExpiry: "2024-08-22" },
-    { subscriptionId: "SUB1015", licenseCategory: "Regular",    compguid: "COMP011", gstin: "09OOOOO1515O1Z5", blsExpiry: "2025-04-05" },
-    { subscriptionId: "SUB1016", licenseCategory: "Regular",    compguid: "COMP012", gstin: "09PPPPP1616P1Z6", blsExpiry: "2023-12-31" },
-    { subscriptionId: "SUB1017", licenseCategory: "CA",         compguid: "COMP013", gstin: "09QQQQQ1717Q1Z7", blsExpiry: "2026-01-15" },
-    { subscriptionId: "SUB1018", licenseCategory: "CA",         compguid: "COMP004", gstin: "09RRRRR1818R1Z8", blsExpiry: "2025-06-30" },
-    { subscriptionId: "SUB1019", licenseCategory: "Accountant", compguid: "COMP014", gstin: "09SSSSS1919S1Z9", blsExpiry: "2026-10-12" },
-    { subscriptionId: "SUB1020", licenseCategory: "Accountant", compguid: "COMP010", gstin: "09TTTTT2020T1Z0", blsExpiry: "2024-04-18" },
-    { subscriptionId: "SUB1021", licenseCategory: "GSTP",       compguid: "COMP015", gstin: "09UUUUU2121U1Z1", blsExpiry: "2026-11-25" },
-    { subscriptionId: "SUB1022", licenseCategory: "GSTP",       compguid: "COMP001", gstin: "09VVVVV2222V1Z2", blsExpiry: "2025-02-14" },
-    { subscriptionId: "SUB1023", licenseCategory: "Regular",    compguid: "COMP016", gstin: "09WWWWW2323W1Z3", blsExpiry: "2026-07-04" },
-    { subscriptionId: "SUB1024", licenseCategory: "Regular",    compguid: "COMP003", gstin: "09XXXXX2424X1Z4", blsExpiry: "2024-09-09" },
-    { subscriptionId: "SUB1025", licenseCategory: "CA",         compguid: "COMP017", gstin: "09YYYYY2525Y1Z5", blsExpiry: "2023-03-20" },
-    { subscriptionId: "SUB1026", licenseCategory: "CA",         compguid: "COMP007", gstin: "09ZZZZZ2626Z1Z6", blsExpiry: "2026-04-08" },
-    { subscriptionId: "SUB1027", licenseCategory: "Accountant", compguid: "COMP018", gstin: "09AAAAB2727A1Z7", blsExpiry: "2025-11-19" },
-    { subscriptionId: "SUB1028", licenseCategory: "Regular",    compguid: "COMP005", gstin: "09BBBBC2828B1Z8", blsExpiry: "2026-02-02" },
-    { subscriptionId: "SUB1029", licenseCategory: "GSTP",       compguid: "COMP019", gstin: "09CCCCD2929C1Z9", blsExpiry: "2024-12-25" },
-    { subscriptionId: "SUB1030", licenseCategory: "CA",         compguid: "COMP020", gstin: "09DDDDE3030D1Z0", blsExpiry: "2025-08-08" }
-];
-
-
 /* ==============================================================
    GLOBAL STATE
    ============================================================== */
-
 const allCategories = ["CA", "Accountant", "GSTP", "Regular"];
-let currentCategory = "";
+let rawData          = [];
+let currentCategory  = "";
 let filteredData     = [];
 let currentPage      = 1;
-const rowsPerPage    = 15;
-
+const rowsPerPage    = 25;
+let sortField        = null;
+let sortDir          = "asc";
+let dataLoaded       = false;
 
 /* ==============================================================
    UTILITY HELPERS
    ============================================================== */
-
-function today() {
+function todayStr() {
     const d = new Date();
-    return d.toISOString().split("T")[0];   // YYYY-MM-DD
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
 }
 
 function isExpired(dateStr) {
-    return dateStr <= today();
+    if (!dateStr) return true;
+    return dateStr.trim() <= todayStr();
 }
 
 function formatDate(dateStr) {
-    const d = new Date(dateStr + "T00:00:00");
-    return d.toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-    });
+    if (!dateStr) return "N/A";
+    try {
+        const d = new Date(dateStr.trim() + "T00:00:00");
+        if (isNaN(d)) return dateStr;
+        return d.toLocaleDateString("en-IN", {
+            day: "2-digit", month: "short", year: "numeric"
+        });
+    } catch {
+        return dateStr;
+    }
 }
 
 function getLicenseBadgeClass(cat) {
@@ -1008,50 +972,347 @@ function getLicenseBadgeClass(cat) {
     }
 }
 
+/* ==============================================================
+   CSV PARSER
+   ============================================================== */
+function parseCSV(csvText) {
+    const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
+    if (lines.length < 2) throw new Error("CSV must have a header row and at least one data row.");
+
+    // Parse header
+    const headers = parseCSVLine(lines[0]).map(h => h.trim());
+
+    // Find column indices (case-insensitive, flexible matching)
+    const colMap = {};
+    const requiredCols = ['subscriptionId', 'licenseCategory', 'compguid', 'gstin', 'blsExpiry'];
+    const aliases = {
+        'subscriptionid': 'subscriptionId',
+        'subscription_id': 'subscriptionId',
+        'subscription id': 'subscriptionId',
+        'sub_id': 'subscriptionId',
+        'subid': 'subscriptionId',
+        'licensecategory': 'licenseCategory',
+        'license_category': 'licenseCategory',
+        'license category': 'licenseCategory',
+        'category': 'licenseCategory',
+        'compguid': 'compguid',
+        'comp_guid': 'compguid',
+        'comp guid': 'compguid',
+        'gstin': 'gstin',
+        'gst_number': 'gstin',
+        'gstnumber': 'gstin',
+        'blsexpiry': 'blsExpiry',
+        'bls_expiry': 'blsExpiry',
+        'bls expiry': 'blsExpiry',
+        'blsexpirydate': 'blsExpiry',
+        'bls_expiry_date': 'blsExpiry',
+        'expiry': 'blsExpiry',
+        'expirydate': 'blsExpiry',
+        'expiry_date': 'blsExpiry'
+    };
+
+    headers.forEach((h, idx) => {
+        const normalized = h.toLowerCase().replace(/[^a-z0-9_]/g, '');
+        const mapped = aliases[normalized] || aliases[h.toLowerCase().trim()];
+        if (mapped) {
+            colMap[mapped] = idx;
+        }
+    });
+
+    // Check all required columns found
+    const missing = requiredCols.filter(c => colMap[c] === undefined);
+    if (missing.length > 0) {
+        throw new Error(`Missing required columns: ${missing.join(', ')}\n\nFound columns: ${headers.join(', ')}\n\nExpected: subscriptionId, licenseCategory, compguid, gstin, blsExpiry`);
+    }
+
+    // Parse data rows
+    const data = [];
+    for (let i = 1; i < lines.length; i++) {
+        const values = parseCSVLine(lines[i]);
+        if (values.length < headers.length) continue;
+
+        const row = {
+            subscriptionId:  (values[colMap.subscriptionId] || "").trim(),
+            licenseCategory: (values[colMap.licenseCategory] || "").trim(),
+            compguid:        (values[colMap.compguid] || "").trim(),
+            gstin:           (values[colMap.gstin] || "").trim(),
+            blsExpiry:       normalizeDate((values[colMap.blsExpiry] || "").trim())
+        };
+
+        // Normalize license category
+        const catLower = row.licenseCategory.toLowerCase();
+        if (catLower === 'ca') row.licenseCategory = 'CA';
+        else if (catLower === 'accountant') row.licenseCategory = 'Accountant';
+        else if (catLower === 'gstp') row.licenseCategory = 'GSTP';
+        else if (catLower === 'regular') row.licenseCategory = 'Regular';
+
+        if (row.subscriptionId && allCategories.includes(row.licenseCategory)) {
+            data.push(row);
+        }
+    }
+
+    if (data.length === 0) {
+        throw new Error("No valid data rows found. Ensure licenseCategory is one of: CA, Accountant, GSTP, Regular");
+    }
+
+    return data;
+}
+
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQuotes) {
+            if (ch === '"') {
+                if (i + 1 < line.length && line[i + 1] === '"') {
+                    current += '"';
+                    i++;
+                } else {
+                    inQuotes = false;
+                }
+            } else {
+                current += ch;
+            }
+        } else {
+            if (ch === '"') {
+                inQuotes = true;
+            } else if (ch === ',') {
+                result.push(current);
+                current = '';
+            } else {
+                current += ch;
+            }
+        }
+    }
+    result.push(current);
+    return result;
+}
+
+function normalizeDate(dateStr) {
+    if (!dateStr) return "";
+
+    // Already YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+
+    // DD-MM-YYYY or DD/MM/YYYY
+    let m = dateStr.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+    if (m) {
+        return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+    }
+
+    // MM/DD/YYYY
+    m = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (m) {
+        return `${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`;
+    }
+
+    // YYYY/MM/DD
+    m = dateStr.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+    if (m) {
+        return `${m[1]}-${m[2]}-${m[3]}`;
+    }
+
+    // Try Date parse
+    try {
+        const d = new Date(dateStr);
+        if (!isNaN(d)) {
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+    } catch {}
+
+    return dateStr;
+}
 
 /* ==============================================================
-   LANDING PAGE – populate summary counts
+   FILE UPLOAD HANDLING
    ============================================================== */
 
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+        showUploadStatus("Please upload a .csv file", "error");
+        return;
+    }
+
+    showLoading(true);
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            rawData = parseCSV(e.target.result);
+            dataLoaded = true;
+            showUploadStatus(`✓ Loaded ${rawData.length.toLocaleString()} records from "${file.name}"`, "success");
+            document.getElementById("uploadSection").classList.add("loaded");
+            document.getElementById("categoryGrid").classList.remove("disabled");
+            document.getElementById("noDataHint").style.display = "none";
+            populateLandingCounts();
+        } catch (err) {
+            showUploadStatus("✕ Error: " + err.message, "error");
+            console.error(err);
+        }
+        showLoading(false);
+    };
+
+    reader.onerror = function() {
+        showUploadStatus("✕ Failed to read file", "error");
+        showLoading(false);
+    };
+
+    reader.readAsText(file);
+
+    // Reset input so same file can be re-selected
+    event.target.value = "";
+}
+
+function showUploadStatus(msg, type) {
+    const el = document.getElementById("uploadStatus");
+    el.textContent = msg;
+    el.className = "upload-status " + type;
+}
+
+function showLoading(show) {
+    document.getElementById("loadingOverlay").classList.toggle("show", show);
+}
+
+function toggleFormatHint() {
+    document.getElementById("formatHint").classList.toggle("show");
+}
+
+// Drag and drop
+document.addEventListener("DOMContentLoaded", function() {
+    const uploadSection = document.getElementById("uploadSection");
+
+    uploadSection.addEventListener("dragover", function(e) {
+        e.preventDefault();
+        uploadSection.classList.add("drag-over");
+    });
+
+    uploadSection.addEventListener("dragleave", function() {
+        uploadSection.classList.remove("drag-over");
+    });
+
+    uploadSection.addEventListener("drop", function(e) {
+        e.preventDefault();
+        uploadSection.classList.remove("drag-over");
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            // Create a fake event
+            const fakeEvent = { target: { files: [file], value: "" } };
+            handleFileUpload(fakeEvent);
+        }
+    });
+});
+
+/* ==============================================================
+   SAMPLE DATA
+   ============================================================== */
+function loadSampleData() {
+    showLoading(true);
+
+    setTimeout(() => {
+        rawData = [
+            { subscriptionId: "SUB1001", licenseCategory: "CA",         compguid: "COMP001", gstin: "09AAAAA1111A1Z1", blsExpiry: "2026-12-31" },
+            { subscriptionId: "SUB1002", licenseCategory: "CA",         compguid: "COMP002", gstin: "09BBBBB2222B1Z2", blsExpiry: "2024-06-15" },
+            { subscriptionId: "SUB1003", licenseCategory: "CA",         compguid: "COMP003", gstin: "09CCCCC3333C1Z3", blsExpiry: "2025-09-20" },
+            { subscriptionId: "SUB1004", licenseCategory: "CA",         compguid: "COMP001", gstin: "09DDDDD4444D1Z4", blsExpiry: "2023-01-10" },
+            { subscriptionId: "SUB1005", licenseCategory: "Accountant", compguid: "COMP004", gstin: "09EEEEE5555E1Z5", blsExpiry: "2026-03-25" },
+            { subscriptionId: "SUB1006", licenseCategory: "Accountant", compguid: "COMP005", gstin: "09FFFFF6666F1Z6", blsExpiry: "2024-11-30" },
+            { subscriptionId: "SUB1007", licenseCategory: "Accountant", compguid: "COMP002", gstin: "09GGGGG7777G1Z7", blsExpiry: "2025-07-14" },
+            { subscriptionId: "SUB1008", licenseCategory: "Accountant", compguid: "COMP006", gstin: "09HHHHH8888H1Z8", blsExpiry: "2023-05-01" },
+            { subscriptionId: "SUB1009", licenseCategory: "GSTP",       compguid: "COMP007", gstin: "09IIIII9999I1Z9", blsExpiry: "2026-08-18" },
+            { subscriptionId: "SUB1010", licenseCategory: "GSTP",       compguid: "COMP003", gstin: "09JJJJJ1010J1Z0", blsExpiry: "2024-02-28" },
+            { subscriptionId: "SUB1011", licenseCategory: "GSTP",       compguid: "COMP008", gstin: "09KKKKK1111K1Z1", blsExpiry: "2025-12-01" },
+            { subscriptionId: "SUB1012", licenseCategory: "GSTP",       compguid: "COMP009", gstin: "09LLLLL1212L1Z2", blsExpiry: "2023-09-15" },
+            { subscriptionId: "SUB1013", licenseCategory: "Regular",    compguid: "COMP010", gstin: "09MMMMM1313M1Z3", blsExpiry: "2026-05-10" },
+            { subscriptionId: "SUB1014", licenseCategory: "Regular",    compguid: "COMP001", gstin: "09NNNNN1414N1Z4", blsExpiry: "2024-08-22" },
+            { subscriptionId: "SUB1015", licenseCategory: "Regular",    compguid: "COMP011", gstin: "09OOOOO1515O1Z5", blsExpiry: "2025-04-05" },
+            { subscriptionId: "SUB1016", licenseCategory: "Regular",    compguid: "COMP012", gstin: "09PPPPP1616P1Z6", blsExpiry: "2023-12-31" },
+            { subscriptionId: "SUB1017", licenseCategory: "CA",         compguid: "COMP013", gstin: "09QQQQQ1717Q1Z7", blsExpiry: "2026-01-15" },
+            { subscriptionId: "SUB1018", licenseCategory: "CA",         compguid: "COMP004", gstin: "09RRRRR1818R1Z8", blsExpiry: "2025-06-30" },
+            { subscriptionId: "SUB1019", licenseCategory: "Accountant", compguid: "COMP014", gstin: "09SSSSS1919S1Z9", blsExpiry: "2026-10-12" },
+            { subscriptionId: "SUB1020", licenseCategory: "Accountant", compguid: "COMP010", gstin: "09TTTTT2020T1Z0", blsExpiry: "2024-04-18" },
+            { subscriptionId: "SUB1021", licenseCategory: "GSTP",       compguid: "COMP015", gstin: "09UUUUU2121U1Z1", blsExpiry: "2026-11-25" },
+            { subscriptionId: "SUB1022", licenseCategory: "GSTP",       compguid: "COMP001", gstin: "09VVVVV2222V1Z2", blsExpiry: "2025-02-14" },
+            { subscriptionId: "SUB1023", licenseCategory: "Regular",    compguid: "COMP016", gstin: "09WWWWW2323W1Z3", blsExpiry: "2026-07-04" },
+            { subscriptionId: "SUB1024", licenseCategory: "Regular",    compguid: "COMP003", gstin: "09XXXXX2424X1Z4", blsExpiry: "2024-09-09" },
+            { subscriptionId: "SUB1025", licenseCategory: "CA",         compguid: "COMP017", gstin: "09YYYYY2525Y1Z5", blsExpiry: "2023-03-20" },
+            { subscriptionId: "SUB1026", licenseCategory: "CA",         compguid: "COMP007", gstin: "09ZZZZZ2626Z1Z6", blsExpiry: "2026-04-08" },
+            { subscriptionId: "SUB1027", licenseCategory: "Accountant", compguid: "COMP018", gstin: "09AAAAB2727A1Z7", blsExpiry: "2025-11-19" },
+            { subscriptionId: "SUB1028", licenseCategory: "Regular",    compguid: "COMP005", gstin: "09BBBBC2828B1Z8", blsExpiry: "2026-02-02" },
+            { subscriptionId: "SUB1029", licenseCategory: "GSTP",       compguid: "COMP019", gstin: "09CCCCD2929C1Z9", blsExpiry: "2024-12-25" },
+            { subscriptionId: "SUB1030", licenseCategory: "CA",         compguid: "COMP020", gstin: "09DDDDE3030D1Z0", blsExpiry: "2025-08-08" }
+        ];
+
+        dataLoaded = true;
+        showUploadStatus("✓ Loaded 30 sample records", "success");
+        document.getElementById("uploadSection").classList.add("loaded");
+        document.getElementById("categoryGrid").classList.remove("disabled");
+        document.getElementById("noDataHint").style.display = "none";
+        populateLandingCounts();
+        showLoading(false);
+    }, 300);
+}
+
+/* ==============================================================
+   LANDING PAGE COUNTS
+   ============================================================== */
 function populateLandingCounts() {
     allCategories.forEach(cat => {
-        const catKey   = cat.toLowerCase();
-        const catData  = rawData.filter(r => r.licenseCategory === cat);
-        const total    = catData.length;
-        const expired  = catData.filter(r => isExpired(r.blsExpiry)).length;
-        const active   = total - expired;
+        const catKey  = cat.toLowerCase();
+        const catData = rawData.filter(r => r.licenseCategory === cat);
+        const total   = catData.length;
+        const expired = catData.filter(r => isExpired(r.blsExpiry)).length;
+        const active  = total - expired;
 
         const elTotal   = document.getElementById(`landing-${catKey}-total`);
         const elActive  = document.getElementById(`landing-${catKey}-active`);
         const elExpired = document.getElementById(`landing-${catKey}-expired`);
 
-        if (elTotal)   elTotal.textContent   = total;
-        if (elActive)  elActive.textContent  = active;
-        if (elExpired) elExpired.textContent  = expired;
+        if (elTotal)   elTotal.textContent   = total.toLocaleString();
+        if (elActive)  elActive.textContent  = active.toLocaleString();
+        if (elExpired) elExpired.textContent  = expired.toLocaleString();
     });
 }
-
 
 /* ==============================================================
    OPEN / CLOSE DASHBOARD
    ============================================================== */
-
 function openDashboard(category) {
+    if (!dataLoaded) {
+        showUploadStatus("Please upload a CSV file first!", "error");
+        return;
+    }
+
     currentCategory = category;
 
-    document.getElementById("landingPage").style.display    = "none";
-    document.getElementById("dashboardPage").style.display  = "block";
+    document.getElementById("landingPage").style.display   = "none";
+    document.getElementById("dashboardPage").style.display = "block";
+    document.getElementById("headerCategory").textContent  = category + " Dashboard";
+    document.getElementById("dashboardTitle").textContent   = category + " Dashboard";
 
-    document.getElementById("headerCategory").textContent   = category + " Dashboard";
-    document.getElementById("dashboardTitle").textContent    = category + " Dashboard";
-
-    // reset filters
+    // Reset filters
     document.getElementById("searchInput").value   = "";
     document.getElementById("statusFilter").value  = "All";
     document.getElementById("licenseFilter").value = "All";
 
+    // Reset sort
+    sortField = null;
+    sortDir = "asc";
+    resetSortArrows();
+
     computeKPIs(category);
     applyFilters();
+
+    // Scroll to top
+    window.scrollTo(0, 0);
 }
 
 function goBack() {
@@ -1060,13 +1321,10 @@ function goBack() {
     currentCategory = "";
 }
 
-
 /* ==============================================================
    COMPUTE KPIs
    ============================================================== */
-
 function computeKPIs(category) {
-
     const catData   = rawData.filter(r => r.licenseCategory === category);
     const totalSubs = catData.length;
     const expSubs   = catData.filter(r => isExpired(r.blsExpiry)).length;
@@ -1075,30 +1333,23 @@ function computeKPIs(category) {
     const uniqueCompguids = new Set(catData.map(r => r.compguid));
     const uniqueGstins    = new Set(catData.map(r => r.gstin));
 
-    document.getElementById("totalSubscriptions").textContent  = totalSubs;
-    document.getElementById("expiredSubscriptions").textContent = expSubs;
-    document.getElementById("activeSubscriptions").textContent  = actSubs;
-    document.getElementById("totalCompguid").textContent        = uniqueCompguids.size;
-    document.getElementById("totalGstin").textContent           = uniqueGstins.size;
+    document.getElementById("totalSubscriptions").textContent  = totalSubs.toLocaleString();
+    document.getElementById("expiredSubscriptions").textContent = expSubs.toLocaleString();
+    document.getElementById("activeSubscriptions").textContent  = actSubs.toLocaleString();
+    document.getElementById("totalCompguid").textContent        = uniqueCompguids.size.toLocaleString();
+    document.getElementById("totalGstin").textContent           = uniqueGstins.size.toLocaleString();
 
-    // ---- Cross-category COMPGUIDs ----
-    // For each OTHER category, count how many COMPGUIDs from
-    // the current category also appear in that other category.
-
+    // Cross-category COMPGUIDs
     const crossContainer = document.getElementById("crossCategoryCards");
     crossContainer.innerHTML = "";
 
     const otherCategories = allCategories.filter(c => c !== category);
 
     otherCategories.forEach(otherCat => {
-
         const otherCompguids = new Set(
-            rawData
-                .filter(r => r.licenseCategory === otherCat)
-                .map(r => r.compguid)
+            rawData.filter(r => r.licenseCategory === otherCat).map(r => r.compguid)
         );
 
-        // intersection
         let crossCount = 0;
         uniqueCompguids.forEach(cg => {
             if (otherCompguids.has(cg)) crossCount++;
@@ -1111,10 +1362,9 @@ function computeKPIs(category) {
                 <div class="kpi-icon">⇄</div>
                 <div class="kpi-label">
                     COMPGUIDs × ${otherCat}
-                    <br>
-                    <small>Associated with ${otherCat} licenses</small>
+                    <br><small>Associated with ${otherCat} licenses</small>
                 </div>
-                <div class="kpi-value">${crossCount}</div>
+                <div class="kpi-value">${crossCount.toLocaleString()}</div>
             </div>
         `;
 
@@ -1122,21 +1372,61 @@ function computeKPIs(category) {
     });
 }
 
+/* ==============================================================
+   SORTING
+   ============================================================== */
+function resetSortArrows() {
+    document.querySelectorAll('.sort-arrow').forEach(el => {
+        el.className = 'sort-arrow none';
+    });
+}
+
+function sortTable(field) {
+    if (field === null) return; // Index column
+
+    if (sortField === field) {
+        sortDir = sortDir === "asc" ? "desc" : "asc";
+    } else {
+        sortField = field;
+        sortDir = "asc";
+    }
+
+    resetSortArrows();
+    const arrow = document.getElementById("sort-" + field);
+    if (arrow) {
+        arrow.className = "sort-arrow " + sortDir;
+    }
+
+    filteredData.sort((a, b) => {
+        let valA, valB;
+
+        if (field === "status") {
+            valA = isExpired(a.blsExpiry) ? "Expired" : "Active";
+            valB = isExpired(b.blsExpiry) ? "Expired" : "Active";
+        } else {
+            valA = a[field] || "";
+            valB = b[field] || "";
+        }
+
+        if (valA < valB) return sortDir === "asc" ? -1 : 1;
+        if (valA > valB) return sortDir === "asc" ? 1 : -1;
+        return 0;
+    });
+
+    currentPage = 1;
+    renderTable();
+}
 
 /* ==============================================================
    FILTERS & TABLE RENDERING
    ============================================================== */
-
 function applyFilters() {
-
     const search  = document.getElementById("searchInput").value.toLowerCase().trim();
     const status  = document.getElementById("statusFilter").value;
     const license = document.getElementById("licenseFilter").value;
 
-    // start with current category data
     filteredData = rawData.filter(r => r.licenseCategory === currentCategory);
 
-    // search
     if (search) {
         filteredData = filteredData.filter(r =>
             r.subscriptionId.toLowerCase().includes(search) ||
@@ -1145,30 +1435,44 @@ function applyFilters() {
         );
     }
 
-    // status
     if (status === "Active") {
         filteredData = filteredData.filter(r => !isExpired(r.blsExpiry));
     } else if (status === "Expired") {
         filteredData = filteredData.filter(r => isExpired(r.blsExpiry));
     }
 
-    // license sub-filter (in case user wants to narrow – though all are same cat)
     if (license !== "All") {
         filteredData = filteredData.filter(r => r.licenseCategory === license);
+    }
+
+    // Re-apply sort if active
+    if (sortField) {
+        filteredData.sort((a, b) => {
+            let valA, valB;
+            if (sortField === "status") {
+                valA = isExpired(a.blsExpiry) ? "Expired" : "Active";
+                valB = isExpired(b.blsExpiry) ? "Expired" : "Active";
+            } else {
+                valA = a[sortField] || "";
+                valB = b[sortField] || "";
+            }
+            if (valA < valB) return sortDir === "asc" ? -1 : 1;
+            if (valA > valB) return sortDir === "asc" ? 1 : -1;
+            return 0;
+        });
     }
 
     currentPage = 1;
     renderTable();
 }
 
-
 function renderTable() {
-
     const tbody = document.getElementById("dataTableBody");
     tbody.innerHTML = "";
 
     const totalRecords = filteredData.length;
-    document.getElementById("recordCount").textContent = totalRecords + " record" + (totalRecords !== 1 ? "s" : "");
+    document.getElementById("recordCount").textContent =
+        totalRecords.toLocaleString() + " record" + (totalRecords !== 1 ? "s" : "");
 
     if (totalRecords === 0) {
         tbody.innerHTML = `
@@ -1188,8 +1492,8 @@ function renderTable() {
     const totalPages = Math.ceil(totalRecords / rowsPerPage);
     if (currentPage > totalPages) currentPage = totalPages;
 
-    const start = (currentPage - 1) * rowsPerPage;
-    const end   = Math.min(start + rowsPerPage, totalRecords);
+    const start    = (currentPage - 1) * rowsPerPage;
+    const end      = Math.min(start + rowsPerPage, totalRecords);
     const pageData = filteredData.slice(start, end);
 
     pageData.forEach((row, idx) => {
@@ -1203,10 +1507,10 @@ function renderTable() {
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${start + idx + 1}</td>
-            <td><strong>${row.subscriptionId}</strong></td>
-            <td><span class="license-badge ${licenseBadgeClass}">${row.licenseCategory}</span></td>
-            <td>${row.compguid}</td>
-            <td style="font-family:monospace;font-size:12px;">${row.gstin}</td>
+            <td><strong>${escapeHtml(row.subscriptionId)}</strong></td>
+            <td><span class="license-badge ${licenseBadgeClass}">${escapeHtml(row.licenseCategory)}</span></td>
+            <td>${escapeHtml(row.compguid)}</td>
+            <td style="font-family:monospace;font-size:12px;">${escapeHtml(row.gstin)}</td>
             <td>${formatDate(row.blsExpiry)}</td>
             <td>${statusBadge}</td>
         `;
@@ -1216,20 +1520,25 @@ function renderTable() {
     renderPagination(totalPages);
 }
 
+function escapeHtml(str) {
+    if (!str) return "";
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
 
 function renderPagination(totalPages) {
-
     const container = document.getElementById("pagination");
     container.innerHTML = "";
 
     if (totalPages <= 1) return;
 
-    // Prev button
+    // Prev
     const prevBtn       = document.createElement("button");
     prevBtn.className   = "page-btn";
     prevBtn.textContent = "← Prev";
     prevBtn.disabled    = (currentPage === 1);
-    prevBtn.onclick     = () => { currentPage--; renderTable(); };
+    prevBtn.onclick     = () => { currentPage--; renderTable(); window.scrollTo(0, document.querySelector('.table-section').offsetTop - 20); };
     container.appendChild(prevBtn);
 
     // Page numbers
@@ -1243,8 +1552,7 @@ function renderPagination(totalPages) {
         if (startP > 2) {
             const dots = document.createElement("span");
             dots.textContent = "…";
-            dots.style.padding = "8px 4px";
-            dots.style.color = "#94a3b8";
+            dots.style.cssText = "padding:8px 4px;color:#94a3b8;";
             container.appendChild(dots);
         }
     }
@@ -1257,20 +1565,25 @@ function renderPagination(totalPages) {
         if (endP < totalPages - 1) {
             const dots = document.createElement("span");
             dots.textContent = "…";
-            dots.style.padding = "8px 4px";
-            dots.style.color = "#94a3b8";
+            dots.style.cssText = "padding:8px 4px;color:#94a3b8;";
             container.appendChild(dots);
         }
         container.appendChild(createPageBtn(totalPages));
     }
 
-    // Next button
+    // Next
     const nextBtn       = document.createElement("button");
     nextBtn.className   = "page-btn";
     nextBtn.textContent = "Next →";
     nextBtn.disabled    = (currentPage === totalPages);
-    nextBtn.onclick     = () => { currentPage++; renderTable(); };
+    nextBtn.onclick     = () => { currentPage++; renderTable(); window.scrollTo(0, document.querySelector('.table-section').offsetTop - 20); };
     container.appendChild(nextBtn);
+
+    // Page info
+    const info = document.createElement("span");
+    info.style.cssText = "color:#94a3b8;font-size:12px;margin-left:12px;";
+    info.textContent = `Page ${currentPage} of ${totalPages}`;
+    container.appendChild(info);
 }
 
 function createPageBtn(pageNum) {
@@ -1281,14 +1594,38 @@ function createPageBtn(pageNum) {
     return btn;
 }
 
-
 /* ==============================================================
-   INIT
+   EXPORT CSV
    ============================================================== */
+function exportTableCSV() {
+    if (filteredData.length === 0) {
+        alert("No data to export.");
+        return;
+    }
 
-document.addEventListener("DOMContentLoaded", () => {
-    populateLandingCounts();
-});
+    const headers = ["Subscription ID", "License Category", "COMPGUID", "GSTIN", "BLS Expiry", "Status"];
+    const rows = filteredData.map(r => [
+        r.subscriptionId,
+        r.licenseCategory,
+        r.compguid,
+        r.gstin,
+        r.blsExpiry,
+        isExpired(r.blsExpiry) ? "Expired" : "Active"
+    ]);
+
+    let csv = headers.join(",") + "\n";
+    rows.forEach(row => {
+        csv += row.map(v => `"${(v || "").replace(/"/g, '""')}"`).join(",") + "\n";
+    });
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = `${currentCategory}_subscriptions_${todayStr()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
 
 </script>
 
