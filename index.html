@@ -86,10 +86,6 @@
     .kpi-card.active::before { background: #22c55e; }
     .kpi-card.comp::before { background: #8b5cf6; }
     .kpi-card.gstin-card::before { background: #f59e0b; }
-    .kpi-card.cross-ca::before { background: #2563eb; }
-    .kpi-card.cross-accountant::before { background: #16a34a; }
-    .kpi-card.cross-gstp::before { background: #d97706; }
-    .kpi-card.cross-regular::before { background: #9333ea; }
     .kpi-card.perpetual::before { background: #0891b2; }
     .kpi-card.subscription::before { background: #7c3aed; }
     .kpi-card.magic::before { background: #db2777; }
@@ -105,16 +101,19 @@
     .section-label { font-size: 14px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; grid-column: 1 / -1; }
 
     /* Distribution Tables */
-    .dist-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
+    .dist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 30px; }
     .dist-card { background: white; border-radius: 14px; border: 1px solid #e5e7eb; padding: 18px; box-shadow: 0 4px 12px rgba(15,23,42,0.05); }
-    .dist-card h3 { font-size: 13px; color: #1f2937; margin-bottom: 4px; text-align: center; }
-    .dist-card p { font-size: 10px; color: #64748b; text-align: center; margin-bottom: 12px; }
+    .dist-card h3 { font-size: 14px; color: #1f2937; margin-bottom: 4px; text-align: center; }
+    .dist-card p { font-size: 11px; color: #64748b; text-align: center; margin-bottom: 12px; }
     .dist-table-wrapper { max-height: 250px; overflow-y: auto; border: 1px solid #eef2f7; border-radius: 8px; }
     .dist-table-wrapper table { width: 100%; border-collapse: collapse; }
     .dist-table-wrapper th { position: sticky; top: 0; background: #f8fafc; padding: 10px 12px; font-size: 11px; text-align: center; z-index: 1; border-bottom: 1px solid #e5e7eb; }
     .dist-table-wrapper td { padding: 10px 12px; font-size: 12px; text-align: center; border-top: 1px solid #eef2f7; }
+    
     .clickable-row { cursor: pointer; transition: background 0.15s; }
-    .clickable-row:hover td { background: #e0f2fe !important; color: #0369a1; }
+    .clickable-row:hover td { background: #eff6ff !important; }
+    .clickable-link { color: #2563eb; font-weight: 600; }
+    .clickable-link span { font-size: 10px; margin-left: 4px; opacity: 0.7; }
 
     /* Filters */
     .filter-section { background: white; padding: 20px; border-radius: 14px; border: 1px solid #e5e7eb; margin-bottom: 22px; }
@@ -138,6 +137,8 @@
     th .sort-arrow.none::after { content: "↕"; }
     td { padding: 12px 14px; border-top: 1px solid #eef2f7; font-size: 12px; white-space: nowrap; }
     tr:hover td { background: #f8fafc; }
+    
+    /* Badges */
     .badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
     .badge-active { background: #dcfce7; color: #15803d; }
     .badge-expired { background: #fee2e2; color: #b91c1c; }
@@ -150,6 +151,7 @@
     .type-perpetual { background: #ecfeff; color: #0e7490; }
     .type-subscription { background: #ede9fe; color: #6d28d9; }
     .type-magic { background: #fce7f3; color: #be185d; }
+    
     .usage-indicator { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
     .usage-active { background: #22c55e; }
     .usage-dormant { background: #ef4444; }
@@ -166,8 +168,8 @@
     /* MODAL OVERLAY */
     .modal-overlay {
         display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15,23,42,0.8); z-index: 10000; align-items: center; justify-content: center;
-        padding: 20px; backdrop-filter: blur(4px);
+        background: rgba(15,23,42,0.85); z-index: 10000; align-items: center; justify-content: center;
+        padding: 20px; backdrop-filter: blur(5px);
     }
     .modal-overlay.show { display: flex; }
     .modal-content {
@@ -188,9 +190,8 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Responsive */
-    @media (max-width: 1200px) { .dist-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 1100px) { .category-grid { grid-template-columns: repeat(2, 1fr); } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 650px) { .landing-title { font-size: 28px; } .category-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: 1fr; } .dist-grid { grid-template-columns: 1fr; } .filter-grid { grid-template-columns: 1fr; } .dashboard-header { padding: 15px; } .dashboard-content { padding: 16px; } .header-title { font-size: 17px; } }
+    @media (max-width: 1100px) { .category-grid, .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 650px) { .landing-title { font-size: 28px; } .category-grid, .kpi-grid, .filter-grid { grid-template-columns: 1fr; } .dashboard-header { padding: 15px; } .dashboard-content { padding: 16px; } .header-title { font-size: 17px; } }
 </style>
 </head>
 
@@ -210,11 +211,11 @@
         <div class="modal-header">
             <h2 id="modalTitle">Raw Data Drill-down</h2>
             <div style="display:flex; gap:12px; align-items:center;">
-                <button class="export-button" onclick="exportPopupCSV()" style="background:#2563eb; border:none; padding:8px 16px; font-weight:600;">📥 Export CSV</button>
+                <button class="export-button" onclick="exportPopupCSV()" style="background:#2563eb; border:none; padding:8px 16px; font-weight:600;">📥 Export Filtered CSV</button>
                 <button class="close-btn" onclick="closeModal()">✕</button>
             </div>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" id="modalBody">
             <div class="table-section" style="box-shadow:none; border:1px solid #e5e7eb;">
                 <div class="table-wrapper">
                     <table>
@@ -305,7 +306,7 @@
             </div>
         </div>
         <div class="header-actions">
-            <button class="export-button" onclick="exportTableCSV()">📥 Export Filtered CSV</button>
+            <button class="export-button" onclick="exportTableCSV()">📥 Export All Data</button>
             <button class="back-button" onclick="goBack()">← Back to Categories</button>
         </div>
     </header>
@@ -344,35 +345,43 @@
 
         <!-- DISTRIBUTION TABLES -->
         <section>
-            <div class="section-label">📈 Distribution Analysis <span style="font-size:11px; color:#64748b; font-weight:normal; text-transform:none;">(Click any row to view raw data)</span></div>
+            <div class="section-label">📈 Distribution Analysis <span style="font-size:11px; color:#64748b; font-weight:normal; text-transform:none;">(Click any row to drill down into raw data)</span></div>
             <div class="dist-grid">
                 
-                <!-- Table 1 -->
                 <div class="dist-card">
                     <h3>COMPGUIDs per Subscription</h3>
                     <p>How many Subscriptions have exactly X COMPGUIDs?</p>
                     <div class="dist-table-wrapper" id="distSubToComp"></div>
                 </div>
 
-                <!-- Table 2 -->
                 <div class="dist-card">
                     <h3>Subscriptions per COMPGUID</h3>
                     <p>How many COMPGUIDs are linked to exactly X Subscriptions?</p>
                     <div class="dist-table-wrapper" id="distCompToSub"></div>
                 </div>
+                
+                <div class="dist-card">
+                    <h3>GSTINs per Subscription</h3>
+                    <p>How many Subscriptions are linked to exactly X GSTINs?</p>
+                    <div class="dist-table-wrapper" id="distSubToGst"></div>
+                </div>
 
-                <!-- Table 3 -->
                 <div class="dist-card">
                     <h3>Subscriptions per GSTIN</h3>
                     <p>How many GSTINs are linked to exactly X Subscriptions?</p>
                     <div class="dist-table-wrapper" id="distGstToSub"></div>
                 </div>
                 
-                <!-- Table 4 -->
                 <div class="dist-card">
                     <h3>COMPGUIDs per GSTIN</h3>
                     <p>How many GSTINs are linked to exactly X COMPGUIDs?</p>
                     <div class="dist-table-wrapper" id="distGstToComp"></div>
+                </div>
+
+                <div class="dist-card">
+                    <h3>GSTINs per COMPGUID</h3>
+                    <p>How many COMPGUIDs are linked to exactly X GSTINs?</p>
+                    <div class="dist-table-wrapper" id="distCompToGst"></div>
                 </div>
 
             </div>
@@ -381,7 +390,7 @@
 
         <!-- FILTERS -->
         <section class="filter-section">
-            <div class="filter-title">🔍 Search & Filter</div>
+            <div class="filter-title">🔍 Search & Filter Raw Data</div>
             <div class="filter-grid">
                 <input type="text" id="searchInput" class="filter-input" placeholder="Search Subscription ID, COMPGUID, GSTIN..." oninput="applyFilters()">
                 <select id="statusFilter" class="filter-select" onchange="applyFilters()">
@@ -454,7 +463,7 @@ let sortDir          = "asc";
 // Modal State
 let popupFilteredData = [];
 let popupCurrentPage  = 1;
-window.distBuckets    = {}; // To store mappings for drill-down
+window.distBuckets    = {}; 
 
 /* ==============================================================
    UTILITY HELPERS
@@ -707,12 +716,14 @@ function computeKPIs(category) {
     });
 
     // -------------------------------------------------------------
-    // SECTION 2: Calculate Distribution Tables
+    // SECTION 2: Calculate 6-Grid Distribution Tables
     // -------------------------------------------------------------
     const subToComp = new Map();
     const compToSub = new Map();
+    const subToGst  = new Map();
     const gstToSub  = new Map();
-    const gstToComp = new Map(); 
+    const gstToComp = new Map();
+    const compToGst = new Map();
 
     categoryRecords.forEach(r => {
         const sub  = r.subscriptionId;
@@ -726,12 +737,16 @@ function computeKPIs(category) {
             compToSub.get(comp).add(sub);
         }
         if (sub && gst) {
+            if (!subToGst.has(sub)) subToGst.set(sub, new Set());
+            subToGst.get(sub).add(gst);
             if (!gstToSub.has(gst)) gstToSub.set(gst, new Set());
             gstToSub.get(gst).add(sub);
         }
         if (gst && comp) {
             if (!gstToComp.has(gst)) gstToComp.set(gst, new Set());
             gstToComp.get(gst).add(comp);
+            if (!compToGst.has(comp)) compToGst.set(comp, new Set());
+            compToGst.get(comp).add(gst);
         }
     });
 
@@ -756,9 +771,9 @@ function computeKPIs(category) {
         } else {
             sizes.forEach(size => {
                 const count = buckets[size].length;
-                html += `<tr class="clickable-row" onclick="openRawDataModal('${typeKey}', ${size}, '${descTitle} = ${size}')">
+                html += `<tr class="clickable-row" title="Click to view ${formatNumber(count)} raw records" onclick="openRawDataModal('${typeKey}', ${size}, '${descTitle} = ${size}')">
                             <td><strong>${size}</strong></td>
-                            <td>${formatNumber(count)}</td>
+                            <td class="clickable-link">${formatNumber(count)} <span>↗</span></td>
                          </tr>`;
             });
         }
@@ -768,25 +783,29 @@ function computeKPIs(category) {
 
     buildDistTable(subToComp, "distSubToComp", "COMPGUID Count", "Total Subscriptions", "subToComp", "Subscriptions with exactly X COMPGUIDs");
     buildDistTable(compToSub, "distCompToSub", "Subscription Count", "Total COMPGUIDs", "compToSub", "COMPGUIDs with exactly X Subscriptions");
+    buildDistTable(subToGst,  "distSubToGst",  "GSTIN Count", "Total Subscriptions", "subToGst", "Subscriptions with exactly X GSTINs");
     buildDistTable(gstToSub,  "distGstToSub",  "Subscription Count", "Total GSTINs", "gstToSub", "GSTINs with exactly X Subscriptions");
     buildDistTable(gstToComp, "distGstToComp", "COMPGUID Count", "Total GSTINs", "gstToComp", "GSTINs with exactly X COMPGUIDs");
+    buildDistTable(compToGst, "distCompToGst", "GSTIN Count", "Total COMPGUIDs", "compToGst", "COMPGUIDs with exactly X GSTINs");
 }
 
 /* ==============================================================
    DRILL-DOWN MODAL LOGIC
    ============================================================== */
 function openRawDataModal(distType, size, desc) {
-    // Determine which field we are filtering
     const fieldMap = {
-        subToComp: 'subscriptionId', // We have Subscriptions grouped by size
-        compToSub: 'compguid',       // We have COMPGUIDs grouped by size
-        gstToSub:  'gstin',          // We have GSTINs grouped by size
-        gstToComp: 'gstin'           // We have GSTINs grouped by size
+        subToComp: 'subscriptionId',
+        compToSub: 'compguid',
+        subToGst:  'subscriptionId',
+        gstToSub:  'gstin',
+        gstToComp: 'gstin',
+        compToGst: 'compguid'
     };
+    
     const filterField = fieldMap[distType];
     const keySet = new Set(window.distBuckets[distType][size] || []);
     
-    // Filter raw data
+    // Filter the raw data using the matched keys
     popupFilteredData = categoryRecords.filter(r => keySet.has(r[filterField]));
     popupCurrentPage = 1;
     
@@ -800,6 +819,11 @@ function closeModal() {
     document.getElementById("rawModal").classList.remove("show");
     popupFilteredData = [];
 }
+
+// Close modal when clicking outside of it
+document.getElementById("rawModal").addEventListener("click", function(e) {
+    if (e.target === this) closeModal();
+});
 
 function renderPopupTable() {
     const tbody = document.getElementById("popupTableBody");
@@ -830,7 +854,7 @@ function renderPopupPagination(totalPages) {
     const prevBtn = document.createElement("button");
     prevBtn.className = "page-btn"; prevBtn.textContent = "← Prev";
     prevBtn.disabled = (popupCurrentPage === 1);
-    prevBtn.onclick = () => { popupCurrentPage--; renderPopupTable(); document.querySelector('.modal-body').scrollTo(0,0); };
+    prevBtn.onclick = () => { popupCurrentPage--; renderPopupTable(); document.getElementById('modalBody').scrollTo(0,0); };
     container.appendChild(prevBtn);
 
     const maxVisible = 7;
@@ -842,14 +866,14 @@ function renderPopupPagination(totalPages) {
         const btn = document.createElement("button");
         btn.className = "page-btn" + (p === popupCurrentPage ? " active-page" : "");
         btn.textContent = p;
-        btn.onclick = () => { popupCurrentPage = p; renderPopupTable(); document.querySelector('.modal-body').scrollTo(0,0); };
+        btn.onclick = () => { popupCurrentPage = p; renderPopupTable(); document.getElementById('modalBody').scrollTo(0,0); };
         container.appendChild(btn);
     }
 
     const nextBtn = document.createElement("button");
     nextBtn.className = "page-btn"; nextBtn.textContent = "Next →";
     nextBtn.disabled = (popupCurrentPage === totalPages);
-    nextBtn.onclick = () => { popupCurrentPage++; renderPopupTable(); document.querySelector('.modal-body').scrollTo(0,0); };
+    nextBtn.onclick = () => { popupCurrentPage++; renderPopupTable(); document.getElementById('modalBody').scrollTo(0,0); };
     container.appendChild(nextBtn);
 }
 
