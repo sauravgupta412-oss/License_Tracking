@@ -4,1066 +4,689 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>License Subscription Dashboard</title>
-
-<!-- JSZip Library CDN for rapid client-side decompressing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
 <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, Helvetica, sans-serif; background: #f4f7fb; color: #1f2937; }
-
-    /* =========================
-       LANDING PAGE
-       ========================= */
-    .landing-page {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
-        display: flex; align-items: center; justify-content: center; padding: 40px 20px;
-    }
-    .landing-container { width: 100%; max-width: 1300px; text-align: center; }
-    .logo {
-        width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 18px;
-        background: rgba(255,255,255,0.15); display: flex; align-items: center;
-        justify-content: center; color: white; font-size: 28px; font-weight: bold;
-        backdrop-filter: blur(10px);
-    }
-    .landing-title { color: white; font-size: 42px; font-weight: 700; margin-bottom: 12px; }
-    .landing-subtitle { color: #cbd5e1; font-size: 17px; margin-bottom: 25px; }
-    
-    .data-status {
-        margin-bottom: 30px; padding: 12px 24px; border-radius: 12px;
-        font-size: 14px; font-weight: 600; display: inline-block;
-    }
-    .data-status.loading { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
-    .data-status.success { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
-    .data-status.error { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
-
-    /* Category Grid */
-    .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
-    .category-grid.disabled { opacity: 0.4; pointer-events: none; }
-    .category-card {
-        background: white; border-radius: 18px; padding: 30px 22px; cursor: pointer;
-        transition: all 0.25s ease; border: 2px solid transparent; box-shadow: 0 15px 35px rgba(0,0,0,0.18);
-    }
-    .category-card:hover { transform: translateY(-8px); border-color: #60a5fa; box-shadow: 0 20px 45px rgba(0,0,0,0.25); }
-    .category-icon {
-        width: 62px; height: 62px; margin: 0 auto 16px; border-radius: 16px;
-        display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;
-    }
-    .ca-icon { background: #dbeafe; color: #2563eb; }
-    .accountant-icon { background: #dcfce7; color: #16a34a; }
-    .gstp-icon { background: #fef3c7; color: #d97706; }
-    .regular-icon { background: #f3e8ff; color: #9333ea; }
-    .category-card h2 { font-size: 20px; margin-bottom: 8px; }
-    .category-card p { color: #64748b; font-size: 13px; line-height: 1.5; }
-    .card-stats { margin-top: 14px; padding-top: 14px; border-top: 1px solid #e5e7eb; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .card-stat-item { text-align: center; }
-    .card-stat-value { font-size: 18px; font-weight: 700; color: #111827; }
-    .card-stat-label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
-
-    /* =========================
-       DASHBOARD
-       ========================= */
-    .dashboard-page { display: none; min-height: 100vh; }
-    .dashboard-header { background: #0f172a; color: white; padding: 18px 35px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-    .header-left { display: flex; align-items: center; gap: 15px; }
-    .header-logo { width: 45px; height: 45px; border-radius: 12px; background: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 14px; }
-    .header-title { font-size: 22px; font-weight: 700; }
-    .header-subtitle { font-size: 12px; color: #94a3b8; margin-top: 3px; }
-    .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .back-button, .export-button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px 16px; border-radius: 9px; cursor: pointer; font-size: 14px; transition: background 0.2s; }
-    .back-button:hover, .export-button:hover { background: rgba(255,255,255,0.18); }
-    .dashboard-content { max-width: 1600px; margin: auto; padding: 30px; }
-    .dashboard-title-section { margin-bottom: 25px; }
-    .dashboard-title { font-size: 28px; font-weight: 700; }
-    .dashboard-description { color: #64748b; margin-top: 6px; font-size: 14px; }
-
-    /* KPI Cards */
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 25px; }
-    .kpi-card { background: white; border-radius: 14px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(15,23,42,0.05); position: relative; overflow: hidden; }
-    .kpi-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #2563eb; }
-    .kpi-card.expired::before { background: #ef4444; }
-    .kpi-card.active::before { background: #22c55e; }
-    .kpi-card.comp::before { background: #8b5cf6; }
-    .kpi-card.gstin-card::before { background: #f59e0b; }
-    .kpi-card.perpetual::before { background: #0891b2; }
-    .kpi-card.subscription::before { background: #7c3aed; }
-    .kpi-card.magic::before { background: #db2777; }
-    .kpi-card.install::before { background: #0d9488; }
-    .kpi-card.usage::before { background: #ea580c; }
-    .kpi-card.dormant::before { background: #64748b; }
-    .kpi-card.new-install::before { background: #059669; }
-    .kpi-label { color: #64748b; font-size: 12px; line-height: 1.4; margin-bottom: 8px; }
-    .kpi-value { font-size: 28px; font-weight: 700; color: #111827; }
-    .kpi-value.small { font-size: 22px; }
-    .kpi-icon { position: absolute; right: 16px; top: 16px; font-size: 18px; opacity: 0.5; }
-    .kpi-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
-    .section-label { font-size: 14px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; grid-column: 1 / -1; }
-
-    /* Distribution Tables */
-    .dist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 30px; }
-    .dist-card { background: white; border-radius: 14px; border: 1px solid #e5e7eb; padding: 18px; box-shadow: 0 4px 12px rgba(15,23,42,0.05); }
-    .dist-card h3 { font-size: 14px; color: #1f2937; margin-bottom: 4px; text-align: center; }
-    .dist-card p { font-size: 11px; color: #64748b; text-align: center; margin-bottom: 12px; }
-    .dist-table-wrapper { max-height: 250px; overflow-y: auto; border: 1px solid #eef2f7; border-radius: 8px; }
-    .dist-table-wrapper table { width: 100%; border-collapse: collapse; }
-    .dist-table-wrapper th { position: sticky; top: 0; background: #f8fafc; padding: 10px 12px; font-size: 11px; text-align: center; z-index: 1; border-bottom: 1px solid #e5e7eb; }
-    .dist-table-wrapper td { padding: 10px 12px; font-size: 12px; text-align: center; border-top: 1px solid #eef2f7; }
-    
-    .clickable-row { cursor: pointer; transition: background 0.15s; }
-    .clickable-row:hover td { background: #eff6ff !important; }
-    .clickable-link { color: #2563eb; font-weight: 600; }
-    .clickable-link span { font-size: 10px; margin-left: 4px; opacity: 0.7; }
-
-    /* Filters */
-    .filter-section { background: white; padding: 20px; border-radius: 14px; border: 1px solid #e5e7eb; margin-bottom: 22px; }
-    .filter-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; }
-    .filter-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px; }
-    .filter-input, .filter-select { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 11px 13px; font-size: 14px; outline: none; }
-    .filter-input:focus, .filter-select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-
-    /* Main Table */
-    .table-section { background: white; border-radius: 14px; border: 1px solid #e5e7eb; overflow: hidden; }
-    .table-header { padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; gap: 10px; }
-    .table-title { font-weight: 600; }
-    .record-count { color: #64748b; font-size: 13px; }
-    .table-wrapper { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1200px; }
-    th { background: #f8fafc; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; padding: 12px 14px; text-align: left; white-space: nowrap; cursor: pointer; user-select: none; }
-    th:hover { background: #eef2f7; }
-    th .sort-arrow { margin-left: 4px; font-size: 9px; color: #94a3b8; }
-    th .sort-arrow.asc::after { content: "▲"; color: #2563eb; }
-    th .sort-arrow.desc::after { content: "▼"; color: #2563eb; }
-    th .sort-arrow.none::after { content: "↕"; }
-    td { padding: 12px 14px; border-top: 1px solid #eef2f7; font-size: 12px; white-space: nowrap; }
-    tr:hover td { background: #f8fafc; }
-    
-    /* Badges */
-    .badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
-    .badge-active { background: #dcfce7; color: #15803d; }
-    .badge-expired { background: #fee2e2; color: #b91c1c; }
-    .license-badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
-    .license-badge-ca { background: #dbeafe; color: #1d4ed8; }
-    .license-badge-accountant { background: #dcfce7; color: #15803d; }
-    .license-badge-gstp { background: #fef3c7; color: #92400e; }
-    .license-badge-regular { background: #f3e8ff; color: #7c3aed; }
-    .type-badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
-    .type-perpetual { background: #ecfeff; color: #0e7490; }
-    .type-subscription { background: #ede9fe; color: #6d28d9; }
-    .type-magic { background: #fce7f3; color: #be185d; }
-    
-    .usage-indicator { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
-    .usage-active { background: #22c55e; }
-    .usage-dormant { background: #ef4444; }
-    .usage-moderate { background: #f59e0b; }
-    .empty-state { text-align: center; padding: 50px 20px; color: #64748b; }
-
-    /* Pagination */
-    .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; padding: 18px; border-top: 1px solid #e5e7eb; flex-wrap: wrap; }
-    .page-btn { padding: 8px 14px; border: 1px solid #d1d5db; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; transition: all 0.15s; }
-    .page-btn:hover { background: #f3f4f6; }
-    .page-btn.active-page { background: #2563eb; color: white; border-color: #2563eb; }
-    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    /* MODAL OVERLAY */
-    .modal-overlay {
-        display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15,23,42,0.85); z-index: 10000; align-items: center; justify-content: center;
-        padding: 20px; backdrop-filter: blur(5px);
-    }
-    .modal-overlay.show { display: flex; }
-    .modal-content {
-        background: white; width: 100%; max-width: 1400px; height: 90vh; border-radius: 16px;
-        display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-    }
-    .modal-header { padding: 20px 25px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
-    .modal-header h2 { font-size: 18px; color: #0f172a; }
-    .close-btn { background: transparent; border: none; font-size: 24px; cursor: pointer; color: #64748b; line-height: 1; }
-    .close-btn:hover { color: #0f172a; }
-    .modal-body { padding: 20px; overflow-y: auto; flex: 1; background: #f4f7fb; }
-    
-    /* Loading overlay */
-    .loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.7); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-    .loading-overlay.show { display: flex; }
-    .loading-spinner { text-align: center; color: white; }
-    .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #60a5fa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* Responsive */
-    @media (max-width: 1100px) { .category-grid, .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 650px) { .landing-title { font-size: 28px; } .category-grid, .kpi-grid, .filter-grid { grid-template-columns: 1fr; } .dashboard-header { padding: 15px; } .dashboard-content { padding: 16px; } .header-title { font-size: 17px; } }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#1f2937}
+.landing-page{min-height:100vh;background:linear-gradient(135deg,#0f172a 0%,#172554 55%,#1d4ed8 100%);display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.landing-container{width:100%;max-width:1300px;text-align:center}
+.logo{width:72px;height:72px;margin:0 auto 20px;border-radius:18px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700}
+.landing-title{color:#fff;font-size:42px;font-weight:700;margin-bottom:12px}
+.landing-subtitle{color:#cbd5e1;font-size:17px;margin-bottom:25px}
+.data-status{margin-bottom:30px;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;display:inline-block}
+.data-status.loading{background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.data-status.success{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)}
+.data-status.error{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.category-grid.disabled{opacity:.4;pointer-events:none}
+.category-card{background:#fff;border-radius:18px;padding:30px 22px;cursor:pointer;transition:.25s;border:2px solid transparent;box-shadow:0 15px 35px rgba(0,0,0,.18)}
+.category-card:hover{transform:translateY(-8px);border-color:#60a5fa}
+.category-icon{width:62px;height:62px;margin:0 auto 16px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700}
+.ca-icon{background:#dbeafe;color:#2563eb}.accountant-icon{background:#dcfce7;color:#16a34a}.gstp-icon{background:#fef3c7;color:#d97706}.regular-icon{background:#f3e8ff;color:#9333ea}
+.category-card h2{font-size:20px;margin-bottom:8px}.category-card p{color:#64748b;font-size:13px}
+.card-stats{margin-top:14px;padding-top:14px;border-top:1px solid #e5e7eb;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.card-stat-item{text-align:center}.card-stat-value{font-size:18px;font-weight:700}.card-stat-label{font-size:10px;color:#94a3b8;margin-top:2px}
+.dashboard-page{display:none;min-height:100vh}
+.dashboard-header{background:#0f172a;color:#fff;padding:18px 35px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.header-left{display:flex;align-items:center;gap:15px}
+.header-logo{width:45px;height:45px;border-radius:12px;background:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.header-title{font-size:22px;font-weight:700}.header-subtitle{font-size:12px;color:#94a3b8;margin-top:3px}
+.header-actions{display:flex;gap:10px;flex-wrap:wrap}
+.back-button,.export-button{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px 16px;border-radius:9px;cursor:pointer;font-size:14px}
+.back-button:hover,.export-button:hover{background:rgba(255,255,255,.18)}
+.dashboard-content{max-width:1600px;margin:auto;padding:30px}
+.dashboard-title{font-size:28px;font-weight:700}.dashboard-description{color:#64748b;margin-top:6px;font-size:14px;margin-bottom:25px}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:25px}
+.kpi-card{background:#fff;border-radius:14px;padding:20px;border:1px solid #e5e7eb;box-shadow:0 4px 12px rgba(15,23,42,.05);position:relative;overflow:hidden}
+.kpi-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#2563eb}
+.kpi-card.expired::before{background:#ef4444}.kpi-card.active::before{background:#22c55e}.kpi-card.comp::before{background:#8b5cf6}.kpi-card.gstin-card::before{background:#f59e0b}
+.kpi-card.perpetual::before{background:#0891b2}.kpi-card.subscription::before{background:#7c3aed}.kpi-card.magic::before{background:#db2777}
+.kpi-card.install::before{background:#0d9488}.kpi-card.usage::before{background:#ea580c}.kpi-card.dormant::before{background:#64748b}.kpi-card.new-install::before{background:#059669}
+.kpi-label{color:#64748b;font-size:12px;line-height:1.4;margin-bottom:8px}.kpi-value{font-size:28px;font-weight:700}.kpi-value.small{font-size:22px}
+.kpi-icon{position:absolute;right:16px;top:16px;font-size:18px;opacity:.5}.kpi-sub{font-size:11px;color:#94a3b8;margin-top:4px}
+.section-label{font-size:14px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px;margin:8px 0 14px;padding-bottom:8px;border-bottom:2px solid #e2e8f0;grid-column:1/-1}
+.dist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:30px}
+.dist-card{background:#fff;border-radius:14px;border:1px solid #e5e7eb;padding:18px;box-shadow:0 4px 12px rgba(15,23,42,.05)}
+.dist-card h3{font-size:14px;text-align:center;margin-bottom:4px}.dist-card p{font-size:11px;color:#64748b;text-align:center;margin-bottom:12px}
+.dist-table-wrapper{max-height:250px;overflow-y:auto;border:1px solid #eef2f7;border-radius:8px}
+.dist-table-wrapper table{width:100%;border-collapse:collapse}
+.dist-table-wrapper th{position:sticky;top:0;background:#f8fafc;padding:10px 12px;font-size:11px;text-align:center;z-index:1;border-bottom:1px solid #e5e7eb}
+.dist-table-wrapper td{padding:10px 12px;font-size:12px;text-align:center;border-top:1px solid #eef2f7}
+.clickable-row{cursor:pointer}.clickable-row:hover td{background:#eff6ff!important}
+.clickable-link{color:#2563eb;font-weight:600}.clickable-link span{font-size:10px;margin-left:4px;opacity:.7}
+.filter-section{background:#fff;padding:20px;border-radius:14px;border:1px solid #e5e7eb;margin-bottom:22px}
+.filter-title{font-size:16px;font-weight:600;margin-bottom:14px}
+.filter-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px}
+.filter-input,.filter-select{width:100%;border:1px solid #d1d5db;border-radius:8px;padding:11px 13px;font-size:14px;outline:none}
+.filter-input:focus,.filter-select:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.table-section{background:#fff;border-radius:14px;border:1px solid #e5e7eb;overflow:hidden}
+.table-header{padding:18px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e5e7eb;flex-wrap:wrap;gap:10px}
+.table-title{font-weight:600}.record-count{color:#64748b;font-size:13px}
+.table-wrapper{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:1200px}
+th{background:#f8fafc;color:#475569;font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding:12px 14px;text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{background:#eef2f7}
+th .sort-arrow{margin-left:4px;font-size:9px;color:#94a3b8}
+th .sort-arrow.asc::after{content:"▲";color:#2563eb}th .sort-arrow.desc::after{content:"▼";color:#2563eb}th .sort-arrow.none::after{content:"↕"}
+td{padding:12px 14px;border-top:1px solid #eef2f7;font-size:12px;white-space:nowrap}
+tr:hover td{background:#f8fafc}
+.badge{padding:4px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.badge-active{background:#dcfce7;color:#15803d}.badge-expired{background:#fee2e2;color:#b91c1c}
+.license-badge{padding:4px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.license-badge-ca{background:#dbeafe;color:#1d4ed8}.license-badge-accountant{background:#dcfce7;color:#15803d}
+.license-badge-gstp{background:#fef3c7;color:#92400e}.license-badge-regular{background:#f3e8ff;color:#7c3aed}
+.type-badge{padding:4px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.type-perpetual{background:#ecfeff;color:#0e7490}.type-subscription{background:#ede9fe;color:#6d28d9}.type-magic{background:#fce7f3;color:#be185d}
+.usage-indicator{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}
+.usage-active{background:#22c55e}.usage-dormant{background:#ef4444}.usage-moderate{background:#f59e0b}
+.empty-state{text-align:center;padding:50px 20px;color:#64748b}
+.pagination{display:flex;justify-content:center;align-items:center;gap:6px;padding:18px;border-top:1px solid #e5e7eb;flex-wrap:wrap}
+.page-btn{padding:8px 14px;border:1px solid #d1d5db;background:#fff;border-radius:8px;cursor:pointer;font-size:13px;color:#374151}
+.page-btn:hover{background:#f3f4f6}.page-btn.active-page{background:#2563eb;color:#fff;border-color:#2563eb}.page-btn:disabled{opacity:.4;cursor:not-allowed}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.85);z-index:10000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}
+.modal-overlay.show{display:flex}
+.modal-content{background:#fff;width:100%;max-width:1400px;height:90vh;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,.5)}
+.modal-header{padding:20px 25px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;background:#f8fafc}
+.modal-header h2{font-size:18px}.close-btn{background:0 0;border:0;font-size:24px;cursor:pointer;color:#64748b}
+.modal-body{padding:20px;overflow-y:auto;flex:1;background:#f4f7fb}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:9999;justify-content:center;align-items:center;backdrop-filter:blur(4px)}
+.loading-overlay.show{display:flex}.loading-spinner{text-align:center;color:#fff}
+.spinner{width:50px;height:50px;border:4px solid rgba(255,255,255,.2);border-top-color:#60a5fa;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 15px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.data-debug{background:#fef3c7;border:1px solid #f59e0b;color:#92400e;padding:14px 18px;border-radius:10px;margin-bottom:20px;font-size:13px;display:none}
+.data-debug.show{display:block}
+.data-debug code{background:rgba(0,0,0,.08);padding:2px 6px;border-radius:4px}
+@media(max-width:1100px){.category-grid,.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.landing-title{font-size:28px}.category-grid,.kpi-grid,.filter-grid{grid-template-columns:1fr}.dashboard-header{padding:15px}.dashboard-content{padding:16px}}
 </style>
 </head>
-
 <body>
 
-<!-- Loading Overlay -->
 <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner">
-        <div class="spinner"></div>
-        <div style="font-size:16px;font-weight:600;" id="loadingText">Processing...</div>
-    </div>
+  <div class="loading-spinner"><div class="spinner"></div><div id="loadingText">Processing...</div></div>
 </div>
 
-<!-- Raw Data Modal Overlay -->
 <div id="rawModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle">Raw Data Drill-down</h2>
-            <div style="display:flex; gap:12px; align-items:center;">
-                <button class="export-button" onclick="exportPopupCSV()" style="background:#2563eb; border:none; padding:8px 16px; font-weight:600;">📥 Export Filtered CSV</button>
-                <button class="close-btn" onclick="closeModal()">✕</button>
-            </div>
-        </div>
-        <div class="modal-body" id="modalBody">
-            <div class="table-section" style="box-shadow:none; border:1px solid #e5e7eb;">
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Subscription ID</th>
-                                <th>Category</th>
-                                <th>Type</th>
-                                <th>COMPGUID</th>
-                                <th>GSTIN</th>
-                                <th>Install Date</th>
-                                <th>Last Used</th>
-                                <th>BLS Expiry</th>
-                                <th>Status</th>
-                                <th>Days Idle</th>
-                            </tr>
-                        </thead>
-                        <tbody id="popupTableBody"></tbody>
-                    </table>
-                </div>
-                <div class="pagination" id="popupPagination"></div>
-            </div>
-        </div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modalTitle">Raw Data Drill-down</h2>
+      <div style="display:flex;gap:12px;align-items:center">
+        <button class="export-button" onclick="exportPopupCSV()" style="background:#2563eb;border:none;padding:8px 16px;font-weight:600">📥 Export Filtered CSV</button>
+        <button class="close-btn" onclick="closeModal()">✕</button>
+      </div>
     </div>
+    <div class="modal-body" id="modalBody">
+      <div class="table-section" style="box-shadow:none;border:1px solid #e5e7eb">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Subscription ID</th><th>Category</th><th>Type</th><th>COMPGUID</th>
+                <th>GSTIN</th><th>Install Date</th><th>Last Used</th><th>BLS Expiry</th><th>Status</th><th>Days Idle</th>
+              </tr>
+            </thead>
+            <tbody id="popupTableBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="popupPagination"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ============================================================
-     LANDING PAGE
-     ============================================================ -->
+<!-- LANDING -->
 <div id="landingPage" class="landing-page">
-    <div class="landing-container">
-        <div class="logo">LD</div>
-        <h1 class="landing-title">License Dashboard</h1>
-        <p class="landing-subtitle">Enterprise analytics for license active state and usage tracking</p>
-
-        <div class="data-status loading" id="dataStatus">⏳ Connecting to server metrics...</div>
-
-        <!-- Category Cards -->
-        <div class="category-grid disabled" id="categoryGrid">
-            <div class="category-card" onclick="openDashboard('CA')">
-                <div class="category-icon ca-icon">CA</div><h2>CA</h2><p>Chartered Accountant tagged licenses</p>
-                <div class="card-stats">
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-total">0</div><div class="card-stat-label">Total</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
-                </div>
-            </div>
-            <div class="category-card" onclick="openDashboard('Accountant')">
-                <div class="category-icon accountant-icon">AC</div><h2>Accountant</h2><p>Accountant tagged licenses</p>
-                <div class="card-stats">
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-total">0</div><div class="card-stat-label">Total</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
-                </div>
-            </div>
-            <div class="category-card" onclick="openDashboard('GSTP')">
-                <div class="category-icon gstp-icon">GP</div><h2>GSTP</h2><p>GST Practitioner tagged licenses</p>
-                <div class="card-stats">
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-total">0</div><div class="card-stat-label">Total</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
-                </div>
-            </div>
-            <div class="category-card" onclick="openDashboard('Regular')">
-                <div class="category-icon regular-icon">RG</div><h2>Regular</h2><p>Regular tagged licenses</p>
-                <div class="card-stats">
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-total">0</div><div class="card-stat-label">Total</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
-                    <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
-                </div>
-            </div>
+  <div class="landing-container">
+    <div class="logo">LD</div>
+    <h1 class="landing-title">License Dashboard</h1>
+    <p class="landing-subtitle">Enterprise analytics for license active state and usage tracking</p>
+    <div class="data-status loading" id="dataStatus">⏳ Connecting to server metrics...</div>
+    <div class="category-grid disabled" id="categoryGrid">
+      <div class="category-card" onclick="openDashboard('CA')">
+        <div class="category-icon ca-icon">CA</div><h2>CA</h2><p>Chartered Accountant tagged licenses</p>
+        <div class="card-stats">
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-total">0</div><div class="card-stat-label">Total</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
         </div>
+      </div>
+      <div class="category-card" onclick="openDashboard('Accountant')">
+        <div class="category-icon accountant-icon">AC</div><h2>Accountant</h2><p>Accountant tagged licenses</p>
+        <div class="card-stats">
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-total">0</div><div class="card-stat-label">Total</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
+        </div>
+      </div>
+      <div class="category-card" onclick="openDashboard('GSTP')">
+        <div class="category-icon gstp-icon">GP</div><h2>GSTP</h2><p>GST Practitioner tagged licenses</p>
+        <div class="card-stats">
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-total">0</div><div class="card-stat-label">Total</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
+        </div>
+      </div>
+      <div class="category-card" onclick="openDashboard('Regular')">
+        <div class="category-icon regular-icon">RG</div><h2>Regular</h2><p>Regular tagged licenses</p>
+        <div class="card-stats">
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-total">0</div><div class="card-stat-label">Total</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+          <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<!-- ============================================================
-     DASHBOARD PAGE
-     ============================================================ -->
+<!-- DASHBOARD -->
 <div id="dashboardPage" class="dashboard-page">
+  <header class="dashboard-header">
+    <div class="header-left">
+      <div class="header-logo">LD</div>
+      <div>
+        <div class="header-title">License Dashboard</div>
+        <div class="header-subtitle" id="headerCategory">Dashboard Overview</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="export-button" onclick="exportTableCSV()">📥 Export All Data</button>
+      <button class="back-button" onclick="goBack()">← Back to Categories</button>
+    </div>
+  </header>
 
-    <header class="dashboard-header">
-        <div class="header-left">
-            <div class="header-logo">LD</div>
-            <div>
-                <div class="header-title">License Dashboard</div>
-                <div class="header-subtitle" id="headerCategory">Dashboard Overview</div>
-            </div>
-        </div>
-        <div class="header-actions">
-            <button class="export-button" onclick="exportTableCSV()">📥 Export All Data</button>
-            <button class="back-button" onclick="goBack()">← Back to Categories</button>
-        </div>
-    </header>
+  <main class="dashboard-content">
+    <h1 class="dashboard-title" id="dashboardTitle">Dashboard</h1>
+    <p class="dashboard-description">Comprehensive active metrics, license models, and execution tracking overview.</p>
 
-    <main class="dashboard-content">
+    <!-- DEBUG BOX -->
+    <div class="data-debug" id="dataDebug"></div>
 
-        <section class="dashboard-title-section">
-            <h1 class="dashboard-title" id="dashboardTitle">Dashboard</h1>
-            <p class="dashboard-description">Comprehensive active metrics, license models, and execution tracking overview.</p>
-        </section>
+    <section class="kpi-grid">
+      <div class="section-label">📊 Subscription Overview</div>
+      <div class="kpi-card"><div class="kpi-icon">▣</div><div class="kpi-label">Unique Subscription IDs</div><div class="kpi-value" id="totalSubscriptions">0</div></div>
+      <div class="kpi-card expired"><div class="kpi-icon">✕</div><div class="kpi-label">Expired Subscriptions<br><small>BLS Expiry ≤ Today</small></div><div class="kpi-value" id="expiredSubscriptions">0</div></div>
+      <div class="kpi-card active"><div class="kpi-icon">✓</div><div class="kpi-label">Active Subscriptions<br><small>BLS Expiry &gt; Today</small></div><div class="kpi-value" id="activeSubscriptions">0</div></div>
+      <div class="kpi-card comp"><div class="kpi-icon">◈</div><div class="kpi-label">Total Unique COMPGUID</div><div class="kpi-value" id="totalCompguid">0</div></div>
+      <div class="kpi-card gstin-card"><div class="kpi-icon">G</div><div class="kpi-label">Total Unique GSTIN</div><div class="kpi-value" id="totalGstin">0</div></div>
 
-        <!-- KPI CARDS -->
-        <section class="kpi-grid">
-            <div class="section-label">📊 Subscription Overview</div>
-            <div class="kpi-card"><div class="kpi-icon">▣</div><div class="kpi-label">Unique Subscription IDs</div><div class="kpi-value" id="totalSubscriptions">0</div></div>
-            <div class="kpi-card expired"><div class="kpi-icon">✕</div><div class="kpi-label">Expired Subscriptions<br><small>BLS Expiry ≤ Today</small></div><div class="kpi-value" id="expiredSubscriptions">0</div></div>
-            <div class="kpi-card active"><div class="kpi-icon">✓</div><div class="kpi-label">Active Subscriptions<br><small>BLS Expiry &gt; Today</small></div><div class="kpi-value" id="activeSubscriptions">0</div></div>
-            <div class="kpi-card comp"><div class="kpi-icon">◈</div><div class="kpi-label">Total Unique COMPGUID</div><div class="kpi-value" id="totalCompguid">0</div></div>
-            <div class="kpi-card gstin-card"><div class="kpi-icon">G</div><div class="kpi-label">Total Unique GSTIN</div><div class="kpi-value" id="totalGstin">0</div></div>
+      <div class="section-label">🏷️ License Type Breakdown (Per Subscription)</div>
+      <div class="kpi-card perpetual"><div class="kpi-icon">∞</div><div class="kpi-label">Perpetual Licenses</div><div class="kpi-value" id="perpetualCount">0</div><div class="kpi-sub" id="perpetualPct">0%</div></div>
+      <div class="kpi-card subscription"><div class="kpi-icon">🔄</div><div class="kpi-label">Subscription Licenses</div><div class="kpi-value" id="subscriptionCount">0</div><div class="kpi-sub" id="subscriptionPct">0%</div></div>
+      <div class="kpi-card magic"><div class="kpi-icon">✨</div><div class="kpi-label">Magic Licenses</div><div class="kpi-value" id="magicCount">0</div><div class="kpi-sub" id="magicPct">0%</div></div>
 
-            <div class="section-label">🏷️ License Type Breakdown (Per Subscription)</div>
-            <div class="kpi-card perpetual"><div class="kpi-icon">∞</div><div class="kpi-label">Perpetual Licenses</div><div class="kpi-value" id="perpetualCount">0</div><div class="kpi-sub" id="perpetualPct">0%</div></div>
-            <div class="kpi-card subscription"><div class="kpi-icon">🔄</div><div class="kpi-label">Subscription Licenses</div><div class="kpi-value" id="subscriptionCount">0</div><div class="kpi-sub" id="subscriptionPct">0%</div></div>
-            <div class="kpi-card magic"><div class="kpi-icon">✨</div><div class="kpi-label">Magic Licenses</div><div class="kpi-value" id="magicCount">0</div><div class="kpi-sub" id="magicPct">0%</div></div>
+      <div class="section-label">📅 Installation & Usage Insights (Per Subscription)</div>
+      <div class="kpi-card install"><div class="kpi-icon">📦</div><div class="kpi-label">New Installs (Last 30 Days)</div><div class="kpi-value" id="newInstalls30">0</div><div class="kpi-sub">Last 90 days: <span id="newInstalls90">0</span></div></div>
+      <div class="kpi-card new-install"><div class="kpi-icon">📆</div><div class="kpi-label">Avg Days Since Install</div><div class="kpi-value small" id="avgDaysSinceInstall">0</div><div class="kpi-sub">Oldest: <span id="oldestInstall">N/A</span></div></div>
+      <div class="kpi-card usage"><div class="kpi-icon">📡</div><div class="kpi-label">Used in Last 30 Days</div><div class="kpi-value" id="usedLast30">0</div><div class="kpi-sub" id="usedLast30Pct">0% of total</div></div>
+      <div class="kpi-card dormant"><div class="kpi-icon">💤</div><div class="kpi-label">Dormant (&gt;90 Days No Use)</div><div class="kpi-value" id="dormantCount">0</div><div class="kpi-sub" id="dormantPct">0% of total</div></div>
+      <div class="kpi-card usage"><div class="kpi-icon">🕐</div><div class="kpi-label">Avg Days Since Last Used</div><div class="kpi-value small" id="avgDaysSinceUsed">0</div><div class="kpi-sub">Never used: <span id="neverUsedCount">0</span></div></div>
 
-            <div class="section-label">📅 Installation & Usage Insights (Per Subscription)</div>
-            <div class="kpi-card install"><div class="kpi-icon">📦</div><div class="kpi-label">New Installs (Last 30 Days)</div><div class="kpi-value" id="newInstalls30">0</div><div class="kpi-sub">Last 90 days: <span id="newInstalls90">0</span></div></div>
-            <div class="kpi-card new-install"><div class="kpi-icon">📆</div><div class="kpi-label">Avg Days Since Install</div><div class="kpi-value small" id="avgDaysSinceInstall">0</div><div class="kpi-sub">Oldest: <span id="oldestInstall">N/A</span></div></div>
-            <div class="kpi-card usage"><div class="kpi-icon">📡</div><div class="kpi-label">Used in Last 30 Days</div><div class="kpi-value" id="usedLast30">0</div><div class="kpi-sub" id="usedLast30Pct">0% of total</div></div>
-            <div class="kpi-card dormant"><div class="kpi-icon">💤</div><div class="kpi-label">Dormant (&gt;90 Days No Use)</div><div class="kpi-value" id="dormantCount">0</div><div class="kpi-sub" id="dormantPct">0% of total</div></div>
-            <div class="kpi-card usage"><div class="kpi-icon">🕐</div><div class="kpi-label">Avg Days Since Last Used</div><div class="kpi-value small" id="avgDaysSinceUsed">0</div><div class="kpi-sub">Never used: <span id="neverUsedCount">0</span></div></div>
+      <div class="section-label">🔗 Cross-Category COMPGUID Overlap</div>
+      <div id="crossCategoryCards" style="display:contents"></div>
+    </section>
 
-            <div class="section-label">🔗 Cross-Category COMPGUID Overlap</div>
-            <div id="crossCategoryCards" style="display: contents;"></div>
-        </section>
+    <section>
+      <div class="section-label">📈 Distribution Analysis <span style="font-size:11px;color:#64748b;font-weight:400;text-transform:none">(Click any row to drill down)</span></div>
+      <div class="dist-grid">
+        <div class="dist-card"><h3>COMPGUIDs per Subscription</h3><p>How many Subscriptions have exactly X COMPGUIDs?</p><div class="dist-table-wrapper" id="distSubToComp"></div></div>
+        <div class="dist-card"><h3>Subscriptions per COMPGUID</h3><p>How many COMPGUIDs are linked to exactly X Subscriptions?</p><div class="dist-table-wrapper" id="distCompToSub"></div></div>
+        <div class="dist-card"><h3>GSTINs per Subscription</h3><p>How many Subscriptions are linked to exactly X GSTINs?</p><div class="dist-table-wrapper" id="distSubToGst"></div></div>
+        <div class="dist-card"><h3>Subscriptions per GSTIN</h3><p>How many GSTINs are linked to exactly X Subscriptions?</p><div class="dist-table-wrapper" id="distGstToSub"></div></div>
+        <div class="dist-card"><h3>COMPGUIDs per GSTIN</h3><p>How many GSTINs are linked to exactly X COMPGUIDs?</p><div class="dist-table-wrapper" id="distGstToComp"></div></div>
+        <div class="dist-card"><h3>GSTINs per COMPGUID</h3><p>How many COMPGUIDs are linked to exactly X GSTINs?</p><div class="dist-table-wrapper" id="distCompToGst"></div></div>
+      </div>
+    </section>
 
-        <!-- DISTRIBUTION TABLES -->
-        <section>
-            <div class="section-label">📈 Distribution Analysis <span style="font-size:11px; color:#64748b; font-weight:normal; text-transform:none;">(Click any row to drill down into raw data)</span></div>
-            <div class="dist-grid">
-                
-                <div class="dist-card">
-                    <h3>COMPGUIDs per Subscription</h3>
-                    <p>How many Subscriptions have exactly X COMPGUIDs?</p>
-                    <div class="dist-table-wrapper" id="distSubToComp"></div>
-                </div>
+    <section class="filter-section">
+      <div class="filter-title">🔍 Search & Filter Raw Data</div>
+      <div class="filter-grid">
+        <input type="text" id="searchInput" class="filter-input" placeholder="Search Subscription ID, COMPGUID, GSTIN..." oninput="applyFilters()">
+        <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+          <option value="All">All Statuses</option><option value="Active">Active</option><option value="Expired">Expired</option>
+        </select>
+        <select id="typeFilter" class="filter-select" onchange="applyFilters()">
+          <option value="All">All License Types</option><option value="Perpetual">Perpetual</option><option value="Subscription">Subscription</option><option value="Magic">Magic</option>
+        </select>
+        <select id="usageFilter" class="filter-select" onchange="applyFilters()">
+          <option value="All">All Usage Statuses</option><option value="Last30">Used in Last 30 Days</option><option value="Last90">Used in Last 90 Days</option><option value="Dormant">Dormant (&gt;90 Days)</option><option value="NeverUsed">Never Used</option>
+        </select>
+      </div>
+    </section>
 
-                <div class="dist-card">
-                    <h3>Subscriptions per COMPGUID</h3>
-                    <p>How many COMPGUIDs are linked to exactly X Subscriptions?</p>
-                    <div class="dist-table-wrapper" id="distCompToSub"></div>
-                </div>
-                
-                <div class="dist-card">
-                    <h3>GSTINs per Subscription</h3>
-                    <p>How many Subscriptions are linked to exactly X GSTINs?</p>
-                    <div class="dist-table-wrapper" id="distSubToGst"></div>
-                </div>
-
-                <div class="dist-card">
-                    <h3>Subscriptions per GSTIN</h3>
-                    <p>How many GSTINs are linked to exactly X Subscriptions?</p>
-                    <div class="dist-table-wrapper" id="distGstToSub"></div>
-                </div>
-                
-                <div class="dist-card">
-                    <h3>COMPGUIDs per GSTIN</h3>
-                    <p>How many GSTINs are linked to exactly X COMPGUIDs?</p>
-                    <div class="dist-table-wrapper" id="distGstToComp"></div>
-                </div>
-
-                <div class="dist-card">
-                    <h3>GSTINs per COMPGUID</h3>
-                    <p>How many COMPGUIDs are linked to exactly X GSTINs?</p>
-                    <div class="dist-table-wrapper" id="distCompToGst"></div>
-                </div>
-
-            </div>
-        </section>
-
-
-        <!-- FILTERS -->
-        <section class="filter-section">
-            <div class="filter-title">🔍 Search & Filter Raw Data</div>
-            <div class="filter-grid">
-                <input type="text" id="searchInput" class="filter-input" placeholder="Search Subscription ID, COMPGUID, GSTIN..." oninput="applyFilters()">
-                <select id="statusFilter" class="filter-select" onchange="applyFilters()">
-                    <option value="All">All Statuses</option>
-                    <option value="Active">Active</option>
-                    <option value="Expired">Expired</option>
-                </select>
-                <select id="typeFilter" class="filter-select" onchange="applyFilters()">
-                    <option value="All">All License Types</option>
-                    <option value="Perpetual">Perpetual</option>
-                    <option value="Subscription">Subscription</option>
-                    <option value="Magic">Magic</option>
-                </select>
-                <select id="usageFilter" class="filter-select" onchange="applyFilters()">
-                    <option value="All">All Usage Statuses</option>
-                    <option value="Last30">Used in Last 30 Days</option>
-                    <option value="Last90">Used in Last 90 Days</option>
-                    <option value="Dormant">Dormant (&gt;90 Days)</option>
-                    <option value="NeverUsed">Never Used</option>
-                </select>
-            </div>
-        </section>
-
-        <!-- MAIN DATA TABLE -->
-        <section class="table-section">
-            <div class="table-header">
-                <div class="table-title">Company & Subscription Details</div>
-                <div class="record-count" id="recordCount">0 records</div>
-            </div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable(null)">#</th>
-                            <th onclick="sortTable('subscriptionId')">Subscription ID <span class="sort-arrow none" id="sort-subscriptionId"></span></th>
-                            <th onclick="sortTable('licenseCategory')">Category <span class="sort-arrow none" id="sort-licenseCategory"></span></th>
-                            <th onclick="sortTable('licenseType')">Type <span class="sort-arrow none" id="sort-licenseType"></span></th>
-                            <th onclick="sortTable('compguid')">COMPGUID <span class="sort-arrow none" id="sort-compguid"></span></th>
-                            <th onclick="sortTable('gstin')">GSTIN <span class="sort-arrow none" id="sort-gstin"></span></th>
-                            <th onclick="sortTable('installDate')">Install Date <span class="sort-arrow none" id="sort-installDate"></span></th>
-                            <th onclick="sortTable('lastUsed')">Last Used <span class="sort-arrow none" id="sort-lastUsed"></span></th>
-                            <th onclick="sortTable('blsExpiry')">BLS Expiry <span class="sort-arrow none" id="sort-blsExpiry"></span></th>
-                            <th onclick="sortTable('status')">Status <span class="sort-arrow none" id="sort-status"></span></th>
-                            <th onclick="sortTable('daysSinceUsed')">Days Idle <span class="sort-arrow none" id="sort-daysSinceUsed"></span></th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataTableBody"></tbody>
-                </table>
-            </div>
-            <div class="pagination" id="pagination"></div>
-        </section>
-
-    </main>
+    <section class="table-section">
+      <div class="table-header">
+        <div class="table-title">Company & Subscription Details</div>
+        <div class="record-count" id="recordCount">0 records</div>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(null)">#</th>
+              <th onclick="sortTable('subscriptionId')">Subscription ID <span class="sort-arrow none" id="sort-subscriptionId"></span></th>
+              <th onclick="sortTable('licenseCategory')">Category <span class="sort-arrow none" id="sort-licenseCategory"></span></th>
+              <th onclick="sortTable('licenseType')">Type <span class="sort-arrow none" id="sort-licenseType"></span></th>
+              <th onclick="sortTable('compguid')">COMPGUID <span class="sort-arrow none" id="sort-compguid"></span></th>
+              <th onclick="sortTable('gstin')">GSTIN <span class="sort-arrow none" id="sort-gstin"></span></th>
+              <th onclick="sortTable('installDate')">Install Date <span class="sort-arrow none" id="sort-installDate"></span></th>
+              <th onclick="sortTable('lastUsed')">Last Used <span class="sort-arrow none" id="sort-lastUsed"></span></th>
+              <th onclick="sortTable('blsExpiry')">BLS Expiry <span class="sort-arrow none" id="sort-blsExpiry"></span></th>
+              <th onclick="sortTable('status')">Status <span class="sort-arrow none" id="sort-status"></span></th>
+              <th onclick="sortTable('daysSinceUsed')">Days Idle <span class="sort-arrow none" id="sort-daysSinceUsed"></span></th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </section>
+  </main>
 </div>
 
 <script>
-/* ==============================================================
-   GLOBAL STATE
-   ============================================================== */
-const allCategories = ["CA", "Accountant", "GSTP", "Regular"];
-let summaryData      = null; 
-let categoryRecords  = []; 
-let currentCategory  = "";
-let filteredData     = [];
-let currentPage      = 1;
-const rowsPerPage    = 30;
-let sortField        = null;
-let sortDir          = "asc";
+const allCategories = ["CA","Accountant","GSTP","Regular"];
+let summaryData=null, categoryRecords=[], currentCategory="", filteredData=[], currentPage=1;
+const rowsPerPage=30;
+let sortField=null, sortDir="asc";
+let popupFilteredData=[], popupCurrentPage=1;
+window.distBuckets={};
 
-// Modal State
-let popupFilteredData = [];
-let popupCurrentPage  = 1;
-window.distBuckets    = {}; 
+function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function isExpired(dateStr){if(!dateStr)return true;return String(dateStr).trim()<=todayStr()}
+function daysAgo(dateStr){if(!dateStr||dateStr==="N/A"||dateStr==="")return null;const t=new Date(todayStr()+"T00:00:00");const d=new Date(dateStr+"T00:00:00");if(isNaN(d))return null;return Math.floor((t-d)/86400000)}
+function formatDate(dateStr){if(!dateStr||!String(dateStr).trim())return"N/A";try{const d=new Date(String(dateStr).trim()+"T00:00:00");if(isNaN(d))return dateStr;return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"})}catch{return dateStr}}
+function formatNumber(n){return Number(n||0).toLocaleString("en-IN")}
+function pct(part,total){return total?(part/total*100).toFixed(1)+"%":"0%"}
+function getLicenseBadgeClass(cat){return({CA:"license-badge-ca",Accountant:"license-badge-accountant",GSTP:"license-badge-gstp",Regular:"license-badge-regular"})[cat]||"license-badge-ca"}
+function getTypeBadgeClass(type){if(!type)return"type-subscription";const t=String(type).toLowerCase();return t==="perpetual"?"type-perpetual":t==="magic"?"type-magic":"type-subscription"}
+function escapeHtml(str){if(!str)return"";const d=document.createElement("div");d.textContent=str;return d.innerHTML}
+function showDebug(msg, isError=true){
+  const el=document.getElementById("dataDebug");
+  el.className="data-debug show";
+  el.innerHTML=msg;
+  if(!isError) el.style.background="#dcfce7", el.style.borderColor="#22c55e", el.style.color="#166534";
+}
+function hideDebug(){document.getElementById("dataDebug").className="data-debug"}
 
-/* ==============================================================
-   UTILITY HELPERS
-   ============================================================== */
-function todayStr() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-function isExpired(dateStr) {
-    if (!dateStr) return true;
-    return dateStr.strip ? dateStr.strip() <= todayStr() : dateStr <= todayStr();
-}
-function daysAgo(dateStr) {
-    if (!dateStr || dateStr === "N/A" || dateStr === "") return null;
-    const t = new Date(todayStr() + "T00:00:00");
-    const d = new Date(dateStr + "T00:00:00");
-    if (isNaN(d)) return null;
-    return Math.floor((t - d) / (1000 * 60 * 60 * 24));
-}
-function formatDate(dateStr) {
-    if (!dateStr || dateStr.trim() === "") return "N/A";
-    try {
-        const d = new Date(dateStr.trim() + "T00:00:00");
-        if (isNaN(d)) return dateStr;
-        return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
-    } catch { return dateStr; }
-}
-function formatNumber(n) { return Number(n || 0).toLocaleString("en-IN"); }
-function pct(part, total) { return total ? (part / total * 100).toFixed(1) + "%" : "0%"; }
-
-function getLicenseBadgeClass(cat) {
-    switch (cat) {
-        case "CA": return "license-badge-ca"; case "Accountant": return "license-badge-accountant";
-        case "GSTP": return "license-badge-gstp"; case "Regular": return "license-badge-regular";
-        default: return "license-badge-ca";
+/* ---------- Robust CSV line parser ---------- */
+function parseCSVLine(line){
+  const result=[]; let cur=""; let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(inQ){
+      if(ch==='"'){ if(i+1<line.length && line[i+1]==='"'){cur+='"';i++} else inQ=false; }
+      else cur+=ch;
+    } else {
+      if(ch==='"') inQ=true;
+      else if(ch===','){ result.push(cur); cur=""; }
+      else cur+=ch;
     }
+  }
+  result.push(cur);
+  return result;
 }
-function getTypeBadgeClass(type) {
-    if (!type) return "type-subscription";
-    switch (type.toLowerCase()) {
-        case "perpetual": return "type-perpetual"; case "subscription": return "type-subscription";
-        case "magic": return "type-magic"; default: return "type-subscription";
+
+async function loadSummary(){
+  const statusEl=document.getElementById("dataStatus");
+  try{
+    const res=await fetch("./summary.json",{cache:"no-cache"});
+    if(!res.ok) throw new Error(`summary.json HTTP ${res.status}. Is the file in the repo root?`);
+    summaryData=await res.json();
+    statusEl.className="data-status success";
+    statusEl.innerHTML=`✓ Connected successfully &nbsp;|&nbsp; Sync Complete`;
+    document.getElementById("categoryGrid").classList.remove("disabled");
+    populateLandingCounts();
+  }catch(err){
+    statusEl.className="data-status error";
+    statusEl.innerHTML=`✕ ${err.message}`;
+    console.error(err);
+  }
+}
+function populateLandingCounts(){
+  if(!summaryData)return;
+  allCategories.forEach(cat=>{
+    const k=cat.toLowerCase(), info=summaryData.categories[cat];
+    if(info){
+      document.getElementById(`landing-${k}-total`).textContent=formatNumber(info.total);
+      document.getElementById(`landing-${k}-active`).textContent=formatNumber(info.active);
+      document.getElementById(`landing-${k}-expired`).textContent=formatNumber(info.expired);
     }
-}
-function escapeHtml(str) {
-    if (!str) return "";
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+  });
 }
 
-/* ==============================================================
-   INITIAL LOAD & DECOMPRESSION
-   ============================================================== */
-async function loadSummary() {
-    const statusEl = document.getElementById("dataStatus");
-    try {
-        const res = await fetch("./summary.json", { cache: "no-cache" });
-        if (!res.ok) throw new Error("Could not download pre-calculated summary.json file.");
-        summaryData = await res.json();
-        
-        statusEl.className = "data-status success";
-        statusEl.innerHTML = `✓ Connected successfully &nbsp;|&nbsp; Sync Complete`;
-        document.getElementById("categoryGrid").classList.remove("disabled");
-        populateLandingCounts();
-    } catch (err) {
-        statusEl.className = "data-status error";
-        statusEl.innerHTML = `✕ Initialization Error: ${err.message}`;
-        console.error(err);
+async function fetchCategoryData(category){
+  showLoading(true, `Downloading ${category.toLowerCase()}.csv.zip ...`);
+  try{
+    const zipUrl=`./${category.toLowerCase()}.csv.zip`;
+    console.log("Fetching:", zipUrl, "from page:", location.href);
+    const res=await fetch(zipUrl,{cache:"no-cache"});
+    if(!res.ok) throw new Error(`Could not fetch ${zipUrl} (HTTP ${res.status}). Check file is in GitHub repo ROOT and named exactly ${category.toLowerCase()}.csv.zip`);
+
+    const blob=await res.blob();
+    console.log("Zip blob size:", blob.size, "bytes");
+    if(blob.size<50) throw new Error(`Zip file is almost empty (${blob.size} bytes). Re-run process_data.py and re-upload.`);
+
+    const zip=await JSZip.loadAsync(blob);
+    const names=Object.keys(zip.files);
+    console.log("Files inside zip:", names);
+
+    // Find csv file flexibly
+    let csvFile=zip.file(`${category.toLowerCase()}.csv`);
+    if(!csvFile){
+      const csvName=names.find(n=>n.toLowerCase().endsWith(".csv") && !n.includes("/"));
+      if(csvName) csvFile=zip.file(csvName);
     }
-}
-
-function populateLandingCounts() {
-    if (!summaryData) return;
-    allCategories.forEach(cat => {
-        const catKey = cat.toLowerCase();
-        const info = summaryData.categories[cat];
-        if (info) {
-            document.getElementById(`landing-${catKey}-total`).textContent = formatNumber(info.total);
-            document.getElementById(`landing-${catKey}-active`).textContent = formatNumber(info.active);
-            document.getElementById(`landing-${catKey}-expired`).textContent = formatNumber(info.expired);
-        }
-    });
-}
-
-async function fetchCategoryData(category) {
-    showLoading(true, `Downloading and unpacking zipped metrics for ${category}...`);
-    try {
-        const zipUrl = `./${category.toLowerCase()}.csv.zip`;
-        const res = await fetch(zipUrl);
-        if (!res.ok) throw new Error(`Server returned HTTP ${res.status}`);
-        
-        const blob = await res.blob();
-        const zip = await JSZip.loadAsync(blob);
-        const fileName = `${category.toLowerCase()}.csv`;
-        const csvFile = zip.file(fileName);
-        if (!csvFile) throw new Error(`Missing ${fileName} within package archive.`);
-        
-        const rawText = await csvFile.async("text");
-        parseCategoryCSV(rawText);
-        
-        showLoading(false);
-        return true;
-    } catch (err) {
-        showLoading(false);
-        alert(`Failed to load data package: ${err.message}`);
-        return false;
+    if(!csvFile){
+      // try nested
+      const csvName=names.find(n=>n.toLowerCase().endsWith(".csv"));
+      if(csvName) csvFile=zip.file(csvName);
     }
-}
+    if(!csvFile) throw new Error(`No .csv found inside zip. Contents: ${names.join(", ")}`);
 
-function parseCategoryCSV(csvText) {
-    const lines = csvText.split(/\r?\n/).filter(l => l.trim() !== "");
-    if (lines.length < 2) { categoryRecords = []; return; }
-    
-    const headers = lines[0].split(",").map(h => h.trim());
-    categoryRecords = [];
-    for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(",");
-        if (values.length < headers.length) continue;
-        categoryRecords.push({
-            subscriptionId: values[0], licenseCategory: values[1], licenseType: values[2],
-            compguid: values[3], gstin: values[4], installDate: values[5],
-            lastUsed: values[6], blsExpiry: values[7]
-        });
+    const rawText=await csvFile.async("text");
+    console.log("CSV text length:", rawText.length, "First 300 chars:", rawText.slice(0,300));
+    parseCategoryCSV(rawText);
+
+    showLoading(false);
+    if(categoryRecords.length===0){
+      showDebug(`⚠️ Loaded zip OK but parsed <strong>0 rows</strong>.<br>
+        Zip files: <code>${names.join(", ")}</code><br>
+        CSV length: <code>${rawText.length}</code> chars<br>
+        First line: <code>${escapeHtml((rawText.split(/\\r?\\n/)[0]||"").slice(0,120))}</code><br>
+        Open browser console (F12) for full log.`);
+      return true; // still open dashboard so user sees debug
     }
+    hideDebug();
+    showDebug(`✓ Loaded <strong>${formatNumber(categoryRecords.length)}</strong> company-rows for ${category}.`, false);
+    setTimeout(hideDebug, 4000);
+    return true;
+  }catch(err){
+    showLoading(false);
+    console.error(err);
+    alert("Failed to load data:\n\n"+err.message);
+    return false;
+  }
 }
 
-/* ==============================================================
-   OPEN / CLOSE DASHBOARD
-   ============================================================== */
-async function openDashboard(category) {
-    const success = await fetchCategoryData(category);
-    if (!success) return;
+function parseCategoryCSV(csvText){
+  // Strip BOM
+  if(csvText.charCodeAt(0)===0xFEFF) csvText=csvText.slice(1);
+  const lines=csvText.split(/\r?\n/).filter(l=>l.trim()!=="");
+  categoryRecords=[];
+  if(lines.length<2){ console.warn("CSV has no data rows"); return; }
 
-    currentCategory = category;
-    document.getElementById("landingPage").style.display   = "none";
-    document.getElementById("dashboardPage").style.display = "block";
-    document.getElementById("headerCategory").textContent  = category + " Dashboard";
-    document.getElementById("dashboardTitle").textContent   = category + " Dashboard";
+  const headers=parseCSVLine(lines[0]).map(h=>h.trim().toLowerCase().replace(/[^a-z0-9]/g,""));
+  console.log("Parsed headers normalized:", headers);
 
-    document.getElementById("searchInput").value   = "";
-    document.getElementById("statusFilter").value  = "All";
-    document.getElementById("typeFilter").value    = "All";
-    document.getElementById("usageFilter").value   = "All";
-    sortField = null; sortDir = "asc"; resetSortArrows();
-
-    computeKPIs(category);
-    applyFilters();
-    window.scrollTo(0, 0);
-}
-
-function goBack() {
-    document.getElementById("dashboardPage").style.display = "none";
-    document.getElementById("landingPage").style.display   = "flex";
-    currentCategory = ""; categoryRecords = [];
-}
-
-function showLoading(show, text = "Loading...") {
-    document.getElementById("loadingOverlay").classList.toggle("show", show);
-    document.getElementById("loadingText").textContent = text;
-}
-
-/* ==============================================================
-   COMPUTE KPIs & DISTRIBUTIONS
-   ============================================================== */
-function computeKPIs(category) {
-    // -------------------------------------------------------------
-    // SECTION 1: Calculate Unique KPI Cards
-    // -------------------------------------------------------------
-    const uniqueCompguids = new Set();
-    const uniqueGstins = new Set();
-    const uniqueSubsMap = new Map();
-
-    categoryRecords.forEach(r => {
-        if(r.compguid) uniqueCompguids.add(r.compguid);
-        if(r.gstin) uniqueGstins.add(r.gstin);
-
-        const id = r.subscriptionId;
-        if (!id) return;
-        
-        if (!uniqueSubsMap.has(id)) {
-            uniqueSubsMap.set(id, r);
-        } else {
-            const old = uniqueSubsMap.get(id);
-            if ((r.blsExpiry || "") > (old.blsExpiry || "")) uniqueSubsMap.set(id, r);
-        }
-    });
-    
-    const uniqueRecords = Array.from(uniqueSubsMap.values());
-    const totalSubs = uniqueRecords.length;
-    const expSubs = uniqueRecords.filter(r => isExpired(r.blsExpiry)).length;
-    const actSubs = totalSubs - expSubs;
-
-    document.getElementById("totalSubscriptions").textContent   = formatNumber(totalSubs);
-    document.getElementById("expiredSubscriptions").textContent = formatNumber(expSubs);
-    document.getElementById("activeSubscriptions").textContent  = formatNumber(actSubs);
-    document.getElementById("totalCompguid").textContent        = formatNumber(uniqueCompguids.size);
-    document.getElementById("totalGstin").textContent           = formatNumber(uniqueGstins.size);
-
-    const perpetualData = uniqueRecords.filter(r => r.licenseType === "Perpetual");
-    const subscriptionData = uniqueRecords.filter(r => r.licenseType === "Subscription");
-    const magicData = uniqueRecords.filter(r => r.licenseType === "Magic");
-
-    document.getElementById("perpetualCount").textContent  = formatNumber(perpetualData.length);
-    document.getElementById("perpetualPct").textContent    = pct(perpetualData.length, totalSubs) + " of total";
-    document.getElementById("subscriptionCount").textContent = formatNumber(subscriptionData.length);
-    document.getElementById("subscriptionPct").textContent = pct(subscriptionData.length, totalSubs) + " of total";
-    document.getElementById("magicCount").textContent      = formatNumber(magicData.length);
-    document.getElementById("magicPct").textContent        = pct(magicData.length, totalSubs) + " of total";
-
-    const installs30 = uniqueRecords.filter(r => { const d = daysAgo(r.installDate); return d !== null && d >= 0 && d <= 30; }).length;
-    const installs90 = uniqueRecords.filter(r => { const d = daysAgo(r.installDate); return d !== null && d >= 0 && d <= 90; }).length;
-    document.getElementById("newInstalls30").textContent = formatNumber(installs30);
-    document.getElementById("newInstalls90").textContent = formatNumber(installs90);
-
-    const installDays = uniqueRecords.map(r => daysAgo(r.installDate)).filter(d => d !== null && d >= 0);
-    const avgInstallDays = installDays.length > 0 ? Math.round(installDays.reduce((a, b) => a + b, 0) / installDays.length) : 0;
-    document.getElementById("avgDaysSinceInstall").textContent = formatNumber(avgInstallDays);
-    
-    const installDates = uniqueRecords.map(r => r.installDate).filter(Boolean).sort();
-    document.getElementById("oldestInstall").textContent = installDates.length > 0 ? formatDate(installDates[0]) : "N/A";
-
-    const usedLast30 = uniqueRecords.filter(r => { const d = daysAgo(r.lastUsed); return d !== null && d >= 0 && d <= 30; }).length;
-    document.getElementById("usedLast30").textContent    = formatNumber(usedLast30);
-    document.getElementById("usedLast30Pct").textContent = pct(usedLast30, totalSubs) + " of total";
-
-    const dormant = uniqueRecords.filter(r => { if (!r.lastUsed) return true; const d = daysAgo(r.lastUsed); return d !== null && d > 90; }).length;
-    document.getElementById("dormantCount").textContent = formatNumber(dormant);
-    document.getElementById("dormantPct").textContent    = pct(dormant, totalSubs) + " of total";
-
-    const usageDays = uniqueRecords.map(r => daysAgo(r.lastUsed)).filter(d => d !== null && d >= 0);
-    const avgUsageDays = usageDays.length > 0 ? Math.round(usageDays.reduce((a, b) => a + b, 0) / usageDays.length) : 0;
-    document.getElementById("avgDaysSinceUsed").textContent = formatNumber(avgUsageDays);
-
-    const neverUsed = uniqueRecords.filter(r => !r.lastUsed || r.lastUsed === "").length;
-    document.getElementById("neverUsedCount").textContent = formatNumber(neverUsed);
-
-    const crossContainer = document.getElementById("crossCategoryCards");
-    crossContainer.innerHTML = "";
-    allCategories.filter(c => c !== category).forEach(otherCat => {
-        const crossCount = (summaryData && summaryData.overlaps[category] && summaryData.overlaps[category][otherCat]) || 0;
-        crossContainer.insertAdjacentHTML("beforeend", `
-            <div class="kpi-card cross-${otherCat.toLowerCase()}">
-                <div class="kpi-icon">⇄</div>
-                <div class="kpi-label">COMPGUIDs × ${otherCat}<br><small>Shared with ${otherCat}</small></div>
-                <div class="kpi-value">${formatNumber(crossCount)}</div>
-                <div class="kpi-sub">${pct(crossCount, uniqueCompguids.size)} of unique tags</div>
-            </div>
-        `);
-    });
-
-    // -------------------------------------------------------------
-    // SECTION 2: Calculate 6-Grid Distribution Tables
-    // -------------------------------------------------------------
-    const subToComp = new Map();
-    const compToSub = new Map();
-    const subToGst  = new Map();
-    const gstToSub  = new Map();
-    const gstToComp = new Map();
-    const compToGst = new Map();
-
-    categoryRecords.forEach(r => {
-        const sub  = r.subscriptionId;
-        const comp = r.compguid;
-        const gst  = r.gstin;
-
-        if (sub && comp) {
-            if (!subToComp.has(sub)) subToComp.set(sub, new Set());
-            subToComp.get(sub).add(comp);
-            if (!compToSub.has(comp)) compToSub.set(comp, new Set());
-            compToSub.get(comp).add(sub);
-        }
-        if (sub && gst) {
-            if (!subToGst.has(sub)) subToGst.set(sub, new Set());
-            subToGst.get(sub).add(gst);
-            if (!gstToSub.has(gst)) gstToSub.set(gst, new Set());
-            gstToSub.get(gst).add(sub);
-        }
-        if (gst && comp) {
-            if (!gstToComp.has(gst)) gstToComp.set(gst, new Set());
-            gstToComp.get(gst).add(comp);
-            if (!compToGst.has(comp)) compToGst.set(comp, new Set());
-            compToGst.get(comp).add(gst);
-        }
-    });
-
-    function buildDistTable(relationMap, containerId, leftLabel, rightLabel, typeKey, descTitle) {
-        const buckets = {}; 
-        relationMap.forEach((set, key) => {
-            const size = set.size;
-            if (size > 0) {
-                if (!buckets[size]) buckets[size] = [];
-                buckets[size].push(key);
-            }
-        });
-
-        window.distBuckets[typeKey] = buckets;
-        const container = document.getElementById(containerId);
-        let html = `<table><thead><tr><th>${leftLabel}</th><th>${rightLabel}</th></tr></thead><tbody>`;
-        
-        const sizes = Object.keys(buckets).map(Number).sort((a, b) => a - b);
-        
-        if (sizes.length === 0) {
-            html += `<tr><td colspan="2" style="text-align:center; color:#94a3b8; padding:20px;">No data</td></tr>`;
-        } else {
-            sizes.forEach(size => {
-                const count = buckets[size].length;
-                html += `<tr class="clickable-row" title="Click to view ${formatNumber(count)} raw records" onclick="openRawDataModal('${typeKey}', ${size}, '${descTitle} = ${size}')">
-                            <td><strong>${size}</strong></td>
-                            <td class="clickable-link">${formatNumber(count)} <span>↗</span></td>
-                         </tr>`;
-            });
-        }
-        html += `</tbody></table>`;
-        container.innerHTML = html;
+  // Flexible column index finder
+  const find=(...names)=>{
+    for(const n of names){
+      const i=headers.indexOf(n.replace(/[^a-z0-9]/g,""));
+      if(i>=0) return i;
     }
+    return -1;
+  };
+  const iSub=find("subscriptionid","subid","subscription_id");
+  const iCat=find("licensecategory","category","license_category");
+  const iType=find("licensetype","type","license_type");
+  const iComp=find("compguid","comp_guid");
+  const iGst=find("gstin","gst");
+  const iInst=find("installdate","install_date");
+  const iLast=find("lastused","last_used","last-used");
+  const iExp=find("blsexpiry","bls_expiry","expiry");
 
-    buildDistTable(subToComp, "distSubToComp", "COMPGUID Count", "Total Subscriptions", "subToComp", "Subscriptions with exactly X COMPGUIDs");
-    buildDistTable(compToSub, "distCompToSub", "Subscription Count", "Total COMPGUIDs", "compToSub", "COMPGUIDs with exactly X Subscriptions");
-    buildDistTable(subToGst,  "distSubToGst",  "GSTIN Count", "Total Subscriptions", "subToGst", "Subscriptions with exactly X GSTINs");
-    buildDistTable(gstToSub,  "distGstToSub",  "Subscription Count", "Total GSTINs", "gstToSub", "GSTINs with exactly X Subscriptions");
-    buildDistTable(gstToComp, "distGstToComp", "COMPGUID Count", "Total GSTINs", "gstToComp", "GSTINs with exactly X COMPGUIDs");
-    buildDistTable(compToGst, "distCompToGst", "GSTIN Count", "Total COMPGUIDs", "compToGst", "COMPGUIDs with exactly X GSTINs");
-}
+  console.log("Column indexes:", {iSub,iCat,iType,iComp,iGst,iInst,iLast,iExp});
 
-/* ==============================================================
-   DRILL-DOWN MODAL LOGIC
-   ============================================================== */
-function openRawDataModal(distType, size, desc) {
-    const fieldMap = {
-        subToComp: 'subscriptionId',
-        compToSub: 'compguid',
-        subToGst:  'subscriptionId',
-        gstToSub:  'gstin',
-        gstToComp: 'gstin',
-        compToGst: 'compguid'
+  if(iSub<0 || iExp<0){
+    console.error("Required columns missing. Headers were:", lines[0]);
+    return;
+  }
+
+  for(let i=1;i<lines.length;i++){
+    const v=parseCSVLine(lines[i]);
+    if(v.length<2) continue;
+    const row={
+      subscriptionId: (v[iSub]||"").trim(),
+      licenseCategory:(iCat>=0?v[iCat]:currentCategory||"").trim(),
+      licenseType:    (iType>=0?v[iType]:"").trim(),
+      compguid:       (iComp>=0?v[iComp]:"").trim(),
+      gstin:          (iGst>=0?v[iGst]:"").trim(),
+      installDate:    (iInst>=0?v[iInst]:"").trim(),
+      lastUsed:       (iLast>=0?v[iLast]:"").trim(),
+      blsExpiry:      (v[iExp]||"").trim()
     };
-    
-    const filterField = fieldMap[distType];
-    const keySet = new Set(window.distBuckets[distType][size] || []);
-    
-    // Filter the raw data using the matched keys
-    popupFilteredData = categoryRecords.filter(r => keySet.has(r[filterField]));
-    popupCurrentPage = 1;
-    
-    document.getElementById("modalTitle").textContent = `Raw Data: ${desc} (Found ${formatNumber(popupFilteredData.length)} rows)`;
-    document.getElementById("rawModal").classList.add("show");
-    
-    renderPopupTable();
+    if(row.subscriptionId) categoryRecords.push(row);
+  }
+  console.log("Parsed rows:", categoryRecords.length, "Sample:", categoryRecords[0]);
 }
 
-function closeModal() {
-    document.getElementById("rawModal").classList.remove("show");
-    popupFilteredData = [];
+async function openDashboard(category){
+  const ok=await fetchCategoryData(category);
+  if(!ok) return;
+  currentCategory=category;
+  document.getElementById("landingPage").style.display="none";
+  document.getElementById("dashboardPage").style.display="block";
+  document.getElementById("headerCategory").textContent=category+" Dashboard";
+  document.getElementById("dashboardTitle").textContent=category+" Dashboard";
+  document.getElementById("searchInput").value="";
+  document.getElementById("statusFilter").value="All";
+  document.getElementById("typeFilter").value="All";
+  document.getElementById("usageFilter").value="All";
+  sortField=null; sortDir="asc";
+  document.querySelectorAll(".sort-arrow").forEach(el=>el.className="sort-arrow none");
+  computeKPIs(category);
+  applyFilters();
+  window.scrollTo(0,0);
+}
+function goBack(){
+  document.getElementById("dashboardPage").style.display="none";
+  document.getElementById("landingPage").style.display="flex";
+  currentCategory=""; categoryRecords=[]; hideDebug();
+}
+function showLoading(show,text="Loading..."){
+  document.getElementById("loadingOverlay").classList.toggle("show",show);
+  document.getElementById("loadingText").textContent=text;
 }
 
-// Close modal when clicking outside of it
-document.getElementById("rawModal").addEventListener("click", function(e) {
-    if (e.target === this) closeModal();
-});
+function computeKPIs(category){
+  const uniqueCompguids=new Set(), uniqueGstins=new Set(), uniqueSubsMap=new Map();
+  categoryRecords.forEach(r=>{
+    if(r.compguid) uniqueCompguids.add(r.compguid);
+    if(r.gstin) uniqueGstins.add(r.gstin);
+    if(!r.subscriptionId) return;
+    if(!uniqueSubsMap.has(r.subscriptionId)) uniqueSubsMap.set(r.subscriptionId,r);
+    else {
+      const old=uniqueSubsMap.get(r.subscriptionId);
+      if((r.blsExpiry||"")>(old.blsExpiry||"")) uniqueSubsMap.set(r.subscriptionId,r);
+    }
+  });
+  const uniqueRecords=[...uniqueSubsMap.values()];
+  const totalSubs=uniqueRecords.length;
+  const expSubs=uniqueRecords.filter(r=>isExpired(r.blsExpiry)).length;
+  const actSubs=totalSubs-expSubs;
 
-function renderPopupTable() {
-    const tbody = document.getElementById("popupTableBody");
-    tbody.innerHTML = "";
-    
-    const totalRecords = popupFilteredData.length;
-    if (totalRecords === 0) return;
-    
-    const totalPages = Math.ceil(totalRecords / rowsPerPage);
-    if (popupCurrentPage > totalPages) popupCurrentPage = totalPages;
-    
-    const start = (popupCurrentPage - 1) * rowsPerPage;
-    const end = Math.min(start + rowsPerPage, totalRecords);
-    const pageData = popupFilteredData.slice(start, end);
-    
-    pageData.forEach((row, idx) => {
-        tbody.appendChild(createRowHTML(row, start + idx + 1));
+  document.getElementById("totalSubscriptions").textContent=formatNumber(totalSubs);
+  document.getElementById("expiredSubscriptions").textContent=formatNumber(expSubs);
+  document.getElementById("activeSubscriptions").textContent=formatNumber(actSubs);
+  document.getElementById("totalCompguid").textContent=formatNumber(uniqueCompguids.size);
+  document.getElementById("totalGstin").textContent=formatNumber(uniqueGstins.size);
+
+  const perpetualData=uniqueRecords.filter(r=>r.licenseType==="Perpetual");
+  const subscriptionData=uniqueRecords.filter(r=>r.licenseType==="Subscription");
+  const magicData=uniqueRecords.filter(r=>r.licenseType==="Magic");
+  document.getElementById("perpetualCount").textContent=formatNumber(perpetualData.length);
+  document.getElementById("perpetualPct").textContent=pct(perpetualData.length,totalSubs)+" of total";
+  document.getElementById("subscriptionCount").textContent=formatNumber(subscriptionData.length);
+  document.getElementById("subscriptionPct").textContent=pct(subscriptionData.length,totalSubs)+" of total";
+  document.getElementById("magicCount").textContent=formatNumber(magicData.length);
+  document.getElementById("magicPct").textContent=pct(magicData.length,totalSubs)+" of total";
+
+  const installs30=uniqueRecords.filter(r=>{const d=daysAgo(r.installDate);return d!==null&&d>=0&&d<=30}).length;
+  const installs90=uniqueRecords.filter(r=>{const d=daysAgo(r.installDate);return d!==null&&d>=0&&d<=90}).length;
+  document.getElementById("newInstalls30").textContent=formatNumber(installs30);
+  document.getElementById("newInstalls90").textContent=formatNumber(installs90);
+  const installDays=uniqueRecords.map(r=>daysAgo(r.installDate)).filter(d=>d!==null&&d>=0);
+  document.getElementById("avgDaysSinceInstall").textContent=formatNumber(installDays.length?Math.round(installDays.reduce((a,b)=>a+b,0)/installDays.length):0);
+  const installDates=uniqueRecords.map(r=>r.installDate).filter(Boolean).sort();
+  document.getElementById("oldestInstall").textContent=installDates.length?formatDate(installDates[0]):"N/A";
+
+  const usedLast30=uniqueRecords.filter(r=>{const d=daysAgo(r.lastUsed);return d!==null&&d>=0&&d<=30}).length;
+  document.getElementById("usedLast30").textContent=formatNumber(usedLast30);
+  document.getElementById("usedLast30Pct").textContent=pct(usedLast30,totalSubs)+" of total";
+  const dormant=uniqueRecords.filter(r=>{if(!r.lastUsed)return true;const d=daysAgo(r.lastUsed);return d!==null&&d>90}).length;
+  document.getElementById("dormantCount").textContent=formatNumber(dormant);
+  document.getElementById("dormantPct").textContent=pct(dormant,totalSubs)+" of total";
+  const usageDays=uniqueRecords.map(r=>daysAgo(r.lastUsed)).filter(d=>d!==null&&d>=0);
+  document.getElementById("avgDaysSinceUsed").textContent=formatNumber(usageDays.length?Math.round(usageDays.reduce((a,b)=>a+b,0)/usageDays.length):0);
+  document.getElementById("neverUsedCount").textContent=formatNumber(uniqueRecords.filter(r=>!r.lastUsed||r.lastUsed==="").length);
+
+  const cross=document.getElementById("crossCategoryCards"); cross.innerHTML="";
+  allCategories.filter(c=>c!==category).forEach(other=>{
+    const n=(summaryData&&summaryData.overlaps[category]&&summaryData.overlaps[category][other])||0;
+    cross.insertAdjacentHTML("beforeend",`<div class="kpi-card"><div class="kpi-icon">⇄</div><div class="kpi-label">COMPGUIDs × ${other}<br><small>Shared with ${other}</small></div><div class="kpi-value">${formatNumber(n)}</div><div class="kpi-sub">${pct(n,uniqueCompguids.size)} of unique tags</div></div>`);
+  });
+
+  // Distributions
+  const subToComp=new Map(),compToSub=new Map(),subToGst=new Map(),gstToSub=new Map(),gstToComp=new Map(),compToGst=new Map();
+  categoryRecords.forEach(r=>{
+    const s=r.subscriptionId,c=r.compguid,g=r.gstin;
+    if(s&&c){if(!subToComp.has(s))subToComp.set(s,new Set());subToComp.get(s).add(c);if(!compToSub.has(c))compToSub.set(c,new Set());compToSub.get(c).add(s)}
+    if(s&&g){if(!subToGst.has(s))subToGst.set(s,new Set());subToGst.get(s).add(g);if(!gstToSub.has(g))gstToSub.set(g,new Set());gstToSub.get(g).add(s)}
+    if(g&&c){if(!gstToComp.has(g))gstToComp.set(g,new Set());gstToComp.get(g).add(c);if(!compToGst.has(c))compToGst.set(c,new Set());compToGst.get(c).add(g)}
+  });
+  function buildDist(map,id,left,right,key,desc){
+    const buckets={}; map.forEach((set,k)=>{const size=set.size;if(size>0){(buckets[size]=buckets[size]||[]).push(k)}});
+    window.distBuckets[key]=buckets;
+    const el=document.getElementById(id);
+    let html=`<table><thead><tr><th>${left}</th><th>${right}</th></tr></thead><tbody>`;
+    const sizes=Object.keys(buckets).map(Number).sort((a,b)=>a-b);
+    if(!sizes.length) html+=`<tr><td colspan="2" style="text-align:center;color:#94a3b8;padding:20px">No data</td></tr>`;
+    else sizes.forEach(size=>{
+      html+=`<tr class="clickable-row" onclick="openRawDataModal('${key}',${size},'${desc} = ${size}')"><td><strong>${size}</strong></td><td class="clickable-link">${formatNumber(buckets[size].length)} <span>↗</span></td></tr>`;
     });
-    
-    renderPopupPagination(totalPages);
+    html+=`</tbody></table>`; el.innerHTML=html;
+  }
+  buildDist(subToComp,"distSubToComp","COMPGUID Count","Total Subscriptions","subToComp","Subscriptions with exactly X COMPGUIDs");
+  buildDist(compToSub,"distCompToSub","Subscription Count","Total COMPGUIDs","compToSub","COMPGUIDs with exactly X Subscriptions");
+  buildDist(subToGst,"distSubToGst","GSTIN Count","Total Subscriptions","subToGst","Subscriptions with exactly X GSTINs");
+  buildDist(gstToSub,"distGstToSub","Subscription Count","Total GSTINs","gstToSub","GSTINs with exactly X Subscriptions");
+  buildDist(gstToComp,"distGstToComp","COMPGUID Count","Total GSTINs","gstToComp","GSTINs with exactly X COMPGUIDs");
+  buildDist(compToGst,"distCompToGst","GSTIN Count","Total COMPGUIDs","compToGst","COMPGUIDs with exactly X GSTINs");
 }
 
-function renderPopupPagination(totalPages) {
-    const container = document.getElementById("popupPagination");
-    container.innerHTML = "";
-    if (totalPages <= 1) return;
+function openRawDataModal(distType,size,desc){
+  const fieldMap={subToComp:"subscriptionId",compToSub:"compguid",subToGst:"subscriptionId",gstToSub:"gstin",gstToComp:"gstin",compToGst:"compguid"};
+  const field=fieldMap[distType];
+  const keySet=new Set((window.distBuckets[distType]||{})[size]||[]);
+  popupFilteredData=categoryRecords.filter(r=>keySet.has(r[field]));
+  popupCurrentPage=1;
+  document.getElementById("modalTitle").textContent=`Raw Data: ${desc} (Found ${formatNumber(popupFilteredData.length)} rows)`;
+  document.getElementById("rawModal").classList.add("show");
+  renderPopupTable();
+}
+function closeModal(){document.getElementById("rawModal").classList.remove("show");popupFilteredData=[]}
+document.getElementById("rawModal").addEventListener("click",function(e){if(e.target===this)closeModal()});
 
-    const prevBtn = document.createElement("button");
-    prevBtn.className = "page-btn"; prevBtn.textContent = "← Prev";
-    prevBtn.disabled = (popupCurrentPage === 1);
-    prevBtn.onclick = () => { popupCurrentPage--; renderPopupTable(); document.getElementById('modalBody').scrollTo(0,0); };
-    container.appendChild(prevBtn);
-
-    const maxVisible = 7;
-    let startP = Math.max(1, popupCurrentPage - Math.floor(maxVisible / 2));
-    let endP   = Math.min(totalPages, startP + maxVisible - 1);
-    if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
-
-    for (let p = startP; p <= endP; p++) {
-        const btn = document.createElement("button");
-        btn.className = "page-btn" + (p === popupCurrentPage ? " active-page" : "");
-        btn.textContent = p;
-        btn.onclick = () => { popupCurrentPage = p; renderPopupTable(); document.getElementById('modalBody').scrollTo(0,0); };
-        container.appendChild(btn);
-    }
-
-    const nextBtn = document.createElement("button");
-    nextBtn.className = "page-btn"; nextBtn.textContent = "Next →";
-    nextBtn.disabled = (popupCurrentPage === totalPages);
-    nextBtn.onclick = () => { popupCurrentPage++; renderPopupTable(); document.getElementById('modalBody').scrollTo(0,0); };
-    container.appendChild(nextBtn);
+function createRowHTML(row,index){
+  const expired=isExpired(row.blsExpiry);
+  const statusBadge=expired?'<span class="badge badge-expired">Expired</span>':'<span class="badge badge-active">Active</span>';
+  const d=daysAgo(row.lastUsed);
+  let usage=(!d&&d!==0)||row.lastUsed===""?'<span style="color:#94a3b8">Never</span>':d<=30?`<span class="usage-indicator usage-active"></span>${d}d`:d<=90?`<span class="usage-indicator usage-moderate"></span>${d}d`:`<span class="usage-indicator usage-dormant"></span>${d}d`;
+  const tr=document.createElement("tr");
+  tr.innerHTML=`<td>${index}</td><td><strong>${escapeHtml(row.subscriptionId)}</strong></td>
+    <td><span class="license-badge ${getLicenseBadgeClass(row.licenseCategory)}">${escapeHtml(row.licenseCategory)}</span></td>
+    <td><span class="type-badge ${getTypeBadgeClass(row.licenseType)}">${escapeHtml(row.licenseType||"N/A")}</span></td>
+    <td>${escapeHtml(row.compguid)}</td><td style="font-family:monospace;font-size:11px">${escapeHtml(row.gstin)}</td>
+    <td>${formatDate(row.installDate)}</td><td>${formatDate(row.lastUsed)}</td><td>${formatDate(row.blsExpiry)}</td>
+    <td>${statusBadge}</td><td>${usage}</td>`;
+  return tr;
+}
+function renderPopupTable(){
+  const tbody=document.getElementById("popupTableBody"); tbody.innerHTML="";
+  const total=popupFilteredData.length; if(!total)return;
+  const pages=Math.ceil(total/rowsPerPage); if(popupCurrentPage>pages)popupCurrentPage=pages;
+  const start=(popupCurrentPage-1)*rowsPerPage;
+  popupFilteredData.slice(start,start+rowsPerPage).forEach((r,i)=>tbody.appendChild(createRowHTML(r,start+i+1)));
+  const box=document.getElementById("popupPagination"); box.innerHTML="";
+  if(pages<=1)return;
+  const prev=document.createElement("button"); prev.className="page-btn"; prev.textContent="← Prev"; prev.disabled=popupCurrentPage===1;
+  prev.onclick=()=>{popupCurrentPage--;renderPopupTable();document.getElementById("modalBody").scrollTo(0,0)}; box.appendChild(prev);
+  for(let p=Math.max(1,popupCurrentPage-3); p<=Math.min(pages,popupCurrentPage+3); p++){
+    const b=document.createElement("button"); b.className="page-btn"+(p===popupCurrentPage?" active-page":""); b.textContent=p;
+    b.onclick=()=>{popupCurrentPage=p;renderPopupTable();document.getElementById("modalBody").scrollTo(0,0)}; box.appendChild(b);
+  }
+  const next=document.createElement("button"); next.className="page-btn"; next.textContent="Next →"; next.disabled=popupCurrentPage===pages;
+  next.onclick=()=>{popupCurrentPage++;renderPopupTable();document.getElementById("modalBody").scrollTo(0,0)}; box.appendChild(next);
+}
+function exportPopupCSV(){
+  if(!popupFilteredData.length)return;
+  const headers=["Subscription ID","License Category","License Type","COMPGUID","GSTIN","Install Date","Last Used","BLS Expiry","Status"];
+  let csv=headers.join(",")+"\n";
+  popupFilteredData.forEach(r=>{csv+=[r.subscriptionId,r.licenseCategory,r.licenseType||"N/A",r.compguid,r.gstin,r.installDate||"N/A",r.lastUsed||"N/A",r.blsExpiry,isExpired(r.blsExpiry)?"Expired":"Active"].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")+"\n"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download=`Filtered_Raw_${todayStr()}.csv`; a.click();
 }
 
-function exportPopupCSV() {
-    if (popupFilteredData.length === 0) return;
-    const headers = ["Subscription ID", "License Category", "License Type", "COMPGUID", "GSTIN", "Install Date", "Last Used", "BLS Expiry", "Status"];
-    const rows = popupFilteredData.map(r => [
-        r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.compguid, r.gstin, r.installDate || "N/A", r.lastUsed || "N/A", r.blsExpiry, isExpired(r.blsExpiry) ? "Expired" : "Active"
-    ]);
-
-    let csv = headers.join(",") + "\n";
-    rows.forEach(r => csv += r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
-    a.href     = url; a.download = `Filtered_Raw_Data_${todayStr()}.csv`;
-    a.click(); URL.revokeObjectURL(url);
+function sortTable(field){
+  if(!field)return;
+  if(sortField===field) sortDir=sortDir==="asc"?"desc":"asc"; else {sortField=field;sortDir="asc"}
+  document.querySelectorAll(".sort-arrow").forEach(el=>el.className="sort-arrow none");
+  const ar=document.getElementById("sort-"+field); if(ar) ar.className="sort-arrow "+sortDir;
+  filteredData.sort((a,b)=>{
+    let A,B;
+    if(field==="status"){A=isExpired(a.blsExpiry)?"Expired":"Active";B=isExpired(b.blsExpiry)?"Expired":"Active"}
+    else if(field==="daysSinceUsed"){A=daysAgo(a.lastUsed)??999999;B=daysAgo(b.lastUsed)??999999}
+    else {A=a[field]||"";B=b[field]||""}
+    return A<B?(sortDir==="asc"?-1:1):A>B?(sortDir==="asc"?1:-1):0;
+  });
+  currentPage=1; renderTable();
 }
-
-/* ==============================================================
-   TABLE ROW GENERATOR (Shared by Main & Popup tables)
-   ============================================================== */
-function createRowHTML(row, index) {
-    const expired = isExpired(row.blsExpiry);
-    const statusBadge = expired ? '<span class="badge badge-expired">Expired</span>' : '<span class="badge badge-active">Active</span>';
-    const licenseBadgeClass = getLicenseBadgeClass(row.licenseCategory);
-    const typeBadgeClass    = getTypeBadgeClass(row.licenseType);
-
-    const daysSinceUsed = daysAgo(row.lastUsed);
-    let usageHtml = "";
-    if (daysSinceUsed === null || row.lastUsed === "") usageHtml = '<span style="color:#94a3b8">Never</span>';
-    else if (daysSinceUsed <= 30) usageHtml = `<span class="usage-indicator usage-active"></span>${daysSinceUsed}d`;
-    else if (daysSinceUsed <= 90) usageHtml = `<span class="usage-indicator usage-moderate"></span>${daysSinceUsed}d`;
-    else usageHtml = `<span class="usage-indicator usage-dormant"></span>${daysSinceUsed}d`;
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-        <td>${index}</td>
-        <td><strong>${escapeHtml(row.subscriptionId)}</strong></td>
-        <td><span class="license-badge ${licenseBadgeClass}">${escapeHtml(row.licenseCategory)}</span></td>
-        <td><span class="type-badge ${typeBadgeClass}">${escapeHtml(row.licenseType || "N/A")}</span></td>
-        <td>${escapeHtml(row.compguid)}</td>
-        <td style="font-family:monospace;font-size:11px;">${escapeHtml(row.gstin)}</td>
-        <td>${formatDate(row.installDate)}</td>
-        <td>${formatDate(row.lastUsed)}</td>
-        <td>${formatDate(row.blsExpiry)}</td>
-        <td>${statusBadge}</td>
-        <td>${usageHtml}</td>
-    `;
-    return tr;
+function applyFilters(){
+  const search=document.getElementById("searchInput").value.toLowerCase().trim();
+  const status=document.getElementById("statusFilter").value;
+  const type=document.getElementById("typeFilter").value;
+  const usage=document.getElementById("usageFilter").value;
+  filteredData=categoryRecords;
+  if(search) filteredData=filteredData.filter(r=>(r.subscriptionId||"").toLowerCase().includes(search)||(r.compguid||"").toLowerCase().includes(search)||(r.gstin||"").toLowerCase().includes(search));
+  if(status==="Active") filteredData=filteredData.filter(r=>!isExpired(r.blsExpiry));
+  else if(status==="Expired") filteredData=filteredData.filter(r=>isExpired(r.blsExpiry));
+  if(type!=="All") filteredData=filteredData.filter(r=>r.licenseType===type);
+  if(usage==="Last30") filteredData=filteredData.filter(r=>{const d=daysAgo(r.lastUsed);return d!==null&&d>=0&&d<=30});
+  else if(usage==="Last90") filteredData=filteredData.filter(r=>{const d=daysAgo(r.lastUsed);return d!==null&&d>=0&&d<=90});
+  else if(usage==="Dormant") filteredData=filteredData.filter(r=>{if(!r.lastUsed)return true;const d=daysAgo(r.lastUsed);return d!==null&&d>90});
+  else if(usage==="NeverUsed") filteredData=filteredData.filter(r=>!r.lastUsed||!String(r.lastUsed).trim());
+  currentPage=1; renderTable();
 }
-
-/* ==============================================================
-   FILTERS & MAIN TABLE RENDERING
-   ============================================================== */
-function sortTable(field) {
-    if (field === null) return;
-    if (sortField === field) sortDir = sortDir === "asc" ? "desc" : "asc";
-    else { sortField = field; sortDir = "asc"; }
-
-    document.querySelectorAll('.sort-arrow').forEach(el => el.className = 'sort-arrow none');
-    const arrow = document.getElementById("sort-" + field);
-    if (arrow) arrow.className = "sort-arrow " + sortDir;
-
-    filteredData.sort((a, b) => {
-        let valA, valB;
-        if (field === "status") { valA = isExpired(a.blsExpiry) ? "Expired" : "Active"; valB = isExpired(b.blsExpiry) ? "Expired" : "Active"; }
-        else if (field === "daysSinceUsed") { valA = daysAgo(a.lastUsed) ?? 999999; valB = daysAgo(b.lastUsed) ?? 999999; }
-        else { valA = a[field] || ""; valB = b[field] || ""; }
-        if (valA < valB) return sortDir === "asc" ? -1 : 1;
-        if (valA > valB) return sortDir === "asc" ? 1 : -1;
-        return 0;
-    });
-
-    currentPage = 1; renderTable();
+function renderTable(){
+  const tbody=document.getElementById("dataTableBody"); tbody.innerHTML="";
+  const total=filteredData.length;
+  document.getElementById("recordCount").textContent=formatNumber(total)+" records mapped";
+  if(!total){
+    tbody.innerHTML=`<tr><td colspan="11"><div class="empty-state"><div style="font-size:40px;margin-bottom:12px">📭</div><div style="font-size:16px;font-weight:600;margin-bottom:6px">No records found</div><div>Data file may be empty or filters excluded everything.</div></div></td></tr>`;
+    document.getElementById("pagination").innerHTML=""; return;
+  }
+  const pages=Math.ceil(total/rowsPerPage); if(currentPage>pages)currentPage=pages;
+  const start=(currentPage-1)*rowsPerPage;
+  filteredData.slice(start,start+rowsPerPage).forEach((r,i)=>tbody.appendChild(createRowHTML(r,start+i+1)));
+  const box=document.getElementById("pagination"); box.innerHTML="";
+  if(pages<=1)return;
+  const prev=document.createElement("button"); prev.className="page-btn"; prev.textContent="← Prev"; prev.disabled=currentPage===1;
+  prev.onclick=()=>{currentPage--;renderTable();scrollToTable()}; box.appendChild(prev);
+  for(let p=Math.max(1,currentPage-3);p<=Math.min(pages,currentPage+3);p++){
+    const b=document.createElement("button"); b.className="page-btn"+(p===currentPage?" active-page":""); b.textContent=p;
+    b.onclick=()=>{currentPage=p;renderTable()}; box.appendChild(b);
+  }
+  const next=document.createElement("button"); next.className="page-btn"; next.textContent="Next →"; next.disabled=currentPage===pages;
+  next.onclick=()=>{currentPage++;renderTable();scrollToTable()}; box.appendChild(next);
 }
-
-function applyFilters() {
-    const search = document.getElementById("searchInput").value.toLowerCase().trim();
-    const status = document.getElementById("statusFilter").value;
-    const type   = document.getElementById("typeFilter").value;
-    const usage  = document.getElementById("usageFilter").value;
-
-    filteredData = categoryRecords;
-
-    if (search) {
-        filteredData = filteredData.filter(r =>
-            (r.subscriptionId && r.subscriptionId.toLowerCase().includes(search)) ||
-            (r.compguid && r.compguid.toLowerCase().includes(search)) ||
-            (r.gstin && r.gstin.toLowerCase().includes(search))
-        );
-    }
-    if (status === "Active") filteredData = filteredData.filter(r => !isExpired(r.blsExpiry));
-    else if (status === "Expired") filteredData = filteredData.filter(r => isExpired(r.blsExpiry));
-    if (type !== "All") filteredData = filteredData.filter(r => r.licenseType === type);
-
-    if (usage === "Last30") filteredData = filteredData.filter(r => { const d = daysAgo(r.lastUsed); return d !== null && d >= 0 && d <= 30; });
-    else if (usage === "Last90") filteredData = filteredData.filter(r => { const d = daysAgo(r.lastUsed); return d !== null && d >= 0 && d <= 90; });
-    else if (usage === "Dormant") filteredData = filteredData.filter(r => { if (!r.lastUsed) return true; const d = daysAgo(r.lastUsed); return d !== null && d > 90; });
-    else if (usage === "NeverUsed") filteredData = filteredData.filter(r => !r.lastUsed || r.lastUsed.trim() === "");
-
-    currentPage = 1; renderTable();
+function scrollToTable(){const el=document.querySelector(".table-section");if(el)window.scrollTo(0,el.offsetTop-20)}
+function exportTableCSV(){
+  if(!filteredData.length)return;
+  const headers=["Subscription ID","License Category","License Type","COMPGUID","GSTIN","Install Date","Last Used","BLS Expiry","Status"];
+  let csv=headers.join(",")+"\n";
+  filteredData.forEach(r=>{csv+=[r.subscriptionId,r.licenseCategory,r.licenseType||"N/A",r.compguid,r.gstin,r.installDate||"N/A",r.lastUsed||"N/A",r.blsExpiry,isExpired(r.blsExpiry)?"Expired":"Active"].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")+"\n"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download=`${currentCategory}_data.csv`; a.click();
 }
-
-function renderTable() {
-    const tbody = document.getElementById("dataTableBody");
-    tbody.innerHTML = "";
-
-    const totalRecords = filteredData.length;
-    document.getElementById("recordCount").textContent = formatNumber(totalRecords) + " records mapped";
-
-    if (totalRecords === 0) {
-        tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><div style="font-size:40px;margin-bottom:12px;">📭</div><div style="font-size:16px;font-weight:600;margin-bottom:6px;">No records found</div><div>Try adjusting your search or filter criteria.</div></div></td></tr>`;
-        document.getElementById("pagination").innerHTML = "";
-        return;
-    }
-
-    const totalPages = Math.ceil(totalRecords / rowsPerPage);
-    if (currentPage > totalPages) currentPage = totalPages;
-
-    const start = (currentPage - 1) * rowsPerPage;
-    const end   = Math.min(start + rowsPerPage, totalRecords);
-    const pageData = filteredData.slice(start, end);
-
-    pageData.forEach((row, idx) => {
-        tbody.appendChild(createRowHTML(row, start + idx + 1));
-    });
-
-    renderPagination(totalPages);
-}
-
-function renderPagination(totalPages) {
-    const container = document.getElementById("pagination");
-    container.innerHTML = "";
-    if (totalPages <= 1) return;
-
-    const prevBtn = document.createElement("button");
-    prevBtn.className = "page-btn"; prevBtn.textContent = "← Prev";
-    prevBtn.disabled = (currentPage === 1);
-    prevBtn.onclick = () => { currentPage--; renderTable(); scrollToTable(); };
-    container.appendChild(prevBtn);
-
-    const maxVisible = 7;
-    let startP = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-    let endP   = Math.min(totalPages, startP + maxVisible - 1);
-    if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
-
-    for (let p = startP; p <= endP; p++) {
-        const btn = document.createElement("button");
-        btn.className = "page-btn" + (p === currentPage ? " active-page" : "");
-        btn.textContent = p;
-        btn.onclick = () => { currentPage = p; renderTable(); };
-        container.appendChild(btn);
-    }
-
-    const nextBtn = document.createElement("button");
-    nextBtn.className = "page-btn"; nextBtn.textContent = "Next →";
-    nextBtn.disabled = (currentPage === totalPages);
-    nextBtn.onclick = () => { currentPage++; renderTable(); scrollToTable(); };
-    container.appendChild(nextBtn);
-}
-
-function scrollToTable() {
-    const el = document.querySelector('.table-section');
-    if (el) window.scrollTo(0, el.offsetTop - 20);
-}
-
-function exportTableCSV() {
-    if (filteredData.length === 0) return;
-    const headers = ["Subscription ID", "License Category", "License Type", "COMPGUID", "GSTIN", "Install Date", "Last Used", "BLS Expiry", "Status"];
-    const rows = filteredData.map(r => [
-        r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.compguid, r.gstin, r.installDate || "N/A", r.lastUsed || "N/A", r.blsExpiry, isExpired(r.blsExpiry) ? "Expired" : "Active"
-    ]);
-
-    let csv = headers.join(",") + "\n";
-    rows.forEach(r => csv += r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
-    a.href     = url; a.download = `${currentCategory}_extracted_metrics.csv`;
-    a.click(); URL.revokeObjectURL(url);
-}
-
-/* ==============================================================
-   INIT
-   ============================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-    loadSummary();
-});
+document.addEventListener("DOMContentLoaded",()=>loadSummary());
 </script>
-
 </body>
 </html>
