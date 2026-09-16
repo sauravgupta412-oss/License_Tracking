@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "CA": {
+      "total": 186374,
+      "active": 182567,
+      "expired": 3807
+    },
+    "Accountant": {
+      "total": 109761,
+      "active": 108341,
+      "expired": 1420
+    },
+    "GSTP": {
+      "total": 792,
+      "active": 761,
+      "expired": 31
+    },
+    "Regular": {
+      "total": 740419,
+      "active": 691355,
+      "expired": 49064
+    }
+  },
+  "overlaps": {
+    "CA": {
+      "Accountant": 5372,
+      "GSTP": 19,
+      "Regular": 40319
+    },
+    "Accountant": {
+      "CA": 5372,
+      "GSTP": 6,
+      "Regular": 19089
+    },
+    "GSTP": {
+      "CA": 19,
+      "Accountant": 6,
+      "Regular": 111
+    },
+    "Regular": {
+      "CA": 40319,
+      "Accountant": 19089,
+      "GSTP": 111
+    }
+  }
+}
