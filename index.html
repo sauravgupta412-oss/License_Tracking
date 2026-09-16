@@ -32,7 +32,7 @@
 
     .landing-container {
         width: 100%;
-        max-width: 1200px;
+        max-width: 1300px;
         text-align: center;
     }
 
@@ -61,143 +61,50 @@
     .landing-subtitle {
         color: #cbd5e1;
         font-size: 17px;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
     }
 
-    /* CSV Upload Section */
-    .upload-section {
-        background: rgba(255,255,255,0.08);
-        border: 2px dashed rgba(255,255,255,0.3);
-        border-radius: 16px;
-        padding: 30px;
-        margin-bottom: 35px;
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-    }
-
-    .upload-section:hover {
-        border-color: rgba(255,255,255,0.5);
-        background: rgba(255,255,255,0.12);
-    }
-
-    .upload-section.drag-over {
-        border-color: #60a5fa;
-        background: rgba(96,165,250,0.15);
-    }
-
-    .upload-section.loaded {
-        border-color: #22c55e;
-        background: rgba(34,197,94,0.1);
-        border-style: solid;
-    }
-
-    .upload-icon {
-        font-size: 40px;
-        margin-bottom: 12px;
-    }
-
-    .upload-title {
-        color: white;
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
-    .upload-desc {
-        color: #94a3b8;
+    .data-status {
+        margin-bottom: 30px;
+        padding: 12px 24px;
+        border-radius: 12px;
         font-size: 14px;
-        margin-bottom: 16px;
-        line-height: 1.6;
-    }
-
-    .upload-btn-wrapper {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .upload-btn {
-        background: #2563eb;
-        color: white;
-        border: none;
-        padding: 12px 28px;
-        border-radius: 10px;
-        font-size: 15px;
         font-weight: 600;
-        cursor: pointer;
-        transition: background 0.2s;
+        display: inline-block;
     }
 
-    .upload-btn:hover {
-        background: #1d4ed8;
+    .data-status.loading {
+        background: rgba(251,191,36,0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(251,191,36,0.3);
     }
 
-    .sample-btn {
-        background: transparent;
+    .data-status.success {
+        background: rgba(34,197,94,0.15);
+        color: #4ade80;
+        border: 1px solid rgba(34,197,94,0.3);
+    }
+
+    .data-status.error {
+        background: rgba(239,68,68,0.15);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.3);
+    }
+
+    .refresh-btn {
+        background: rgba(255,255,255,0.1);
         color: #93c5fd;
-        border: 1px solid rgba(147,197,253,0.4);
-        padding: 12px 28px;
-        border-radius: 10px;
-        font-size: 15px;
-        font-weight: 600;
+        border: 1px solid rgba(147,197,253,0.3);
+        padding: 8px 18px;
+        border-radius: 8px;
+        font-size: 13px;
         cursor: pointer;
+        margin-left: 12px;
         transition: all 0.2s;
     }
 
-    .sample-btn:hover {
-        background: rgba(147,197,253,0.1);
-        border-color: #93c5fd;
-    }
-
-    .file-input {
-        display: none;
-    }
-
-    .upload-status {
-        margin-top: 14px;
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    .upload-status.success {
-        color: #4ade80;
-    }
-
-    .upload-status.error {
-        color: #f87171;
-    }
-
-    .format-hint {
-        background: rgba(0,0,0,0.2);
-        border-radius: 10px;
-        padding: 14px 20px;
-        margin-top: 18px;
-        text-align: left;
-        display: none;
-    }
-
-    .format-hint.show {
-        display: block;
-    }
-
-    .format-hint-title {
-        color: #93c5fd;
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
-    .format-hint code {
-        color: #fbbf24;
-        font-size: 12px;
-        display: block;
-        padding: 6px 10px;
-        background: rgba(0,0,0,0.3);
-        border-radius: 6px;
-        overflow-x: auto;
-        white-space: pre;
+    .refresh-btn:hover {
+        background: rgba(255,255,255,0.18);
     }
 
     /* Category Grid */
@@ -215,7 +122,7 @@
     .category-card {
         background: white;
         border-radius: 18px;
-        padding: 35px 25px;
+        padding: 30px 22px;
         cursor: pointer;
         transition: all 0.25s ease;
         border: 2px solid transparent;
@@ -229,14 +136,14 @@
     }
 
     .category-icon {
-        width: 68px;
-        height: 68px;
-        margin: 0 auto 20px;
+        width: 62px;
+        height: 62px;
+        margin: 0 auto 16px;
         border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 27px;
+        font-size: 24px;
         font-weight: bold;
     }
 
@@ -246,42 +153,37 @@
     .regular-icon { background: #f3e8ff; color: #9333ea; }
 
     .category-card h2 {
-        font-size: 22px;
-        margin-bottom: 9px;
+        font-size: 20px;
+        margin-bottom: 8px;
     }
 
     .category-card p {
         color: #64748b;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 1.5;
     }
 
     .card-stats {
-        margin-top: 15px;
-        padding-top: 15px;
+        margin-top: 14px;
+        padding-top: 14px;
         border-top: 1px solid #e5e7eb;
-        display: flex;
-        justify-content: space-around;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
     }
 
     .card-stat-item { text-align: center; }
 
     .card-stat-value {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 700;
         color: #111827;
     }
 
     .card-stat-label {
-        font-size: 11px;
+        font-size: 10px;
         color: #94a3b8;
         margin-top: 2px;
-    }
-
-    .no-data-hint {
-        color: #94a3b8;
-        font-size: 14px;
-        margin-top: 20px;
     }
 
     /* =========================
@@ -355,7 +257,7 @@
     }
 
     .dashboard-content {
-        max-width: 1500px;
+        max-width: 1600px;
         margin: auto;
         padding: 30px;
     }
@@ -377,14 +279,14 @@
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
-        margin-bottom: 30px;
+        gap: 16px;
+        margin-bottom: 25px;
     }
 
     .kpi-card {
         background: white;
         border-radius: 14px;
-        padding: 21px;
+        padding: 20px;
         border: 1px solid #e5e7eb;
         box-shadow: 0 4px 12px rgba(15,23,42,0.05);
         position: relative;
@@ -394,9 +296,7 @@
     .kpi-card::before {
         content: "";
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
+        left: 0; top: 0; bottom: 0;
         width: 4px;
         background: #2563eb;
     }
@@ -404,31 +304,61 @@
     .kpi-card.expired::before { background: #ef4444; }
     .kpi-card.active::before { background: #22c55e; }
     .kpi-card.comp::before { background: #8b5cf6; }
-    .kpi-card.gstin::before { background: #f59e0b; }
+    .kpi-card.gstin-card::before { background: #f59e0b; }
     .kpi-card.cross-ca::before { background: #2563eb; }
     .kpi-card.cross-accountant::before { background: #16a34a; }
     .kpi-card.cross-gstp::before { background: #d97706; }
     .kpi-card.cross-regular::before { background: #9333ea; }
+    .kpi-card.perpetual::before { background: #0891b2; }
+    .kpi-card.subscription::before { background: #7c3aed; }
+    .kpi-card.magic::before { background: #db2777; }
+    .kpi-card.install::before { background: #0d9488; }
+    .kpi-card.usage::before { background: #ea580c; }
+    .kpi-card.dormant::before { background: #64748b; }
+    .kpi-card.new-install::before { background: #059669; }
 
     .kpi-label {
         color: #64748b;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 1.4;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     .kpi-value {
-        font-size: 30px;
+        font-size: 28px;
         font-weight: 700;
         color: #111827;
     }
 
+    .kpi-value.small {
+        font-size: 22px;
+    }
+
     .kpi-icon {
         position: absolute;
-        right: 18px;
-        top: 18px;
-        font-size: 20px;
-        opacity: 0.6;
+        right: 16px;
+        top: 16px;
+        font-size: 18px;
+        opacity: 0.5;
+    }
+
+    .kpi-sub {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-top: 4px;
+    }
+
+    /* Section Dividers */
+    .section-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 8px 0 14px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e2e8f0;
+        grid-column: 1 / -1;
     }
 
     /* Filters */
@@ -448,7 +378,7 @@
 
     .filter-grid {
         display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
         gap: 12px;
     }
 
@@ -480,6 +410,8 @@
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid #e5e7eb;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .table-title { font-weight: 600; }
@@ -494,50 +426,47 @@
     table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 900px;
+        min-width: 1200px;
     }
 
     th {
         background: #f8fafc;
         color: #475569;
-        font-size: 12px;
+        font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 0.4px;
-        padding: 13px 15px;
+        padding: 12px 14px;
         text-align: left;
         white-space: nowrap;
         cursor: pointer;
         user-select: none;
-        position: relative;
     }
 
-    th:hover {
-        background: #eef2f7;
-    }
+    th:hover { background: #eef2f7; }
 
     th .sort-arrow {
-        margin-left: 5px;
-        font-size: 10px;
+        margin-left: 4px;
+        font-size: 9px;
         color: #94a3b8;
     }
 
-    th .sort-arrow.asc::after { content: "▲"; }
-    th .sort-arrow.desc::after { content: "▼"; }
-    th .sort-arrow.none::after { content: "▲▼"; font-size: 8px; }
+    th .sort-arrow.asc::after { content: "▲"; color: #2563eb; }
+    th .sort-arrow.desc::after { content: "▼"; color: #2563eb; }
+    th .sort-arrow.none::after { content: "↕"; }
 
     td {
-        padding: 14px 15px;
+        padding: 12px 14px;
         border-top: 1px solid #eef2f7;
-        font-size: 13px;
+        font-size: 12px;
         white-space: nowrap;
     }
 
     tr:hover td { background: #f8fafc; }
 
     .badge {
-        padding: 5px 9px;
+        padding: 4px 8px;
         border-radius: 20px;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 600;
     }
 
@@ -545,9 +474,9 @@
     .badge-expired { background: #fee2e2; color: #b91c1c; }
 
     .license-badge {
-        padding: 5px 9px;
+        padding: 4px 8px;
         border-radius: 20px;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 600;
     }
 
@@ -555,6 +484,29 @@
     .license-badge-accountant { background: #dcfce7; color: #15803d; }
     .license-badge-gstp { background: #fef3c7; color: #92400e; }
     .license-badge-regular { background: #f3e8ff; color: #7c3aed; }
+
+    .type-badge {
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+    .type-perpetual { background: #ecfeff; color: #0e7490; }
+    .type-subscription { background: #ede9fe; color: #6d28d9; }
+    .type-magic { background: #fce7f3; color: #be185d; }
+
+    .usage-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+
+    .usage-active { background: #22c55e; }
+    .usage-dormant { background: #ef4444; }
+    .usage-moderate { background: #f59e0b; }
 
     .empty-state {
         text-align: center;
@@ -597,7 +549,7 @@
         cursor: not-allowed;
     }
 
-    /* Loading overlay */
+    /* Loading */
     .loading-overlay {
         display: none;
         position: fixed;
@@ -609,14 +561,9 @@
         backdrop-filter: blur(4px);
     }
 
-    .loading-overlay.show {
-        display: flex;
-    }
+    .loading-overlay.show { display: flex; }
 
-    .loading-spinner {
-        text-align: center;
-        color: white;
-    }
+    .loading-spinner { text-align: center; color: white; }
 
     .spinner {
         width: 50px;
@@ -628,24 +575,24 @@
         margin: 0 auto 15px;
     }
 
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Responsive */
-    @media (max-width: 1000px) {
+    @media (max-width: 1100px) {
         .category-grid { grid-template-columns: repeat(2, 1fr); }
         .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        .section-label { grid-column: 1 / -1; }
     }
 
     @media (max-width: 650px) {
-        .landing-title { font-size: 30px; }
+        .landing-title { font-size: 28px; }
         .category-grid { grid-template-columns: 1fr; }
         .kpi-grid { grid-template-columns: 1fr; }
         .filter-grid { grid-template-columns: 1fr; }
         .dashboard-header { padding: 15px; }
-        .dashboard-content { padding: 18px; }
+        .dashboard-content { padding: 16px; }
         .header-title { font-size: 17px; }
+        .section-label { grid-column: 1 / -1; }
     }
 </style>
 </head>
@@ -656,7 +603,7 @@
 <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-spinner">
         <div class="spinner"></div>
-        <div style="font-size:16px;font-weight:600;">Processing CSV data...</div>
+        <div style="font-size:16px;font-weight:600;" id="loadingText">Loading data from GitHub...</div>
     </div>
 </div>
 
@@ -667,50 +614,14 @@
     <div class="landing-container">
 
         <div class="logo">LD</div>
-
         <h1 class="landing-title">License Dashboard</h1>
-
         <p class="landing-subtitle">
-            Upload your CSV data file, then select a license category to view its dashboard
+            Select a license category to view its subscription dashboard
         </p>
 
-        <!-- CSV Upload Section -->
-        <div class="upload-section" id="uploadSection">
-            <div class="upload-icon">📄</div>
-            <div class="upload-title">Upload Your CSV Data File</div>
-            <div class="upload-desc">
-                Drag & drop your CSV file here, or click the button below to browse.<br>
-                Your data stays in the browser — nothing is uploaded to any server.
-            </div>
-
-            <div class="upload-btn-wrapper">
-                <button class="upload-btn" onclick="document.getElementById('csvFileInput').click()">
-                    📁 Choose CSV File
-                </button>
-                <button class="sample-btn" onclick="loadSampleData()">
-                    ⚡ Load Sample Data
-                </button>
-                <button class="sample-btn" onclick="toggleFormatHint()">
-                    ❓ CSV Format
-                </button>
-            </div>
-
-            <input type="file" id="csvFileInput" class="file-input" accept=".csv" onchange="handleFileUpload(event)">
-
-            <div class="upload-status" id="uploadStatus"></div>
-
-            <div class="format-hint" id="formatHint">
-                <div class="format-hint-title">Required CSV Columns (header names must match exactly):</div>
-                <code>subscriptionId,licenseCategory,compguid,gstin,blsExpiry
-SUB1001,CA,COMP001,09AAAAA1111A1Z1,2026-12-31
-SUB1002,Accountant,COMP002,09BBBBB2222B1Z2,2024-06-15
-SUB1003,GSTP,COMP003,09CCCCC3333C1Z3,2025-09-20
-SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
-                <div style="color:#94a3b8;font-size:12px;margin-top:8px;">
-                    <strong>licenseCategory</strong> must be one of: <strong>CA</strong>, <strong>Accountant</strong>, <strong>GSTP</strong>, <strong>Regular</strong><br>
-                    <strong>blsExpiry</strong> date format: <strong>YYYY-MM-DD</strong> (e.g. 2026-12-31)
-                </div>
-            </div>
+        <div class="data-status loading" id="dataStatus">
+            ⏳ Loading data from GitHub repository...
+            <button class="refresh-btn" onclick="fetchDataFromGitHub()" style="display:none" id="retryBtn">🔄 Retry</button>
         </div>
 
         <!-- Category Cards -->
@@ -719,7 +630,7 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
             <div class="category-card" onclick="openDashboard('CA')">
                 <div class="category-icon ca-icon">CA</div>
                 <h2>CA</h2>
-                <p>View all subscriptions and COMPGUIDs tagged with CA licenses.</p>
+                <p>Chartered Accountant tagged licenses</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-ca-total">0</div>
@@ -739,7 +650,7 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
             <div class="category-card" onclick="openDashboard('Accountant')">
                 <div class="category-icon accountant-icon">AC</div>
                 <h2>Accountant</h2>
-                <p>View all subscriptions and COMPGUIDs tagged with Accountant licenses.</p>
+                <p>Accountant tagged licenses</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-accountant-total">0</div>
@@ -759,7 +670,7 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
             <div class="category-card" onclick="openDashboard('GSTP')">
                 <div class="category-icon gstp-icon">GP</div>
                 <h2>GSTP</h2>
-                <p>View all subscriptions and COMPGUIDs tagged with GSTP licenses.</p>
+                <p>GST Practitioner tagged licenses</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-gstp-total">0</div>
@@ -779,7 +690,7 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
             <div class="category-card" onclick="openDashboard('Regular')">
                 <div class="category-icon regular-icon">RG</div>
                 <h2>Regular</h2>
-                <p>View all subscriptions and COMPGUIDs tagged with Regular licenses.</p>
+                <p>Regular tagged licenses</p>
                 <div class="card-stats">
                     <div class="card-stat-item">
                         <div class="card-stat-value" id="landing-regular-total">0</div>
@@ -795,10 +706,6 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="no-data-hint" id="noDataHint">
-            ↑ Upload a CSV file first to enable the dashboard categories
         </div>
 
     </div>
@@ -828,12 +735,15 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
         <section class="dashboard-title-section">
             <h1 class="dashboard-title" id="dashboardTitle">CA Dashboard</h1>
             <p class="dashboard-description">
-                Subscription, COMPGUID and GSTIN overview for the selected license category.
+                Comprehensive subscription, usage, and license overview for the selected category.
             </p>
         </section>
 
         <!-- KPI CARDS -->
         <section class="kpi-grid" id="kpiGrid">
+
+            <!-- Row 1: Core Subscription Metrics -->
+            <div class="section-label">📊 Subscription Overview</div>
 
             <div class="kpi-card">
                 <div class="kpi-icon">▣</div>
@@ -849,21 +759,86 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
 
             <div class="kpi-card active">
                 <div class="kpi-icon">✓</div>
-                <div class="kpi-label">Active Subscriptions<br><small>BLS Expiry ≥ Today</small></div>
+                <div class="kpi-label">Active Subscriptions<br><small>BLS Expiry &gt; Today</small></div>
                 <div class="kpi-value" id="activeSubscriptions">0</div>
             </div>
 
             <div class="kpi-card comp">
                 <div class="kpi-icon">◈</div>
-                <div class="kpi-label">Total COMPGUID</div>
+                <div class="kpi-label">Total Unique COMPGUID</div>
                 <div class="kpi-value" id="totalCompguid">0</div>
             </div>
 
-            <div class="kpi-card gstin">
+            <div class="kpi-card gstin-card">
                 <div class="kpi-icon">G</div>
-                <div class="kpi-label">Total GSTIN</div>
+                <div class="kpi-label">Total Unique GSTIN</div>
                 <div class="kpi-value" id="totalGstin">0</div>
             </div>
+
+            <!-- Row 2: License Type Breakdown -->
+            <div class="section-label">🏷️ License Type Breakdown</div>
+
+            <div class="kpi-card perpetual">
+                <div class="kpi-icon">∞</div>
+                <div class="kpi-label">Perpetual Licenses</div>
+                <div class="kpi-value" id="perpetualCount">0</div>
+                <div class="kpi-sub" id="perpetualPct">0%</div>
+            </div>
+
+            <div class="kpi-card subscription">
+                <div class="kpi-icon">🔄</div>
+                <div class="kpi-label">Subscription Licenses</div>
+                <div class="kpi-value" id="subscriptionCount">0</div>
+                <div class="kpi-sub" id="subscriptionPct">0%</div>
+            </div>
+
+            <div class="kpi-card magic">
+                <div class="kpi-icon">✨</div>
+                <div class="kpi-label">Magic Licenses</div>
+                <div class="kpi-value" id="magicCount">0</div>
+                <div class="kpi-sub" id="magicPct">0%</div>
+            </div>
+
+            <!-- Row 3: Installation & Usage Insights -->
+            <div class="section-label">📅 Installation & Usage Insights</div>
+
+            <div class="kpi-card install">
+                <div class="kpi-icon">📦</div>
+                <div class="kpi-label">New Installs (Last 30 Days)</div>
+                <div class="kpi-value" id="newInstalls30">0</div>
+                <div class="kpi-sub" id="newInstalls90Sub">Last 90 days: <span id="newInstalls90">0</span></div>
+            </div>
+
+            <div class="kpi-card new-install">
+                <div class="kpi-icon">📆</div>
+                <div class="kpi-label">Avg Days Since Install</div>
+                <div class="kpi-value small" id="avgDaysSinceInstall">0</div>
+                <div class="kpi-sub" id="oldestInstallSub">Oldest: <span id="oldestInstall">N/A</span></div>
+            </div>
+
+            <div class="kpi-card usage">
+                <div class="kpi-icon">📡</div>
+                <div class="kpi-label">Used in Last 30 Days</div>
+                <div class="kpi-value" id="usedLast30">0</div>
+                <div class="kpi-sub" id="usedLast30Pct">0% of total</div>
+            </div>
+
+            <div class="kpi-card dormant">
+                <div class="kpi-icon">💤</div>
+                <div class="kpi-label">Dormant (&gt;90 Days No Use)</div>
+                <div class="kpi-value" id="dormantCount">0</div>
+                <div class="kpi-sub" id="dormantPct">0% of total</div>
+            </div>
+
+            <div class="kpi-card usage">
+                <div class="kpi-icon">🕐</div>
+                <div class="kpi-label">Avg Days Since Last Used</div>
+                <div class="kpi-value small" id="avgDaysSinceUsed">0</div>
+                <div class="kpi-sub" id="neverUsedSub">Never used: <span id="neverUsedCount">0</span></div>
+            </div>
+
+            <!-- Row 4: Cross-Category -->
+            <div class="section-label">🔗 Cross-Category COMPGUID Overlap</div>
 
             <div id="crossCategoryCards" style="display: contents;"></div>
 
@@ -871,22 +846,28 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
 
         <!-- FILTERS -->
         <section class="filter-section">
-            <div class="filter-title">Search & Filter</div>
+            <div class="filter-title">🔍 Search & Filter</div>
             <div class="filter-grid">
                 <input type="text" id="searchInput" class="filter-input"
-                       placeholder="Search Subscription ID, COMPGUID or GSTIN..."
+                       placeholder="Search Subscription ID, COMPGUID, GSTIN..."
                        oninput="applyFilters()">
                 <select id="statusFilter" class="filter-select" onchange="applyFilters()">
                     <option value="All">All Statuses</option>
                     <option value="Active">Active</option>
                     <option value="Expired">Expired</option>
                 </select>
-                <select id="licenseFilter" class="filter-select" onchange="applyFilters()">
-                    <option value="All">All License Categories</option>
-                    <option value="CA">CA</option>
-                    <option value="Accountant">Accountant</option>
-                    <option value="GSTP">GSTP</option>
-                    <option value="Regular">Regular</option>
+                <select id="typeFilter" class="filter-select" onchange="applyFilters()">
+                    <option value="All">All License Types</option>
+                    <option value="Perpetual">Perpetual</option>
+                    <option value="Subscription">Subscription</option>
+                    <option value="Magic">Magic</option>
+                </select>
+                <select id="usageFilter" class="filter-select" onchange="applyFilters()">
+                    <option value="All">All Usage</option>
+                    <option value="Last30">Used Last 30 Days</option>
+                    <option value="Last90">Used Last 90 Days</option>
+                    <option value="Dormant">Dormant (&gt;90 Days)</option>
+                    <option value="NeverUsed">Never Used</option>
                 </select>
             </div>
         </section>
@@ -901,13 +882,17 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
                 <table>
                     <thead>
                         <tr>
-                            <th onclick="sortTable(null)"># <span class="sort-arrow none" id="sort-idx"></span></th>
+                            <th onclick="sortTable(null)">#</th>
                             <th onclick="sortTable('subscriptionId')">Subscription ID <span class="sort-arrow none" id="sort-subscriptionId"></span></th>
-                            <th onclick="sortTable('licenseCategory')">License Category <span class="sort-arrow none" id="sort-licenseCategory"></span></th>
+                            <th onclick="sortTable('licenseCategory')">Category <span class="sort-arrow none" id="sort-licenseCategory"></span></th>
+                            <th onclick="sortTable('licenseType')">License Type <span class="sort-arrow none" id="sort-licenseType"></span></th>
                             <th onclick="sortTable('compguid')">COMPGUID <span class="sort-arrow none" id="sort-compguid"></span></th>
                             <th onclick="sortTable('gstin')">GSTIN <span class="sort-arrow none" id="sort-gstin"></span></th>
+                            <th onclick="sortTable('installDate')">Install Date <span class="sort-arrow none" id="sort-installDate"></span></th>
+                            <th onclick="sortTable('lastUsed')">Last Used <span class="sort-arrow none" id="sort-lastUsed"></span></th>
                             <th onclick="sortTable('blsExpiry')">BLS Expiry <span class="sort-arrow none" id="sort-blsExpiry"></span></th>
                             <th onclick="sortTable('status')">Status <span class="sort-arrow none" id="sort-status"></span></th>
+                            <th onclick="sortTable('daysSinceUsed')">Days Idle <span class="sort-arrow none" id="sort-daysSinceUsed"></span></th>
                         </tr>
                     </thead>
                     <tbody id="dataTableBody"></tbody>
@@ -921,6 +906,31 @@ SUB1004,Regular,COMP004,09DDDDD4444D1Z4,2023-01-10</code>
 
 <script>
 /* ==============================================================
+   CONFIGURATION — UPDATE THESE VALUES
+   ============================================================== */
+
+/*
+   ╔══════════════════════════════════════════════════════════════╗
+   ║  IMPORTANT: Update the URL below to point to YOUR CSV file  ║
+   ║  on YOUR GitHub repository.                                  ║
+   ║                                                              ║
+   ║  Format for raw GitHub file URL:                             ║
+   ║  https://raw.githubusercontent.com/USERNAME/REPO/BRANCH/FILE ║
+   ╚══════════════════════════════════════════════════════════════╝
+*/
+
+const CSV_URL = "https://raw.githubusercontent.com/YOUR-USERNAME/YOUR-REPO/main/data.csv";
+
+/*
+   If your CSV file is named differently, update the filename above.
+   Examples:
+   - https://raw.githubusercontent.com/johndoe/license-dashboard/main/data.csv
+   - https://raw.githubusercontent.com/johndoe/license-dashboard/main/rawdata.csv
+   - https://raw.githubusercontent.com/johndoe/license-dashboard/main/licenses.csv
+*/
+
+
+/* ==============================================================
    GLOBAL STATE
    ============================================================== */
 const allCategories = ["CA", "Accountant", "GSTP", "Regular"];
@@ -928,7 +938,7 @@ let rawData          = [];
 let currentCategory  = "";
 let filteredData     = [];
 let currentPage      = 1;
-const rowsPerPage    = 25;
+const rowsPerPage    = 30;
 let sortField        = null;
 let sortDir          = "asc";
 let dataLoaded       = false;
@@ -938,10 +948,7 @@ let dataLoaded       = false;
    ============================================================== */
 function todayStr() {
     const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
 function isExpired(dateStr) {
@@ -949,17 +956,38 @@ function isExpired(dateStr) {
     return dateStr.trim() <= todayStr();
 }
 
+function daysBetween(dateStr1, dateStr2) {
+    if (!dateStr1 || !dateStr2) return null;
+    const d1 = new Date(dateStr1 + "T00:00:00");
+    const d2 = new Date(dateStr2 + "T00:00:00");
+    if (isNaN(d1) || isNaN(d2)) return null;
+    return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+}
+
+function daysAgo(dateStr) {
+    if (!dateStr) return null;
+    return daysBetween(dateStr, todayStr());
+}
+
 function formatDate(dateStr) {
-    if (!dateStr) return "N/A";
+    if (!dateStr || dateStr.trim() === "") return "N/A";
     try {
         const d = new Date(dateStr.trim() + "T00:00:00");
         if (isNaN(d)) return dateStr;
         return d.toLocaleDateString("en-IN", {
             day: "2-digit", month: "short", year: "numeric"
         });
-    } catch {
-        return dateStr;
-    }
+    } catch { return dateStr; }
+}
+
+function formatNumber(n) {
+    if (n === null || n === undefined) return "0";
+    return Number(n).toLocaleString("en-IN");
+}
+
+function pct(part, total) {
+    if (!total) return "0%";
+    return (part / total * 100).toFixed(1) + "%";
 }
 
 function getLicenseBadgeClass(cat) {
@@ -972,71 +1000,91 @@ function getLicenseBadgeClass(cat) {
     }
 }
 
+function getTypeBadgeClass(type) {
+    if (!type) return "type-subscription";
+    switch (type.toLowerCase()) {
+        case "perpetual":    return "type-perpetual";
+        case "subscription": return "type-subscription";
+        case "magic":        return "type-magic";
+        default:             return "type-subscription";
+    }
+}
+
+function escapeHtml(str) {
+    if (!str) return "";
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
 /* ==============================================================
    CSV PARSER
    ============================================================== */
 function parseCSV(csvText) {
     const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
-    if (lines.length < 2) throw new Error("CSV must have a header row and at least one data row.");
+    if (lines.length < 2) throw new Error("CSV must have a header and at least one data row.");
 
-    // Parse header
     const headers = parseCSVLine(lines[0]).map(h => h.trim());
 
-    // Find column indices (case-insensitive, flexible matching)
-    const colMap = {};
-    const requiredCols = ['subscriptionId', 'licenseCategory', 'compguid', 'gstin', 'blsExpiry'];
+    // Flexible column mapping
     const aliases = {
-        'subscriptionid': 'subscriptionId',
-        'subscription_id': 'subscriptionId',
-        'subscription id': 'subscriptionId',
-        'sub_id': 'subscriptionId',
+        'subscriptionid': 'subscriptionId', 'subscription_id': 'subscriptionId',
+        'subscription id': 'subscriptionId', 'sub_id': 'subscriptionId',
         'subid': 'subscriptionId',
-        'licensecategory': 'licenseCategory',
-        'license_category': 'licenseCategory',
-        'license category': 'licenseCategory',
-        'category': 'licenseCategory',
-        'compguid': 'compguid',
-        'comp_guid': 'compguid',
-        'comp guid': 'compguid',
-        'gstin': 'gstin',
-        'gst_number': 'gstin',
-        'gstnumber': 'gstin',
-        'blsexpiry': 'blsExpiry',
-        'bls_expiry': 'blsExpiry',
-        'bls expiry': 'blsExpiry',
-        'blsexpirydate': 'blsExpiry',
-        'bls_expiry_date': 'blsExpiry',
-        'expiry': 'blsExpiry',
-        'expirydate': 'blsExpiry',
-        'expiry_date': 'blsExpiry'
+        'licensecategory': 'licenseCategory', 'license_category': 'licenseCategory',
+        'license category': 'licenseCategory', 'category': 'licenseCategory',
+        'compguid': 'compguid', 'comp_guid': 'compguid', 'comp guid': 'compguid',
+        'gstin': 'gstin', 'gst_number': 'gstin', 'gstnumber': 'gstin',
+        'blsexpiry': 'blsExpiry', 'bls_expiry': 'blsExpiry', 'bls expiry': 'blsExpiry',
+        'blsexpirydate': 'blsExpiry', 'bls_expiry_date': 'blsExpiry',
+        'expiry': 'blsExpiry', 'expirydate': 'blsExpiry', 'expiry_date': 'blsExpiry',
+        'installdate': 'installDate', 'install_date': 'installDate',
+        'install date': 'installDate', 'installedon': 'installDate',
+        'installed_on': 'installDate', 'installationdate': 'installDate',
+        'installation_date': 'installDate',
+        'lastused': 'lastUsed', 'last_used': 'lastUsed', 'last used': 'lastUsed',
+        'last-used': 'lastUsed', 'lastusedon': 'lastUsed', 'last_used_on': 'lastUsed',
+        'lastuseddate': 'lastUsed', 'last_used_date': 'lastUsed',
+        'licensetype': 'licenseType', 'license_type': 'licenseType',
+        'license type': 'licenseType', 'type': 'licenseType',
+        'lic_type': 'licenseType', 'lictype': 'licenseType'
     };
 
+    const colMap = {};
     headers.forEach((h, idx) => {
-        const normalized = h.toLowerCase().replace(/[^a-z0-9_]/g, '');
-        const mapped = aliases[normalized] || aliases[h.toLowerCase().trim()];
-        if (mapped) {
-            colMap[mapped] = idx;
+        const normalized = h.toLowerCase().replace(/[^a-z0-9_\- ]/g, '').trim();
+        // Try exact match first
+        if (aliases[normalized]) {
+            colMap[aliases[normalized]] = idx;
+        } else {
+            // Try removing all special chars
+            const stripped = normalized.replace(/[^a-z0-9]/g, '');
+            if (aliases[stripped]) {
+                colMap[aliases[stripped]] = idx;
+            }
         }
     });
 
-    // Check all required columns found
+    const requiredCols = ['subscriptionId', 'licenseCategory', 'compguid', 'gstin', 'blsExpiry'];
     const missing = requiredCols.filter(c => colMap[c] === undefined);
     if (missing.length > 0) {
-        throw new Error(`Missing required columns: ${missing.join(', ')}\n\nFound columns: ${headers.join(', ')}\n\nExpected: subscriptionId, licenseCategory, compguid, gstin, blsExpiry`);
+        throw new Error(`Missing required columns: ${missing.join(', ')}\n\nFound columns: ${headers.join(', ')}\n\nRequired: subscriptionId, licenseCategory, compguid, gstin, blsExpiry\nOptional: installDate, lastUsed, licenseType`);
     }
 
-    // Parse data rows
     const data = [];
     for (let i = 1; i < lines.length; i++) {
         const values = parseCSVLine(lines[i]);
-        if (values.length < headers.length) continue;
+        if (values.length < 3) continue;
 
         const row = {
             subscriptionId:  (values[colMap.subscriptionId] || "").trim(),
             licenseCategory: (values[colMap.licenseCategory] || "").trim(),
             compguid:        (values[colMap.compguid] || "").trim(),
             gstin:           (values[colMap.gstin] || "").trim(),
-            blsExpiry:       normalizeDate((values[colMap.blsExpiry] || "").trim())
+            blsExpiry:       normalizeDate((values[colMap.blsExpiry] || "").trim()),
+            installDate:     colMap.installDate !== undefined ? normalizeDate((values[colMap.installDate] || "").trim()) : "",
+            lastUsed:        colMap.lastUsed !== undefined ? normalizeDate((values[colMap.lastUsed] || "").trim()) : "",
+            licenseType:     colMap.licenseType !== undefined ? (values[colMap.licenseType] || "").trim() : ""
         };
 
         // Normalize license category
@@ -1045,6 +1093,14 @@ function parseCSV(csvText) {
         else if (catLower === 'accountant') row.licenseCategory = 'Accountant';
         else if (catLower === 'gstp') row.licenseCategory = 'GSTP';
         else if (catLower === 'regular') row.licenseCategory = 'Regular';
+
+        // Normalize license type
+        if (row.licenseType) {
+            const typeLower = row.licenseType.toLowerCase();
+            if (typeLower === 'perpetual') row.licenseType = 'Perpetual';
+            else if (typeLower === 'subscription') row.licenseType = 'Subscription';
+            else if (typeLower === 'magic') row.licenseType = 'Magic';
+        }
 
         if (row.subscriptionId && allCategories.includes(row.licenseCategory)) {
             data.push(row);
@@ -1092,37 +1148,24 @@ function parseCSVLine(line) {
 }
 
 function normalizeDate(dateStr) {
-    if (!dateStr) return "";
+    if (!dateStr || dateStr.toLowerCase() === 'na' || dateStr === '-' || dateStr === '') return "";
 
     // Already YYYY-MM-DD
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
 
     // DD-MM-YYYY or DD/MM/YYYY
     let m = dateStr.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
-    if (m) {
-        return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
-    }
-
-    // MM/DD/YYYY
-    m = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (m) {
-        return `${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`;
-    }
+    if (m) return `${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
 
     // YYYY/MM/DD
     m = dateStr.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
-    if (m) {
-        return `${m[1]}-${m[2]}-${m[3]}`;
-    }
+    if (m) return `${m[1]}-${m[2]}-${m[3]}`;
 
-    // Try Date parse
+    // Try Date parse as fallback
     try {
         const d = new Date(dateStr);
         if (!isNaN(d)) {
-            const yyyy = d.getFullYear();
-            const mm = String(d.getMonth() + 1).padStart(2, '0');
-            const dd = String(d.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
         }
     } catch {}
 
@@ -1130,135 +1173,60 @@ function normalizeDate(dateStr) {
 }
 
 /* ==============================================================
-   FILE UPLOAD HANDLING
+   FETCH DATA FROM GITHUB
    ============================================================== */
+async function fetchDataFromGitHub() {
+    const statusEl = document.getElementById("dataStatus");
+    const retryBtn = document.getElementById("retryBtn");
 
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    if (!file.name.toLowerCase().endsWith('.csv')) {
-        showUploadStatus("Please upload a .csv file", "error");
-        return;
-    }
-
+    statusEl.className = "data-status loading";
+    statusEl.innerHTML = "⏳ Loading data from GitHub repository...";
+    retryBtn.style.display = "none";
     showLoading(true);
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            rawData = parseCSV(e.target.result);
-            dataLoaded = true;
-            showUploadStatus(`✓ Loaded ${rawData.length.toLocaleString()} records from "${file.name}"`, "success");
-            document.getElementById("uploadSection").classList.add("loaded");
-            document.getElementById("categoryGrid").classList.remove("disabled");
-            document.getElementById("noDataHint").style.display = "none";
-            populateLandingCounts();
-        } catch (err) {
-            showUploadStatus("✕ Error: " + err.message, "error");
-            console.error(err);
+    try {
+        const response = await fetch(CSV_URL, {
+            cache: "no-cache"
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}. Check if the CSV URL is correct and the repository is public.`);
         }
-        showLoading(false);
-    };
 
-    reader.onerror = function() {
-        showUploadStatus("✕ Failed to read file", "error");
-        showLoading(false);
-    };
+        const csvText = await response.text();
 
-    reader.readAsText(file);
+        if (!csvText || csvText.trim().length === 0) {
+            throw new Error("CSV file is empty.");
+        }
 
-    // Reset input so same file can be re-selected
-    event.target.value = "";
-}
+        rawData = parseCSV(csvText);
+        dataLoaded = true;
 
-function showUploadStatus(msg, type) {
-    const el = document.getElementById("uploadStatus");
-    el.textContent = msg;
-    el.className = "upload-status " + type;
+        statusEl.className = "data-status success";
+        statusEl.innerHTML = `✓ Loaded ${formatNumber(rawData.length)} records successfully &nbsp;|&nbsp; Last refreshed: ${new Date().toLocaleTimeString("en-IN")}`;
+
+        const refreshBtn = document.createElement("button");
+        refreshBtn.className = "refresh-btn";
+        refreshBtn.textContent = "🔄 Refresh";
+        refreshBtn.onclick = fetchDataFromGitHub;
+        statusEl.appendChild(refreshBtn);
+
+        document.getElementById("categoryGrid").classList.remove("disabled");
+        populateLandingCounts();
+
+    } catch (err) {
+        statusEl.className = "data-status error";
+        statusEl.innerHTML = `✕ Failed to load data: ${err.message} `;
+        retryBtn.style.display = "inline-block";
+        statusEl.appendChild(retryBtn);
+        console.error("Data fetch error:", err);
+    }
+
+    showLoading(false);
 }
 
 function showLoading(show) {
     document.getElementById("loadingOverlay").classList.toggle("show", show);
-}
-
-function toggleFormatHint() {
-    document.getElementById("formatHint").classList.toggle("show");
-}
-
-// Drag and drop
-document.addEventListener("DOMContentLoaded", function() {
-    const uploadSection = document.getElementById("uploadSection");
-
-    uploadSection.addEventListener("dragover", function(e) {
-        e.preventDefault();
-        uploadSection.classList.add("drag-over");
-    });
-
-    uploadSection.addEventListener("dragleave", function() {
-        uploadSection.classList.remove("drag-over");
-    });
-
-    uploadSection.addEventListener("drop", function(e) {
-        e.preventDefault();
-        uploadSection.classList.remove("drag-over");
-        const file = e.dataTransfer.files[0];
-        if (file) {
-            // Create a fake event
-            const fakeEvent = { target: { files: [file], value: "" } };
-            handleFileUpload(fakeEvent);
-        }
-    });
-});
-
-/* ==============================================================
-   SAMPLE DATA
-   ============================================================== */
-function loadSampleData() {
-    showLoading(true);
-
-    setTimeout(() => {
-        rawData = [
-            { subscriptionId: "SUB1001", licenseCategory: "CA",         compguid: "COMP001", gstin: "09AAAAA1111A1Z1", blsExpiry: "2026-12-31" },
-            { subscriptionId: "SUB1002", licenseCategory: "CA",         compguid: "COMP002", gstin: "09BBBBB2222B1Z2", blsExpiry: "2024-06-15" },
-            { subscriptionId: "SUB1003", licenseCategory: "CA",         compguid: "COMP003", gstin: "09CCCCC3333C1Z3", blsExpiry: "2025-09-20" },
-            { subscriptionId: "SUB1004", licenseCategory: "CA",         compguid: "COMP001", gstin: "09DDDDD4444D1Z4", blsExpiry: "2023-01-10" },
-            { subscriptionId: "SUB1005", licenseCategory: "Accountant", compguid: "COMP004", gstin: "09EEEEE5555E1Z5", blsExpiry: "2026-03-25" },
-            { subscriptionId: "SUB1006", licenseCategory: "Accountant", compguid: "COMP005", gstin: "09FFFFF6666F1Z6", blsExpiry: "2024-11-30" },
-            { subscriptionId: "SUB1007", licenseCategory: "Accountant", compguid: "COMP002", gstin: "09GGGGG7777G1Z7", blsExpiry: "2025-07-14" },
-            { subscriptionId: "SUB1008", licenseCategory: "Accountant", compguid: "COMP006", gstin: "09HHHHH8888H1Z8", blsExpiry: "2023-05-01" },
-            { subscriptionId: "SUB1009", licenseCategory: "GSTP",       compguid: "COMP007", gstin: "09IIIII9999I1Z9", blsExpiry: "2026-08-18" },
-            { subscriptionId: "SUB1010", licenseCategory: "GSTP",       compguid: "COMP003", gstin: "09JJJJJ1010J1Z0", blsExpiry: "2024-02-28" },
-            { subscriptionId: "SUB1011", licenseCategory: "GSTP",       compguid: "COMP008", gstin: "09KKKKK1111K1Z1", blsExpiry: "2025-12-01" },
-            { subscriptionId: "SUB1012", licenseCategory: "GSTP",       compguid: "COMP009", gstin: "09LLLLL1212L1Z2", blsExpiry: "2023-09-15" },
-            { subscriptionId: "SUB1013", licenseCategory: "Regular",    compguid: "COMP010", gstin: "09MMMMM1313M1Z3", blsExpiry: "2026-05-10" },
-            { subscriptionId: "SUB1014", licenseCategory: "Regular",    compguid: "COMP001", gstin: "09NNNNN1414N1Z4", blsExpiry: "2024-08-22" },
-            { subscriptionId: "SUB1015", licenseCategory: "Regular",    compguid: "COMP011", gstin: "09OOOOO1515O1Z5", blsExpiry: "2025-04-05" },
-            { subscriptionId: "SUB1016", licenseCategory: "Regular",    compguid: "COMP012", gstin: "09PPPPP1616P1Z6", blsExpiry: "2023-12-31" },
-            { subscriptionId: "SUB1017", licenseCategory: "CA",         compguid: "COMP013", gstin: "09QQQQQ1717Q1Z7", blsExpiry: "2026-01-15" },
-            { subscriptionId: "SUB1018", licenseCategory: "CA",         compguid: "COMP004", gstin: "09RRRRR1818R1Z8", blsExpiry: "2025-06-30" },
-            { subscriptionId: "SUB1019", licenseCategory: "Accountant", compguid: "COMP014", gstin: "09SSSSS1919S1Z9", blsExpiry: "2026-10-12" },
-            { subscriptionId: "SUB1020", licenseCategory: "Accountant", compguid: "COMP010", gstin: "09TTTTT2020T1Z0", blsExpiry: "2024-04-18" },
-            { subscriptionId: "SUB1021", licenseCategory: "GSTP",       compguid: "COMP015", gstin: "09UUUUU2121U1Z1", blsExpiry: "2026-11-25" },
-            { subscriptionId: "SUB1022", licenseCategory: "GSTP",       compguid: "COMP001", gstin: "09VVVVV2222V1Z2", blsExpiry: "2025-02-14" },
-            { subscriptionId: "SUB1023", licenseCategory: "Regular",    compguid: "COMP016", gstin: "09WWWWW2323W1Z3", blsExpiry: "2026-07-04" },
-            { subscriptionId: "SUB1024", licenseCategory: "Regular",    compguid: "COMP003", gstin: "09XXXXX2424X1Z4", blsExpiry: "2024-09-09" },
-            { subscriptionId: "SUB1025", licenseCategory: "CA",         compguid: "COMP017", gstin: "09YYYYY2525Y1Z5", blsExpiry: "2023-03-20" },
-            { subscriptionId: "SUB1026", licenseCategory: "CA",         compguid: "COMP007", gstin: "09ZZZZZ2626Z1Z6", blsExpiry: "2026-04-08" },
-            { subscriptionId: "SUB1027", licenseCategory: "Accountant", compguid: "COMP018", gstin: "09AAAAB2727A1Z7", blsExpiry: "2025-11-19" },
-            { subscriptionId: "SUB1028", licenseCategory: "Regular",    compguid: "COMP005", gstin: "09BBBBC2828B1Z8", blsExpiry: "2026-02-02" },
-            { subscriptionId: "SUB1029", licenseCategory: "GSTP",       compguid: "COMP019", gstin: "09CCCCD2929C1Z9", blsExpiry: "2024-12-25" },
-            { subscriptionId: "SUB1030", licenseCategory: "CA",         compguid: "COMP020", gstin: "09DDDDE3030D1Z0", blsExpiry: "2025-08-08" }
-        ];
-
-        dataLoaded = true;
-        showUploadStatus("✓ Loaded 30 sample records", "success");
-        document.getElementById("uploadSection").classList.add("loaded");
-        document.getElementById("categoryGrid").classList.remove("disabled");
-        document.getElementById("noDataHint").style.display = "none";
-        populateLandingCounts();
-        showLoading(false);
-    }, 300);
 }
 
 /* ==============================================================
@@ -1276,9 +1244,9 @@ function populateLandingCounts() {
         const elActive  = document.getElementById(`landing-${catKey}-active`);
         const elExpired = document.getElementById(`landing-${catKey}-expired`);
 
-        if (elTotal)   elTotal.textContent   = total.toLocaleString();
-        if (elActive)  elActive.textContent  = active.toLocaleString();
-        if (elExpired) elExpired.textContent  = expired.toLocaleString();
+        if (elTotal)   elTotal.textContent   = formatNumber(total);
+        if (elActive)  elActive.textContent  = formatNumber(active);
+        if (elExpired) elExpired.textContent  = formatNumber(expired);
     });
 }
 
@@ -1286,32 +1254,25 @@ function populateLandingCounts() {
    OPEN / CLOSE DASHBOARD
    ============================================================== */
 function openDashboard(category) {
-    if (!dataLoaded) {
-        showUploadStatus("Please upload a CSV file first!", "error");
-        return;
-    }
+    if (!dataLoaded) return;
 
     currentCategory = category;
-
     document.getElementById("landingPage").style.display   = "none";
     document.getElementById("dashboardPage").style.display = "block";
     document.getElementById("headerCategory").textContent  = category + " Dashboard";
     document.getElementById("dashboardTitle").textContent   = category + " Dashboard";
 
-    // Reset filters
+    // Reset
     document.getElementById("searchInput").value   = "";
     document.getElementById("statusFilter").value  = "All";
-    document.getElementById("licenseFilter").value = "All";
-
-    // Reset sort
+    document.getElementById("typeFilter").value    = "All";
+    document.getElementById("usageFilter").value   = "All";
     sortField = null;
     sortDir = "asc";
     resetSortArrows();
 
     computeKPIs(category);
     applyFilters();
-
-    // Scroll to top
     window.scrollTo(0, 0);
 }
 
@@ -1330,16 +1291,96 @@ function computeKPIs(category) {
     const expSubs   = catData.filter(r => isExpired(r.blsExpiry)).length;
     const actSubs   = totalSubs - expSubs;
 
-    const uniqueCompguids = new Set(catData.map(r => r.compguid));
-    const uniqueGstins    = new Set(catData.map(r => r.gstin));
+    const uniqueCompguids = new Set(catData.map(r => r.compguid).filter(Boolean));
+    const uniqueGstins    = new Set(catData.map(r => r.gstin).filter(Boolean));
 
-    document.getElementById("totalSubscriptions").textContent  = totalSubs.toLocaleString();
-    document.getElementById("expiredSubscriptions").textContent = expSubs.toLocaleString();
-    document.getElementById("activeSubscriptions").textContent  = actSubs.toLocaleString();
-    document.getElementById("totalCompguid").textContent        = uniqueCompguids.size.toLocaleString();
-    document.getElementById("totalGstin").textContent           = uniqueGstins.size.toLocaleString();
+    document.getElementById("totalSubscriptions").textContent  = formatNumber(totalSubs);
+    document.getElementById("expiredSubscriptions").textContent = formatNumber(expSubs);
+    document.getElementById("activeSubscriptions").textContent  = formatNumber(actSubs);
+    document.getElementById("totalCompguid").textContent        = formatNumber(uniqueCompguids.size);
+    document.getElementById("totalGstin").textContent           = formatNumber(uniqueGstins.size);
 
-    // Cross-category COMPGUIDs
+    // --- License Type Breakdown ---
+    const perpetualData    = catData.filter(r => r.licenseType === "Perpetual");
+    const subscriptionData = catData.filter(r => r.licenseType === "Subscription");
+    const magicData        = catData.filter(r => r.licenseType === "Magic");
+
+    document.getElementById("perpetualCount").textContent    = formatNumber(perpetualData.length);
+    document.getElementById("perpetualPct").textContent      = pct(perpetualData.length, totalSubs) + " of total";
+    document.getElementById("subscriptionCount").textContent = formatNumber(subscriptionData.length);
+    document.getElementById("subscriptionPct").textContent   = pct(subscriptionData.length, totalSubs) + " of total";
+    document.getElementById("magicCount").textContent        = formatNumber(magicData.length);
+    document.getElementById("magicPct").textContent          = pct(magicData.length, totalSubs) + " of total";
+
+    // --- Installation Insights ---
+    const now = todayStr();
+
+    // New installs in last 30 and 90 days
+    const installs30 = catData.filter(r => {
+        const d = daysAgo(r.installDate);
+        return d !== null && d >= 0 && d <= 30;
+    }).length;
+
+    const installs90 = catData.filter(r => {
+        const d = daysAgo(r.installDate);
+        return d !== null && d >= 0 && d <= 90;
+    }).length;
+
+    document.getElementById("newInstalls30").textContent = formatNumber(installs30);
+    document.getElementById("newInstalls90").textContent = formatNumber(installs90);
+
+    // Average days since install
+    const installDays = catData
+        .map(r => daysAgo(r.installDate))
+        .filter(d => d !== null && d >= 0);
+
+    const avgInstallDays = installDays.length > 0
+        ? Math.round(installDays.reduce((a, b) => a + b, 0) / installDays.length)
+        : 0;
+
+    document.getElementById("avgDaysSinceInstall").textContent = formatNumber(avgInstallDays);
+
+    // Oldest install
+    const installDates = catData.map(r => r.installDate).filter(Boolean).sort();
+    document.getElementById("oldestInstall").textContent =
+        installDates.length > 0 ? formatDate(installDates[0]) : "N/A";
+
+    // --- Usage Insights ---
+    // Used in last 30 days
+    const usedLast30 = catData.filter(r => {
+        const d = daysAgo(r.lastUsed);
+        return d !== null && d >= 0 && d <= 30;
+    }).length;
+
+    document.getElementById("usedLast30").textContent    = formatNumber(usedLast30);
+    document.getElementById("usedLast30Pct").textContent = pct(usedLast30, totalSubs) + " of total";
+
+    // Dormant (>90 days no use)
+    const dormant = catData.filter(r => {
+        if (!r.lastUsed) return true; // never used = dormant
+        const d = daysAgo(r.lastUsed);
+        return d !== null && d > 90;
+    }).length;
+
+    document.getElementById("dormantCount").textContent = formatNumber(dormant);
+    document.getElementById("dormantPct").textContent    = pct(dormant, totalSubs) + " of total";
+
+    // Avg days since last used
+    const usageDays = catData
+        .map(r => daysAgo(r.lastUsed))
+        .filter(d => d !== null && d >= 0);
+
+    const avgUsageDays = usageDays.length > 0
+        ? Math.round(usageDays.reduce((a, b) => a + b, 0) / usageDays.length)
+        : 0;
+
+    document.getElementById("avgDaysSinceUsed").textContent = formatNumber(avgUsageDays);
+
+    // Never used
+    const neverUsed = catData.filter(r => !r.lastUsed || r.lastUsed.trim() === "").length;
+    document.getElementById("neverUsedCount").textContent = formatNumber(neverUsed);
+
+    // --- Cross-Category COMPGUIDs ---
     const crossContainer = document.getElementById("crossCategoryCards");
     crossContainer.innerHTML = "";
 
@@ -1347,7 +1388,7 @@ function computeKPIs(category) {
 
     otherCategories.forEach(otherCat => {
         const otherCompguids = new Set(
-            rawData.filter(r => r.licenseCategory === otherCat).map(r => r.compguid)
+            rawData.filter(r => r.licenseCategory === otherCat).map(r => r.compguid).filter(Boolean)
         );
 
         let crossCount = 0;
@@ -1357,18 +1398,17 @@ function computeKPIs(category) {
 
         const cardClass = "cross-" + otherCat.toLowerCase();
 
-        const cardHTML = `
+        crossContainer.insertAdjacentHTML("beforeend", `
             <div class="kpi-card ${cardClass}">
                 <div class="kpi-icon">⇄</div>
                 <div class="kpi-label">
                     COMPGUIDs × ${otherCat}
-                    <br><small>Associated with ${otherCat} licenses</small>
+                    <br><small>Shared with ${otherCat} licenses</small>
                 </div>
-                <div class="kpi-value">${crossCount.toLocaleString()}</div>
+                <div class="kpi-value">${formatNumber(crossCount)}</div>
+                <div class="kpi-sub">${pct(crossCount, uniqueCompguids.size)} of ${category} COMPGUIDs</div>
             </div>
-        `;
-
-        crossContainer.insertAdjacentHTML("beforeend", cardHTML);
+        `);
     });
 }
 
@@ -1382,7 +1422,7 @@ function resetSortArrows() {
 }
 
 function sortTable(field) {
-    if (field === null) return; // Index column
+    if (field === null) return;
 
     if (sortField === field) {
         sortDir = sortDir === "asc" ? "desc" : "asc";
@@ -1393,21 +1433,20 @@ function sortTable(field) {
 
     resetSortArrows();
     const arrow = document.getElementById("sort-" + field);
-    if (arrow) {
-        arrow.className = "sort-arrow " + sortDir;
-    }
+    if (arrow) arrow.className = "sort-arrow " + sortDir;
 
     filteredData.sort((a, b) => {
         let valA, valB;
-
         if (field === "status") {
             valA = isExpired(a.blsExpiry) ? "Expired" : "Active";
             valB = isExpired(b.blsExpiry) ? "Expired" : "Active";
+        } else if (field === "daysSinceUsed") {
+            valA = daysAgo(a.lastUsed) ?? 99999;
+            valB = daysAgo(b.lastUsed) ?? 99999;
         } else {
             valA = a[field] || "";
             valB = b[field] || "";
         }
-
         if (valA < valB) return sortDir === "asc" ? -1 : 1;
         if (valA > valB) return sortDir === "asc" ? 1 : -1;
         return 0;
@@ -1421,9 +1460,10 @@ function sortTable(field) {
    FILTERS & TABLE RENDERING
    ============================================================== */
 function applyFilters() {
-    const search  = document.getElementById("searchInput").value.toLowerCase().trim();
-    const status  = document.getElementById("statusFilter").value;
-    const license = document.getElementById("licenseFilter").value;
+    const search = document.getElementById("searchInput").value.toLowerCase().trim();
+    const status = document.getElementById("statusFilter").value;
+    const type   = document.getElementById("typeFilter").value;
+    const usage  = document.getElementById("usageFilter").value;
 
     filteredData = rawData.filter(r => r.licenseCategory === currentCategory);
 
@@ -1435,23 +1475,41 @@ function applyFilters() {
         );
     }
 
-    if (status === "Active") {
-        filteredData = filteredData.filter(r => !isExpired(r.blsExpiry));
-    } else if (status === "Expired") {
-        filteredData = filteredData.filter(r => isExpired(r.blsExpiry));
+    if (status === "Active") filteredData = filteredData.filter(r => !isExpired(r.blsExpiry));
+    else if (status === "Expired") filteredData = filteredData.filter(r => isExpired(r.blsExpiry));
+
+    if (type !== "All") filteredData = filteredData.filter(r => r.licenseType === type);
+
+    if (usage === "Last30") {
+        filteredData = filteredData.filter(r => {
+            const d = daysAgo(r.lastUsed);
+            return d !== null && d >= 0 && d <= 30;
+        });
+    } else if (usage === "Last90") {
+        filteredData = filteredData.filter(r => {
+            const d = daysAgo(r.lastUsed);
+            return d !== null && d >= 0 && d <= 90;
+        });
+    } else if (usage === "Dormant") {
+        filteredData = filteredData.filter(r => {
+            if (!r.lastUsed) return true;
+            const d = daysAgo(r.lastUsed);
+            return d !== null && d > 90;
+        });
+    } else if (usage === "NeverUsed") {
+        filteredData = filteredData.filter(r => !r.lastUsed || r.lastUsed.trim() === "");
     }
 
-    if (license !== "All") {
-        filteredData = filteredData.filter(r => r.licenseCategory === license);
-    }
-
-    // Re-apply sort if active
+    // Re-apply sort
     if (sortField) {
         filteredData.sort((a, b) => {
             let valA, valB;
             if (sortField === "status") {
                 valA = isExpired(a.blsExpiry) ? "Expired" : "Active";
                 valB = isExpired(b.blsExpiry) ? "Expired" : "Active";
+            } else if (sortField === "daysSinceUsed") {
+                valA = daysAgo(a.lastUsed) ?? 99999;
+                valB = daysAgo(b.lastUsed) ?? 99999;
             } else {
                 valA = a[sortField] || "";
                 valB = b[sortField] || "";
@@ -1472,19 +1530,17 @@ function renderTable() {
 
     const totalRecords = filteredData.length;
     document.getElementById("recordCount").textContent =
-        totalRecords.toLocaleString() + " record" + (totalRecords !== 1 ? "s" : "");
+        formatNumber(totalRecords) + " record" + (totalRecords !== 1 ? "s" : "");
 
     if (totalRecords === 0) {
         tbody.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    <div class="empty-state">
-                        <div style="font-size:40px;margin-bottom:12px;">📭</div>
-                        <div style="font-size:16px;font-weight:600;margin-bottom:6px;">No records found</div>
-                        <div>Try adjusting your search or filter criteria.</div>
-                    </div>
-                </td>
-            </tr>`;
+            <tr><td colspan="11">
+                <div class="empty-state">
+                    <div style="font-size:40px;margin-bottom:12px;">📭</div>
+                    <div style="font-size:16px;font-weight:600;margin-bottom:6px;">No records found</div>
+                    <div>Try adjusting your search or filter criteria.</div>
+                </div>
+            </td></tr>`;
         document.getElementById("pagination").innerHTML = "";
         return;
     }
@@ -1503,16 +1559,33 @@ function renderTable() {
             : '<span class="badge badge-active">Active</span>';
 
         const licenseBadgeClass = getLicenseBadgeClass(row.licenseCategory);
+        const typeBadgeClass    = getTypeBadgeClass(row.licenseType);
+
+        const daysSinceUsed = daysAgo(row.lastUsed);
+        let usageHtml = "";
+        if (daysSinceUsed === null || row.lastUsed === "") {
+            usageHtml = '<span style="color:#94a3b8">Never</span>';
+        } else if (daysSinceUsed <= 30) {
+            usageHtml = `<span class="usage-indicator usage-active"></span>${daysSinceUsed}d`;
+        } else if (daysSinceUsed <= 90) {
+            usageHtml = `<span class="usage-indicator usage-moderate"></span>${daysSinceUsed}d`;
+        } else {
+            usageHtml = `<span class="usage-indicator usage-dormant"></span>${daysSinceUsed}d`;
+        }
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${start + idx + 1}</td>
             <td><strong>${escapeHtml(row.subscriptionId)}</strong></td>
             <td><span class="license-badge ${licenseBadgeClass}">${escapeHtml(row.licenseCategory)}</span></td>
+            <td><span class="type-badge ${typeBadgeClass}">${escapeHtml(row.licenseType || "N/A")}</span></td>
             <td>${escapeHtml(row.compguid)}</td>
-            <td style="font-family:monospace;font-size:12px;">${escapeHtml(row.gstin)}</td>
+            <td style="font-family:monospace;font-size:11px;">${escapeHtml(row.gstin)}</td>
+            <td>${formatDate(row.installDate)}</td>
+            <td>${formatDate(row.lastUsed)}</td>
             <td>${formatDate(row.blsExpiry)}</td>
             <td>${statusBadge}</td>
+            <td>${usageHtml}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -1520,28 +1593,18 @@ function renderTable() {
     renderPagination(totalPages);
 }
 
-function escapeHtml(str) {
-    if (!str) return "";
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-}
-
 function renderPagination(totalPages) {
     const container = document.getElementById("pagination");
     container.innerHTML = "";
-
     if (totalPages <= 1) return;
 
-    // Prev
     const prevBtn       = document.createElement("button");
     prevBtn.className   = "page-btn";
     prevBtn.textContent = "← Prev";
     prevBtn.disabled    = (currentPage === 1);
-    prevBtn.onclick     = () => { currentPage--; renderTable(); window.scrollTo(0, document.querySelector('.table-section').offsetTop - 20); };
+    prevBtn.onclick     = () => { currentPage--; renderTable(); scrollToTable(); };
     container.appendChild(prevBtn);
 
-    // Page numbers
     const maxVisible = 7;
     let startP = Math.max(1, currentPage - Math.floor(maxVisible / 2));
     let endP   = Math.min(totalPages, startP + maxVisible - 1);
@@ -1549,38 +1612,24 @@ function renderPagination(totalPages) {
 
     if (startP > 1) {
         container.appendChild(createPageBtn(1));
-        if (startP > 2) {
-            const dots = document.createElement("span");
-            dots.textContent = "…";
-            dots.style.cssText = "padding:8px 4px;color:#94a3b8;";
-            container.appendChild(dots);
-        }
+        if (startP > 2) appendDots(container);
     }
 
-    for (let p = startP; p <= endP; p++) {
-        container.appendChild(createPageBtn(p));
-    }
+    for (let p = startP; p <= endP; p++) container.appendChild(createPageBtn(p));
 
     if (endP < totalPages) {
-        if (endP < totalPages - 1) {
-            const dots = document.createElement("span");
-            dots.textContent = "…";
-            dots.style.cssText = "padding:8px 4px;color:#94a3b8;";
-            container.appendChild(dots);
-        }
+        if (endP < totalPages - 1) appendDots(container);
         container.appendChild(createPageBtn(totalPages));
     }
 
-    // Next
     const nextBtn       = document.createElement("button");
     nextBtn.className   = "page-btn";
     nextBtn.textContent = "Next →";
     nextBtn.disabled    = (currentPage === totalPages);
-    nextBtn.onclick     = () => { currentPage++; renderTable(); window.scrollTo(0, document.querySelector('.table-section').offsetTop - 20); };
+    nextBtn.onclick     = () => { currentPage++; renderTable(); scrollToTable(); };
     container.appendChild(nextBtn);
 
-    // Page info
-    const info = document.createElement("span");
+    const info       = document.createElement("span");
     info.style.cssText = "color:#94a3b8;font-size:12px;margin-left:12px;";
     info.textContent = `Page ${currentPage} of ${totalPages}`;
     container.appendChild(info);
@@ -1594,6 +1643,18 @@ function createPageBtn(pageNum) {
     return btn;
 }
 
+function appendDots(container) {
+    const dots = document.createElement("span");
+    dots.textContent = "…";
+    dots.style.cssText = "padding:8px 4px;color:#94a3b8;";
+    container.appendChild(dots);
+}
+
+function scrollToTable() {
+    const el = document.querySelector('.table-section');
+    if (el) window.scrollTo(0, el.offsetTop - 20);
+}
+
 /* ==============================================================
    EXPORT CSV
    ============================================================== */
@@ -1603,19 +1664,22 @@ function exportTableCSV() {
         return;
     }
 
-    const headers = ["Subscription ID", "License Category", "COMPGUID", "GSTIN", "BLS Expiry", "Status"];
+    const headers = [
+        "Subscription ID", "License Category", "License Type",
+        "COMPGUID", "GSTIN", "Install Date", "Last Used",
+        "BLS Expiry", "Status", "Days Since Last Used"
+    ];
+
     const rows = filteredData.map(r => [
-        r.subscriptionId,
-        r.licenseCategory,
-        r.compguid,
-        r.gstin,
-        r.blsExpiry,
-        isExpired(r.blsExpiry) ? "Expired" : "Active"
+        r.subscriptionId, r.licenseCategory, r.licenseType || "N/A",
+        r.compguid, r.gstin, r.installDate || "N/A", r.lastUsed || "N/A",
+        r.blsExpiry, isExpired(r.blsExpiry) ? "Expired" : "Active",
+        daysAgo(r.lastUsed) ?? "Never"
     ]);
 
     let csv = headers.join(",") + "\n";
     rows.forEach(row => {
-        csv += row.map(v => `"${(v || "").replace(/"/g, '""')}"`).join(",") + "\n";
+        csv += row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n";
     });
 
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -1627,6 +1691,12 @@ function exportTableCSV() {
     URL.revokeObjectURL(url);
 }
 
+/* ==============================================================
+   INIT — Auto-load data on page open
+   ============================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    fetchDataFromGitHub();
+});
 </script>
 
 </body>
