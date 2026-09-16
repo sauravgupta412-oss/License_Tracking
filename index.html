@@ -9,17 +9,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #1f2937;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; background: #f4f7fb; color: #1f2937; }
 
     /* =========================
        LANDING PAGE
@@ -27,281 +18,70 @@
     .landing-page {
         min-height: 100vh;
         background: linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 40px 20px;
+        display: flex; align-items: center; justify-content: center; padding: 40px 20px;
     }
-
-    .landing-container {
-        width: 100%;
-        max-width: 1300px;
-        text-align: center;
-    }
-
+    .landing-container { width: 100%; max-width: 1300px; text-align: center; }
     .logo {
-        width: 72px;
-        height: 72px;
-        margin: 0 auto 20px;
-        border-radius: 18px;
-        background: rgba(255,255,255,0.15);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 28px;
-        font-weight: bold;
+        width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 18px;
+        background: rgba(255,255,255,0.15); display: flex; align-items: center;
+        justify-content: center; color: white; font-size: 28px; font-weight: bold;
         backdrop-filter: blur(10px);
     }
-
-    .landing-title {
-        color: white;
-        font-size: 42px;
-        font-weight: 700;
-        margin-bottom: 12px;
-    }
-
-    .landing-subtitle {
-        color: #cbd5e1;
-        font-size: 17px;
-        margin-bottom: 25px;
-    }
-
+    .landing-title { color: white; font-size: 42px; font-weight: 700; margin-bottom: 12px; }
+    .landing-subtitle { color: #cbd5e1; font-size: 17px; margin-bottom: 25px; }
+    
     .data-status {
-        margin-bottom: 30px;
-        padding: 12px 24px;
-        border-radius: 12px;
-        font-size: 14px;
-        font-weight: 600;
-        display: inline-block;
+        margin-bottom: 30px; padding: 12px 24px; border-radius: 12px;
+        font-size: 14px; font-weight: 600; display: inline-block;
     }
-
-    .data-status.loading {
-        background: rgba(251,191,36,0.15);
-        color: #fbbf24;
-        border: 1px solid rgba(251,191,36,0.3);
-    }
-
-    .data-status.success {
-        background: rgba(34,197,94,0.15);
-        color: #4ade80;
-        border: 1px solid rgba(34,197,94,0.3);
-    }
-
-    .data-status.error {
-        background: rgba(239,68,68,0.15);
-        color: #f87171;
-        border: 1px solid rgba(239,68,68,0.3);
-    }
-
-    .refresh-btn {
-        background: rgba(255,255,255,0.1);
-        color: #93c5fd;
-        border: 1px solid rgba(147,197,253,0.3);
-        padding: 8px 18px;
-        border-radius: 8px;
-        font-size: 13px;
-        cursor: pointer;
-        margin-left: 12px;
-        transition: all 0.2s;
-    }
-
-    .refresh-btn:hover { background: rgba(255,255,255,0.18); }
+    .data-status.loading { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+    .data-status.success { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+    .data-status.error { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
     /* Category Grid */
-    .category-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 22px;
-    }
-
-    .category-grid.disabled {
-        opacity: 0.4;
-        pointer-events: none;
-    }
-
+    .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .category-grid.disabled { opacity: 0.4; pointer-events: none; }
     .category-card {
-        background: white;
-        border-radius: 18px;
-        padding: 30px 22px;
-        cursor: pointer;
-        transition: all 0.25s ease;
-        border: 2px solid transparent;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+        background: white; border-radius: 18px; padding: 30px 22px; cursor: pointer;
+        transition: all 0.25s ease; border: 2px solid transparent; box-shadow: 0 15px 35px rgba(0,0,0,0.18);
     }
-
-    .category-card:hover {
-        transform: translateY(-8px);
-        border-color: #60a5fa;
-        box-shadow: 0 20px 45px rgba(0,0,0,0.25);
-    }
-
+    .category-card:hover { transform: translateY(-8px); border-color: #60a5fa; box-shadow: 0 20px 45px rgba(0,0,0,0.25); }
     .category-icon {
-        width: 62px;
-        height: 62px;
-        margin: 0 auto 16px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
+        width: 62px; height: 62px; margin: 0 auto 16px; border-radius: 16px;
+        display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold;
     }
-
     .ca-icon { background: #dbeafe; color: #2563eb; }
     .accountant-icon { background: #dcfce7; color: #16a34a; }
     .gstp-icon { background: #fef3c7; color: #d97706; }
     .regular-icon { background: #f3e8ff; color: #9333ea; }
-
-    .category-card h2 {
-        font-size: 20px;
-        margin-bottom: 8px;
-    }
-
-    .category-card p {
-        color: #64748b;
-        font-size: 13px;
-        line-height: 1.5;
-    }
-
-    .card-stats {
-        margin-top: 14px;
-        padding-top: 14px;
-        border-top: 1px solid #e5e7eb;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-    }
-
+    .category-card h2 { font-size: 20px; margin-bottom: 8px; }
+    .category-card p { color: #64748b; font-size: 13px; line-height: 1.5; }
+    .card-stats { margin-top: 14px; padding-top: 14px; border-top: 1px solid #e5e7eb; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .card-stat-item { text-align: center; }
-
-    .card-stat-value {
-        font-size: 18px;
-        font-weight: 700;
-        color: #111827;
-    }
-
-    .card-stat-label {
-        font-size: 10px;
-        color: #94a3b8;
-        margin-top: 2px;
-    }
+    .card-stat-value { font-size: 18px; font-weight: 700; color: #111827; }
+    .card-stat-label { font-size: 10px; color: #94a3b8; margin-top: 2px; }
 
     /* =========================
        DASHBOARD
        ========================= */
-    .dashboard-page {
-        display: none;
-        min-height: 100vh;
-    }
-
-    .dashboard-header {
-        background: #0f172a;
-        color: white;
-        padding: 18px 35px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .header-logo {
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
-        background: #2563eb;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        color: white;
-        font-size: 14px;
-    }
-
-    .header-title {
-        font-size: 22px;
-        font-weight: 700;
-    }
-
-    .header-subtitle {
-        font-size: 12px;
-        color: #94a3b8;
-        margin-top: 3px;
-    }
-
-    .header-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .back-button, .export-button {
-        background: rgba(255,255,255,0.1);
-        color: white;
-        border: 1px solid rgba(255,255,255,0.2);
-        padding: 10px 16px;
-        border-radius: 9px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background 0.2s;
-    }
-
-    .back-button:hover, .export-button:hover {
-        background: rgba(255,255,255,0.18);
-    }
-
-    .dashboard-content {
-        max-width: 1600px;
-        margin: auto;
-        padding: 30px;
-    }
-
+    .dashboard-page { display: none; min-height: 100vh; }
+    .dashboard-header { background: #0f172a; color: white; padding: 18px 35px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .header-left { display: flex; align-items: center; gap: 15px; }
+    .header-logo { width: 45px; height: 45px; border-radius: 12px; background: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 14px; }
+    .header-title { font-size: 22px; font-weight: 700; }
+    .header-subtitle { font-size: 12px; color: #94a3b8; margin-top: 3px; }
+    .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .back-button, .export-button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px 16px; border-radius: 9px; cursor: pointer; font-size: 14px; transition: background 0.2s; }
+    .back-button:hover, .export-button:hover { background: rgba(255,255,255,0.18); }
+    .dashboard-content { max-width: 1600px; margin: auto; padding: 30px; }
     .dashboard-title-section { margin-bottom: 25px; }
-
-    .dashboard-title {
-        font-size: 28px;
-        font-weight: 700;
-    }
-
-    .dashboard-description {
-        color: #64748b;
-        margin-top: 6px;
-        font-size: 14px;
-    }
+    .dashboard-title { font-size: 28px; font-weight: 700; }
+    .dashboard-description { color: #64748b; margin-top: 6px; font-size: 14px; }
 
     /* KPI Cards */
-    .kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-        margin-bottom: 25px;
-    }
-
-    .kpi-card {
-        background: white;
-        border-radius: 14px;
-        padding: 20px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 4px 12px rgba(15,23,42,0.05);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .kpi-card::before {
-        content: "";
-        position: absolute;
-        left: 0; top: 0; bottom: 0;
-        width: 4px;
-        background: #2563eb;
-    }
-
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 25px; }
+    .kpi-card { background: white; border-radius: 14px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(15,23,42,0.05); position: relative; overflow: hidden; }
+    .kpi-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #2563eb; }
     .kpi-card.expired::before { background: #ef4444; }
     .kpi-card.active::before { background: #22c55e; }
     .kpi-card.comp::before { background: #8b5cf6; }
@@ -317,347 +97,100 @@
     .kpi-card.usage::before { background: #ea580c; }
     .kpi-card.dormant::before { background: #64748b; }
     .kpi-card.new-install::before { background: #059669; }
-
-    .kpi-label {
-        color: #64748b;
-        font-size: 12px;
-        line-height: 1.4;
-        margin-bottom: 8px;
-    }
-
-    .kpi-value {
-        font-size: 28px;
-        font-weight: 700;
-        color: #111827;
-    }
-
+    .kpi-label { color: #64748b; font-size: 12px; line-height: 1.4; margin-bottom: 8px; }
+    .kpi-value { font-size: 28px; font-weight: 700; color: #111827; }
     .kpi-value.small { font-size: 22px; }
-
-    .kpi-icon {
-        position: absolute;
-        right: 16px;
-        top: 16px;
-        font-size: 18px;
-        opacity: 0.5;
-    }
-
-    .kpi-sub {
-        font-size: 11px;
-        color: #94a3b8;
-        margin-top: 4px;
-    }
-
-    /* Section Dividers */
-    .section-label {
-        font-size: 14px;
-        font-weight: 700;
-        color: #475569;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin: 8px 0 14px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid #e2e8f0;
-        grid-column: 1 / -1;
-    }
+    .kpi-icon { position: absolute; right: 16px; top: 16px; font-size: 18px; opacity: 0.5; }
+    .kpi-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+    .section-label { font-size: 14px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 14px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; grid-column: 1 / -1; }
 
     /* Distribution Tables */
-    .dist-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-        margin-bottom: 30px;
-    }
-
-    .dist-card {
-        background: white;
-        border-radius: 14px;
-        border: 1px solid #e5e7eb;
-        padding: 18px;
-        box-shadow: 0 4px 12px rgba(15,23,42,0.05);
-    }
-
-    .dist-card h3 {
-        font-size: 14px;
-        color: #1f2937;
-        margin-bottom: 4px;
-        text-align: center;
-    }
-    
-    .dist-card p {
-        font-size: 11px;
-        color: #64748b;
-        text-align: center;
-        margin-bottom: 12px;
-    }
-
-    .dist-table-wrapper {
-        max-height: 250px;
-        overflow-y: auto;
-        border: 1px solid #eef2f7;
-        border-radius: 8px;
-    }
-
-    .dist-table-wrapper table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: unset; 
-    }
-
-    .dist-table-wrapper th {
-        position: sticky;
-        top: 0;
-        background: #f8fafc;
-        padding: 10px 12px;
-        font-size: 11px;
-        text-align: center;
-        z-index: 1;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .dist-table-wrapper td {
-        padding: 10px 12px;
-        font-size: 12px;
-        text-align: center;
-        border-top: 1px solid #eef2f7;
-    }
-
-    .dist-table-wrapper tr:hover td {
-        background: #f8fafc;
-    }
+    .dist-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
+    .dist-card { background: white; border-radius: 14px; border: 1px solid #e5e7eb; padding: 18px; box-shadow: 0 4px 12px rgba(15,23,42,0.05); }
+    .dist-card h3 { font-size: 13px; color: #1f2937; margin-bottom: 4px; text-align: center; }
+    .dist-card p { font-size: 10px; color: #64748b; text-align: center; margin-bottom: 12px; }
+    .dist-table-wrapper { max-height: 250px; overflow-y: auto; border: 1px solid #eef2f7; border-radius: 8px; }
+    .dist-table-wrapper table { width: 100%; border-collapse: collapse; }
+    .dist-table-wrapper th { position: sticky; top: 0; background: #f8fafc; padding: 10px 12px; font-size: 11px; text-align: center; z-index: 1; border-bottom: 1px solid #e5e7eb; }
+    .dist-table-wrapper td { padding: 10px 12px; font-size: 12px; text-align: center; border-top: 1px solid #eef2f7; }
+    .clickable-row { cursor: pointer; transition: background 0.15s; }
+    .clickable-row:hover td { background: #e0f2fe !important; color: #0369a1; }
 
     /* Filters */
-    .filter-section {
-        background: white;
-        padding: 20px;
-        border-radius: 14px;
-        border: 1px solid #e5e7eb;
-        margin-bottom: 22px;
-    }
-
-    .filter-title {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 14px;
-    }
-
-    .filter-grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: 12px;
-    }
-
-    .filter-input, .filter-select {
-        width: 100%;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        padding: 11px 13px;
-        font-size: 14px;
-        outline: none;
-    }
-
-    .filter-input:focus, .filter-select:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-    }
+    .filter-section { background: white; padding: 20px; border-radius: 14px; border: 1px solid #e5e7eb; margin-bottom: 22px; }
+    .filter-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; }
+    .filter-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px; }
+    .filter-input, .filter-select { width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 11px 13px; font-size: 14px; outline: none; }
+    .filter-input:focus, .filter-select:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 
     /* Main Table */
-    .table-section {
-        background: white;
-        border-radius: 14px;
-        border: 1px solid #e5e7eb;
-        overflow: hidden;
-    }
-
-    .table-header {
-        padding: 18px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #e5e7eb;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
+    .table-section { background: white; border-radius: 14px; border: 1px solid #e5e7eb; overflow: hidden; }
+    .table-header { padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; gap: 10px; }
     .table-title { font-weight: 600; }
-
-    .record-count {
-        color: #64748b;
-        font-size: 13px;
-    }
-
+    .record-count { color: #64748b; font-size: 13px; }
     .table-wrapper { overflow-x: auto; }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 1200px;
-    }
-
-    th {
-        background: #f8fafc;
-        color: #475569;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-        padding: 12px 14px;
-        text-align: left;
-        white-space: nowrap;
-        cursor: pointer;
-        user-select: none;
-    }
-
+    table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+    th { background: #f8fafc; color: #475569; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; padding: 12px 14px; text-align: left; white-space: nowrap; cursor: pointer; user-select: none; }
     th:hover { background: #eef2f7; }
-
-    th .sort-arrow {
-        margin-left: 4px;
-        font-size: 9px;
-        color: #94a3b8;
-    }
-
+    th .sort-arrow { margin-left: 4px; font-size: 9px; color: #94a3b8; }
     th .sort-arrow.asc::after { content: "▲"; color: #2563eb; }
     th .sort-arrow.desc::after { content: "▼"; color: #2563eb; }
     th .sort-arrow.none::after { content: "↕"; }
-
-    td {
-        padding: 12px 14px;
-        border-top: 1px solid #eef2f7;
-        font-size: 12px;
-        white-space: nowrap;
-    }
-
+    td { padding: 12px 14px; border-top: 1px solid #eef2f7; font-size: 12px; white-space: nowrap; }
     tr:hover td { background: #f8fafc; }
-
-    .badge {
-        padding: 4px 8px;
-        border-radius: 20px;
-        font-size: 10px;
-        font-weight: 600;
-    }
-
+    .badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
     .badge-active { background: #dcfce7; color: #15803d; }
     .badge-expired { background: #fee2e2; color: #b91c1c; }
-
-    .license-badge {
-        padding: 4px 8px;
-        border-radius: 20px;
-        font-size: 10px;
-        font-weight: 600;
-    }
-
+    .license-badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
     .license-badge-ca { background: #dbeafe; color: #1d4ed8; }
     .license-badge-accountant { background: #dcfce7; color: #15803d; }
     .license-badge-gstp { background: #fef3c7; color: #92400e; }
     .license-badge-regular { background: #f3e8ff; color: #7c3aed; }
-
-    .type-badge {
-        padding: 4px 8px;
-        border-radius: 20px;
-        font-size: 10px;
-        font-weight: 600;
-    }
-
+    .type-badge { padding: 4px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; }
     .type-perpetual { background: #ecfeff; color: #0e7490; }
     .type-subscription { background: #ede9fe; color: #6d28d9; }
     .type-magic { background: #fce7f3; color: #be185d; }
-
-    .usage-indicator {
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        margin-right: 6px;
-    }
-
+    .usage-indicator { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
     .usage-active { background: #22c55e; }
     .usage-dormant { background: #ef4444; }
     .usage-moderate { background: #f59e0b; }
-
-    .empty-state {
-        text-align: center;
-        padding: 50px 20px;
-        color: #64748b;
-    }
+    .empty-state { text-align: center; padding: 50px 20px; color: #64748b; }
 
     /* Pagination */
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 6px;
-        padding: 18px;
-        border-top: 1px solid #e5e7eb;
-        flex-wrap: wrap;
-    }
-
-    .page-btn {
-        padding: 8px 14px;
-        border: 1px solid #d1d5db;
-        background: white;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 13px;
-        color: #374151;
-        transition: all 0.15s;
-    }
-
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; padding: 18px; border-top: 1px solid #e5e7eb; flex-wrap: wrap; }
+    .page-btn { padding: 8px 14px; border: 1px solid #d1d5db; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; color: #374151; transition: all 0.15s; }
     .page-btn:hover { background: #f3f4f6; }
+    .page-btn.active-page { background: #2563eb; color: white; border-color: #2563eb; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .page-btn.active-page {
-        background: #2563eb;
-        color: white;
-        border-color: #2563eb;
+    /* MODAL OVERLAY */
+    .modal-overlay {
+        display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(15,23,42,0.8); z-index: 10000; align-items: center; justify-content: center;
+        padding: 20px; backdrop-filter: blur(4px);
     }
-
-    .page-btn:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
+    .modal-overlay.show { display: flex; }
+    .modal-content {
+        background: white; width: 100%; max-width: 1400px; height: 90vh; border-radius: 16px;
+        display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     }
-
+    .modal-header { padding: 20px 25px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; }
+    .modal-header h2 { font-size: 18px; color: #0f172a; }
+    .close-btn { background: transparent; border: none; font-size: 24px; cursor: pointer; color: #64748b; line-height: 1; }
+    .close-btn:hover { color: #0f172a; }
+    .modal-body { padding: 20px; overflow-y: auto; flex: 1; background: #f4f7fb; }
+    
     /* Loading overlay */
-    .loading-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(15,23,42,0.7);
-        z-index: 9999;
-        justify-content: center;
-        align-items: center;
-        backdrop-filter: blur(4px);
-    }
-
+    .loading-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15,23,42,0.7); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
     .loading-overlay.show { display: flex; }
-
     .loading-spinner { text-align: center; color: white; }
-
-    .spinner {
-        width: 50px;
-        height: 50px;
-        border: 4px solid rgba(255,255,255,0.2);
-        border-top-color: #60a5fa;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin: 0 auto 15px;
-    }
-
+    .spinner { width: 50px; height: 50px; border: 4px solid rgba(255,255,255,0.2); border-top-color: #60a5fa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Responsive */
-    @media (max-width: 1100px) {
-        .category-grid { grid-template-columns: repeat(2, 1fr); }
-        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-        .dist-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 650px) {
-        .landing-title { font-size: 28px; }
-        .category-grid { grid-template-columns: 1fr; }
-        .kpi-grid { grid-template-columns: 1fr; }
-        .dist-grid { grid-template-columns: 1fr; }
-        .filter-grid { grid-template-columns: 1fr; }
-        .dashboard-header { padding: 15px; }
-        .dashboard-content { padding: 16px; }
-        .header-title { font-size: 17px; }
-    }
+    @media (max-width: 1200px) { .dist-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 1100px) { .category-grid { grid-template-columns: repeat(2, 1fr); } .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 650px) { .landing-title { font-size: 28px; } .category-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: 1fr; } .dist-grid { grid-template-columns: 1fr; } .filter-grid { grid-template-columns: 1fr; } .dashboard-header { padding: 15px; } .dashboard-content { padding: 16px; } .header-title { font-size: 17px; } }
 </style>
 </head>
 
@@ -671,106 +204,90 @@
     </div>
 </div>
 
+<!-- Raw Data Modal Overlay -->
+<div id="rawModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Raw Data Drill-down</h2>
+            <div style="display:flex; gap:12px; align-items:center;">
+                <button class="export-button" onclick="exportPopupCSV()" style="background:#2563eb; border:none; padding:8px 16px; font-weight:600;">📥 Export CSV</button>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="table-section" style="box-shadow:none; border:1px solid #e5e7eb;">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Subscription ID</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>COMPGUID</th>
+                                <th>GSTIN</th>
+                                <th>Install Date</th>
+                                <th>Last Used</th>
+                                <th>BLS Expiry</th>
+                                <th>Status</th>
+                                <th>Days Idle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="popupTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="popupPagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ============================================================
      LANDING PAGE
      ============================================================ -->
 <div id="landingPage" class="landing-page">
     <div class="landing-container">
-
         <div class="logo">LD</div>
         <h1 class="landing-title">License Dashboard</h1>
-        <p class="landing-subtitle">
-            Enterprise analytics for license active state and usage tracking
-        </p>
+        <p class="landing-subtitle">Enterprise analytics for license active state and usage tracking</p>
 
-        <div class="data-status loading" id="dataStatus">
-            ⏳ Connecting to server metrics...
-        </div>
+        <div class="data-status loading" id="dataStatus">⏳ Connecting to server metrics...</div>
 
         <!-- Category Cards -->
         <div class="category-grid disabled" id="categoryGrid">
-
             <div class="category-card" onclick="openDashboard('CA')">
-                <div class="category-icon ca-icon">CA</div>
-                <h2>CA</h2>
-                <p>Chartered Accountant tagged licenses</p>
+                <div class="category-icon ca-icon">CA</div><h2>CA</h2><p>Chartered Accountant tagged licenses</p>
                 <div class="card-stats">
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-ca-total">0</div>
-                        <div class="card-stat-label">Total</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-ca-active" style="color:#22c55e">0</div>
-                        <div class="card-stat-label">Active</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-ca-expired" style="color:#ef4444">0</div>
-                        <div class="card-stat-label">Expired</div>
-                    </div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-total">0</div><div class="card-stat-label">Total</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-ca-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
                 </div>
             </div>
-
             <div class="category-card" onclick="openDashboard('Accountant')">
-                <div class="category-icon accountant-icon">AC</div>
-                <h2>Accountant</h2>
-                <p>Accountant tagged licenses</p>
+                <div class="category-icon accountant-icon">AC</div><h2>Accountant</h2><p>Accountant tagged licenses</p>
                 <div class="card-stats">
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-accountant-total">0</div>
-                        <div class="card-stat-label">Total</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-accountant-active" style="color:#22c55e">0</div>
-                        <div class="card-stat-label">Active</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-accountant-expired" style="color:#ef4444">0</div>
-                        <div class="card-stat-label">Expired</div>
-                    </div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-total">0</div><div class="card-stat-label">Total</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-accountant-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
                 </div>
             </div>
-
             <div class="category-card" onclick="openDashboard('GSTP')">
-                <div class="category-icon gstp-icon">GP</div>
-                <h2>GSTP</h2>
-                <p>GST Practitioner tagged licenses</p>
+                <div class="category-icon gstp-icon">GP</div><h2>GSTP</h2><p>GST Practitioner tagged licenses</p>
                 <div class="card-stats">
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-gstp-total">0</div>
-                        <div class="card-stat-label">Total</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-gstp-active" style="color:#22c55e">0</div>
-                        <div class="card-stat-label">Active</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-gstp-expired" style="color:#ef4444">0</div>
-                        <div class="card-stat-label">Expired</div>
-                    </div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-total">0</div><div class="card-stat-label">Total</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-gstp-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
                 </div>
             </div>
-
             <div class="category-card" onclick="openDashboard('Regular')">
-                <div class="category-icon regular-icon">RG</div>
-                <h2>Regular</h2>
-                <p>Regular tagged licenses</p>
+                <div class="category-icon regular-icon">RG</div><h2>Regular</h2><p>Regular tagged licenses</p>
                 <div class="card-stats">
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-regular-total">0</div>
-                        <div class="card-stat-label">Total</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-regular-active" style="color:#22c55e">0</div>
-                        <div class="card-stat-label">Active</div>
-                    </div>
-                    <div class="card-stat-item">
-                        <div class="card-stat-value" id="landing-regular-expired" style="color:#ef4444">0</div>
-                        <div class="card-stat-label">Expired</div>
-                    </div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-total">0</div><div class="card-stat-label">Total</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-active" style="color:#22c55e">0</div><div class="card-stat-label">Active</div></div>
+                    <div class="card-stat-item"><div class="card-stat-value" id="landing-regular-expired" style="color:#ef4444">0</div><div class="card-stat-label">Expired</div></div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -788,7 +305,7 @@
             </div>
         </div>
         <div class="header-actions">
-            <button class="export-button" onclick="exportTableCSV()">📥 Export CSV</button>
+            <button class="export-button" onclick="exportTableCSV()">📥 Export Filtered CSV</button>
             <button class="back-button" onclick="goBack()">← Back to Categories</button>
         </div>
     </header>
@@ -797,136 +314,65 @@
 
         <section class="dashboard-title-section">
             <h1 class="dashboard-title" id="dashboardTitle">Dashboard</h1>
-            <p class="dashboard-description">
-                Comprehensive active metrics, license models, and execution tracking overview.
-            </p>
+            <p class="dashboard-description">Comprehensive active metrics, license models, and execution tracking overview.</p>
         </section>
 
         <!-- KPI CARDS -->
         <section class="kpi-grid">
-
             <div class="section-label">📊 Subscription Overview</div>
-
-            <div class="kpi-card">
-                <div class="kpi-icon">▣</div>
-                <div class="kpi-label">Unique Subscription IDs</div>
-                <div class="kpi-value" id="totalSubscriptions">0</div>
-            </div>
-
-            <div class="kpi-card expired">
-                <div class="kpi-icon">✕</div>
-                <div class="kpi-label">Expired Subscriptions<br><small>BLS Expiry ≤ Today</small></div>
-                <div class="kpi-value" id="expiredSubscriptions">0</div>
-            </div>
-
-            <div class="kpi-card active">
-                <div class="kpi-icon">✓</div>
-                <div class="kpi-label">Active Subscriptions<br><small>BLS Expiry &gt; Today</small></div>
-                <div class="kpi-value" id="activeSubscriptions">0</div>
-            </div>
-
-            <div class="kpi-card comp">
-                <div class="kpi-icon">◈</div>
-                <div class="kpi-label">Total Unique COMPGUID</div>
-                <div class="kpi-value" id="totalCompguid">0</div>
-            </div>
-
-            <div class="kpi-card gstin-card">
-                <div class="kpi-icon">G</div>
-                <div class="kpi-label">Total Unique GSTIN</div>
-                <div class="kpi-value" id="totalGstin">0</div>
-            </div>
+            <div class="kpi-card"><div class="kpi-icon">▣</div><div class="kpi-label">Unique Subscription IDs</div><div class="kpi-value" id="totalSubscriptions">0</div></div>
+            <div class="kpi-card expired"><div class="kpi-icon">✕</div><div class="kpi-label">Expired Subscriptions<br><small>BLS Expiry ≤ Today</small></div><div class="kpi-value" id="expiredSubscriptions">0</div></div>
+            <div class="kpi-card active"><div class="kpi-icon">✓</div><div class="kpi-label">Active Subscriptions<br><small>BLS Expiry &gt; Today</small></div><div class="kpi-value" id="activeSubscriptions">0</div></div>
+            <div class="kpi-card comp"><div class="kpi-icon">◈</div><div class="kpi-label">Total Unique COMPGUID</div><div class="kpi-value" id="totalCompguid">0</div></div>
+            <div class="kpi-card gstin-card"><div class="kpi-icon">G</div><div class="kpi-label">Total Unique GSTIN</div><div class="kpi-value" id="totalGstin">0</div></div>
 
             <div class="section-label">🏷️ License Type Breakdown (Per Subscription)</div>
-
-            <div class="kpi-card perpetual">
-                <div class="kpi-icon">∞</div>
-                <div class="kpi-label">Perpetual Licenses</div>
-                <div class="kpi-value" id="perpetualCount">0</div>
-                <div class="kpi-sub" id="perpetualPct">0%</div>
-            </div>
-
-            <div class="kpi-card subscription">
-                <div class="kpi-icon">🔄</div>
-                <div class="kpi-label">Subscription Licenses</div>
-                <div class="kpi-value" id="subscriptionCount">0</div>
-                <div class="kpi-sub" id="subscriptionPct">0%</div>
-            </div>
-
-            <div class="kpi-card magic">
-                <div class="kpi-icon">✨</div>
-                <div class="kpi-label">Magic Licenses</div>
-                <div class="kpi-value" id="magicCount">0</div>
-                <div class="kpi-sub" id="magicPct">0%</div>
-            </div>
+            <div class="kpi-card perpetual"><div class="kpi-icon">∞</div><div class="kpi-label">Perpetual Licenses</div><div class="kpi-value" id="perpetualCount">0</div><div class="kpi-sub" id="perpetualPct">0%</div></div>
+            <div class="kpi-card subscription"><div class="kpi-icon">🔄</div><div class="kpi-label">Subscription Licenses</div><div class="kpi-value" id="subscriptionCount">0</div><div class="kpi-sub" id="subscriptionPct">0%</div></div>
+            <div class="kpi-card magic"><div class="kpi-icon">✨</div><div class="kpi-label">Magic Licenses</div><div class="kpi-value" id="magicCount">0</div><div class="kpi-sub" id="magicPct">0%</div></div>
 
             <div class="section-label">📅 Installation & Usage Insights (Per Subscription)</div>
-
-            <div class="kpi-card install">
-                <div class="kpi-icon">📦</div>
-                <div class="kpi-label">New Installs (Last 30 Days)</div>
-                <div class="kpi-value" id="newInstalls30">0</div>
-                <div class="kpi-sub">Last 90 days: <span id="newInstalls90">0</span></div>
-            </div>
-
-            <div class="kpi-card new-install">
-                <div class="kpi-icon">📆</div>
-                <div class="kpi-label">Avg Days Since Install</div>
-                <div class="kpi-value small" id="avgDaysSinceInstall">0</div>
-                <div class="kpi-sub">Oldest: <span id="oldestInstall">N/A</span></div>
-            </div>
-
-            <div class="kpi-card usage">
-                <div class="kpi-icon">📡</div>
-                <div class="kpi-label">Used in Last 30 Days</div>
-                <div class="kpi-value" id="usedLast30">0</div>
-                <div class="kpi-sub" id="usedLast30Pct">0% of total</div>
-            </div>
-
-            <div class="kpi-card dormant">
-                <div class="kpi-icon">💤</div>
-                <div class="kpi-label">Dormant (&gt;90 Days No Use)</div>
-                <div class="kpi-value" id="dormantCount">0</div>
-                <div class="kpi-sub" id="dormantPct">0% of total</div>
-            </div>
-
-            <div class="kpi-card usage">
-                <div class="kpi-icon">🕐</div>
-                <div class="kpi-label">Avg Days Since Last Used</div>
-                <div class="kpi-value small" id="avgDaysSinceUsed">0</div>
-                <div class="kpi-sub">Never used: <span id="neverUsedCount">0</span></div>
-            </div>
+            <div class="kpi-card install"><div class="kpi-icon">📦</div><div class="kpi-label">New Installs (Last 30 Days)</div><div class="kpi-value" id="newInstalls30">0</div><div class="kpi-sub">Last 90 days: <span id="newInstalls90">0</span></div></div>
+            <div class="kpi-card new-install"><div class="kpi-icon">📆</div><div class="kpi-label">Avg Days Since Install</div><div class="kpi-value small" id="avgDaysSinceInstall">0</div><div class="kpi-sub">Oldest: <span id="oldestInstall">N/A</span></div></div>
+            <div class="kpi-card usage"><div class="kpi-icon">📡</div><div class="kpi-label">Used in Last 30 Days</div><div class="kpi-value" id="usedLast30">0</div><div class="kpi-sub" id="usedLast30Pct">0% of total</div></div>
+            <div class="kpi-card dormant"><div class="kpi-icon">💤</div><div class="kpi-label">Dormant (&gt;90 Days No Use)</div><div class="kpi-value" id="dormantCount">0</div><div class="kpi-sub" id="dormantPct">0% of total</div></div>
+            <div class="kpi-card usage"><div class="kpi-icon">🕐</div><div class="kpi-label">Avg Days Since Last Used</div><div class="kpi-value small" id="avgDaysSinceUsed">0</div><div class="kpi-sub">Never used: <span id="neverUsedCount">0</span></div></div>
 
             <div class="section-label">🔗 Cross-Category COMPGUID Overlap</div>
             <div id="crossCategoryCards" style="display: contents;"></div>
-
         </section>
-
 
         <!-- DISTRIBUTION TABLES -->
         <section>
-            <div class="section-label">📈 Distribution Analysis</div>
+            <div class="section-label">📈 Distribution Analysis <span style="font-size:11px; color:#64748b; font-weight:normal; text-transform:none;">(Click any row to view raw data)</span></div>
             <div class="dist-grid">
                 
-                <!-- Table 1: COMPGUIDs per Subscription -->
+                <!-- Table 1 -->
                 <div class="dist-card">
                     <h3>COMPGUIDs per Subscription</h3>
                     <p>How many Subscriptions have exactly X COMPGUIDs?</p>
                     <div class="dist-table-wrapper" id="distSubToComp"></div>
                 </div>
 
-                <!-- Table 2: Subscriptions per COMPGUID -->
+                <!-- Table 2 -->
                 <div class="dist-card">
                     <h3>Subscriptions per COMPGUID</h3>
                     <p>How many COMPGUIDs are linked to exactly X Subscriptions?</p>
                     <div class="dist-table-wrapper" id="distCompToSub"></div>
                 </div>
 
-                <!-- Table 3: Subscriptions per GSTIN -->
+                <!-- Table 3 -->
                 <div class="dist-card">
                     <h3>Subscriptions per GSTIN</h3>
                     <p>How many GSTINs are linked to exactly X Subscriptions?</p>
                     <div class="dist-table-wrapper" id="distGstToSub"></div>
+                </div>
+                
+                <!-- Table 4 -->
+                <div class="dist-card">
+                    <h3>COMPGUIDs per GSTIN</h3>
+                    <p>How many GSTINs are linked to exactly X COMPGUIDs?</p>
+                    <div class="dist-table-wrapper" id="distGstToComp"></div>
                 </div>
 
             </div>
@@ -937,9 +383,7 @@
         <section class="filter-section">
             <div class="filter-title">🔍 Search & Filter</div>
             <div class="filter-grid">
-                <input type="text" id="searchInput" class="filter-input"
-                       placeholder="Search Subscription ID, COMPGUID, GSTIN..."
-                       oninput="applyFilters()">
+                <input type="text" id="searchInput" class="filter-input" placeholder="Search Subscription ID, COMPGUID, GSTIN..." oninput="applyFilters()">
                 <select id="statusFilter" class="filter-select" onchange="applyFilters()">
                     <option value="All">All Statuses</option>
                     <option value="Active">Active</option>
@@ -961,7 +405,7 @@
             </div>
         </section>
 
-        <!-- DATA TABLE -->
+        <!-- MAIN DATA TABLE -->
         <section class="table-section">
             <div class="table-header">
                 <div class="table-title">Company & Subscription Details</div>
@@ -999,13 +443,18 @@
    ============================================================== */
 const allCategories = ["CA", "Accountant", "GSTP", "Regular"];
 let summaryData      = null; 
-let categoryRecords  = [];    // All rows including multiple COMPGUIDs for one SubID
+let categoryRecords  = []; 
 let currentCategory  = "";
 let filteredData     = [];
 let currentPage      = 1;
 const rowsPerPage    = 30;
 let sortField        = null;
 let sortDir          = "asc";
+
+// Modal State
+let popupFilteredData = [];
+let popupCurrentPage  = 1;
+window.distBuckets    = {}; // To store mappings for drill-down
 
 /* ==============================================================
    UTILITY HELPERS
@@ -1014,12 +463,10 @@ function todayStr() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
-
 function isExpired(dateStr) {
     if (!dateStr) return true;
     return dateStr.strip ? dateStr.strip() <= todayStr() : dateStr <= todayStr();
 }
-
 function daysAgo(dateStr) {
     if (!dateStr || dateStr === "N/A" || dateStr === "") return null;
     const t = new Date(todayStr() + "T00:00:00");
@@ -1027,47 +474,31 @@ function daysAgo(dateStr) {
     if (isNaN(d)) return null;
     return Math.floor((t - d) / (1000 * 60 * 60 * 24));
 }
-
 function formatDate(dateStr) {
     if (!dateStr || dateStr.trim() === "") return "N/A";
     try {
         const d = new Date(dateStr.trim() + "T00:00:00");
         if (isNaN(d)) return dateStr;
-        return d.toLocaleDateString("en-IN", {
-            day: "2-digit", month: "short", year: "numeric"
-        });
+        return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
     } catch { return dateStr; }
 }
-
-function formatNumber(n) {
-    return Number(n || 0).toLocaleString("en-IN");
-}
-
-function pct(part, total) {
-    if (!total) return "0%";
-    return (part / total * 100).toFixed(1) + "%";
-}
+function formatNumber(n) { return Number(n || 0).toLocaleString("en-IN"); }
+function pct(part, total) { return total ? (part / total * 100).toFixed(1) + "%" : "0%"; }
 
 function getLicenseBadgeClass(cat) {
     switch (cat) {
-        case "CA":         return "license-badge-ca";
-        case "Accountant": return "license-badge-accountant";
-        case "GSTP":       return "license-badge-gstp";
-        case "Regular":    return "license-badge-regular";
-        default:           return "license-badge-ca";
+        case "CA": return "license-badge-ca"; case "Accountant": return "license-badge-accountant";
+        case "GSTP": return "license-badge-gstp"; case "Regular": return "license-badge-regular";
+        default: return "license-badge-ca";
     }
 }
-
 function getTypeBadgeClass(type) {
     if (!type) return "type-subscription";
     switch (type.toLowerCase()) {
-        case "perpetual":    return "type-perpetual";
-        case "subscription": return "type-subscription";
-        case "magic":        return "type-magic";
-        default:             return "type-subscription";
+        case "perpetual": return "type-perpetual"; case "subscription": return "type-subscription";
+        case "magic": return "type-magic"; default: return "type-subscription";
     }
 }
-
 function escapeHtml(str) {
     if (!str) return "";
     const div = document.createElement('div');
@@ -1076,19 +507,17 @@ function escapeHtml(str) {
 }
 
 /* ==============================================================
-   INITIAL LOAD & DECOMPRESSION (Relative Path Structure)
+   INITIAL LOAD & DECOMPRESSION
    ============================================================== */
 async function loadSummary() {
     const statusEl = document.getElementById("dataStatus");
     try {
         const res = await fetch("./summary.json", { cache: "no-cache" });
         if (!res.ok) throw new Error("Could not download pre-calculated summary.json file.");
-        
         summaryData = await res.json();
         
         statusEl.className = "data-status success";
         statusEl.innerHTML = `✓ Connected successfully &nbsp;|&nbsp; Sync Complete`;
-        
         document.getElementById("categoryGrid").classList.remove("disabled");
         populateLandingCounts();
     } catch (err) {
@@ -1111,9 +540,6 @@ function populateLandingCounts() {
     });
 }
 
-/* ==============================================================
-   FETCH, DECOMPRESS, & LOAD TARGET CATEGORY DATA
-   ============================================================== */
 async function fetchCategoryData(category) {
     showLoading(true, `Downloading and unpacking zipped metrics for ${category}...`);
     try {
@@ -1122,7 +548,6 @@ async function fetchCategoryData(category) {
         if (!res.ok) throw new Error(`Server returned HTTP ${res.status}`);
         
         const blob = await res.blob();
-        
         const zip = await JSZip.loadAsync(blob);
         const fileName = `${category.toLowerCase()}.csv`;
         const csvFile = zip.file(fileName);
@@ -1142,27 +567,17 @@ async function fetchCategoryData(category) {
 
 function parseCategoryCSV(csvText) {
     const lines = csvText.split(/\r?\n/).filter(l => l.trim() !== "");
-    if (lines.length < 2) {
-        categoryRecords = [];
-        return;
-    }
+    if (lines.length < 2) { categoryRecords = []; return; }
     
     const headers = lines[0].split(",").map(h => h.trim());
-    
     categoryRecords = [];
     for (let i = 1; i < lines.length; i++) {
         const values = lines[i].split(",");
         if (values.length < headers.length) continue;
-        
         categoryRecords.push({
-            subscriptionId:  values[0],
-            licenseCategory: values[1],
-            licenseType:     values[2],
-            compguid:        values[3],
-            gstin:           values[4],
-            installDate:     values[5],
-            lastUsed:        values[6],
-            blsExpiry:       values[7]
+            subscriptionId: values[0], licenseCategory: values[1], licenseType: values[2],
+            compguid: values[3], gstin: values[4], installDate: values[5],
+            lastUsed: values[6], blsExpiry: values[7]
         });
     }
 }
@@ -1184,9 +599,7 @@ async function openDashboard(category) {
     document.getElementById("statusFilter").value  = "All";
     document.getElementById("typeFilter").value    = "All";
     document.getElementById("usageFilter").value   = "All";
-    sortField = null;
-    sortDir = "asc";
-    resetSortArrows();
+    sortField = null; sortDir = "asc"; resetSortArrows();
 
     computeKPIs(category);
     applyFilters();
@@ -1196,29 +609,29 @@ async function openDashboard(category) {
 function goBack() {
     document.getElementById("dashboardPage").style.display = "none";
     document.getElementById("landingPage").style.display   = "flex";
-    currentCategory = "";
-    categoryRecords = [];
+    currentCategory = ""; categoryRecords = [];
 }
 
 function showLoading(show, text = "Loading...") {
-    const el = document.getElementById("loadingOverlay");
+    document.getElementById("loadingOverlay").classList.toggle("show", show);
     document.getElementById("loadingText").textContent = text;
-    el.classList.toggle("show", show);
 }
 
 /* ==============================================================
-   COMPUTE KPIs
+   COMPUTE KPIs & DISTRIBUTIONS
    ============================================================== */
 function computeKPIs(category) {
-    
     // -------------------------------------------------------------
     // SECTION 1: Calculate Unique KPI Cards
     // -------------------------------------------------------------
-    const uniqueCompguids = new Set(categoryRecords.map(r => r.compguid).filter(Boolean));
-    const uniqueGstins    = new Set(categoryRecords.map(r => r.gstin).filter(Boolean));
-
+    const uniqueCompguids = new Set();
+    const uniqueGstins = new Set();
     const uniqueSubsMap = new Map();
+
     categoryRecords.forEach(r => {
+        if(r.compguid) uniqueCompguids.add(r.compguid);
+        if(r.gstin) uniqueGstins.add(r.gstin);
+
         const id = r.subscriptionId;
         if (!id) return;
         
@@ -1226,73 +639,49 @@ function computeKPIs(category) {
             uniqueSubsMap.set(id, r);
         } else {
             const old = uniqueSubsMap.get(id);
-            if ((r.blsExpiry || "") > (old.blsExpiry || "")) {
-                uniqueSubsMap.set(id, r);
-            }
+            if ((r.blsExpiry || "") > (old.blsExpiry || "")) uniqueSubsMap.set(id, r);
         }
     });
     
     const uniqueRecords = Array.from(uniqueSubsMap.values());
-
     const totalSubs = uniqueRecords.length;
-    const expSubs   = uniqueRecords.filter(r => isExpired(r.blsExpiry)).length;
-    const actSubs   = totalSubs - expSubs;
+    const expSubs = uniqueRecords.filter(r => isExpired(r.blsExpiry)).length;
+    const actSubs = totalSubs - expSubs;
 
     document.getElementById("totalSubscriptions").textContent   = formatNumber(totalSubs);
     document.getElementById("expiredSubscriptions").textContent = formatNumber(expSubs);
     document.getElementById("activeSubscriptions").textContent  = formatNumber(actSubs);
-    
     document.getElementById("totalCompguid").textContent        = formatNumber(uniqueCompguids.size);
     document.getElementById("totalGstin").textContent           = formatNumber(uniqueGstins.size);
 
-    // --- License Type Breakdown ---
-    const perpetualData    = uniqueRecords.filter(r => r.licenseType === "Perpetual");
+    const perpetualData = uniqueRecords.filter(r => r.licenseType === "Perpetual");
     const subscriptionData = uniqueRecords.filter(r => r.licenseType === "Subscription");
-    const magicData        = uniqueRecords.filter(r => r.licenseType === "Magic");
+    const magicData = uniqueRecords.filter(r => r.licenseType === "Magic");
 
-    document.getElementById("perpetualCount").textContent    = formatNumber(perpetualData.length);
-    document.getElementById("perpetualPct").textContent      = pct(perpetualData.length, totalSubs) + " of total";
+    document.getElementById("perpetualCount").textContent  = formatNumber(perpetualData.length);
+    document.getElementById("perpetualPct").textContent    = pct(perpetualData.length, totalSubs) + " of total";
     document.getElementById("subscriptionCount").textContent = formatNumber(subscriptionData.length);
-    document.getElementById("subscriptionPct").textContent   = pct(subscriptionData.length, totalSubs) + " of total";
-    document.getElementById("magicCount").textContent        = formatNumber(magicData.length);
-    document.getElementById("magicPct").textContent          = pct(magicData.length, totalSubs) + " of total";
+    document.getElementById("subscriptionPct").textContent = pct(subscriptionData.length, totalSubs) + " of total";
+    document.getElementById("magicCount").textContent      = formatNumber(magicData.length);
+    document.getElementById("magicPct").textContent        = pct(magicData.length, totalSubs) + " of total";
 
-    // --- Installation Insights ---
-    const installs30 = uniqueRecords.filter(r => {
-        const d = daysAgo(r.installDate);
-        return d !== null && d >= 0 && d <= 30;
-    }).length;
-
-    const installs90 = uniqueRecords.filter(r => {
-        const d = daysAgo(r.installDate);
-        return d !== null && d >= 0 && d <= 90;
-    }).length;
-
+    const installs30 = uniqueRecords.filter(r => { const d = daysAgo(r.installDate); return d !== null && d >= 0 && d <= 30; }).length;
+    const installs90 = uniqueRecords.filter(r => { const d = daysAgo(r.installDate); return d !== null && d >= 0 && d <= 90; }).length;
     document.getElementById("newInstalls30").textContent = formatNumber(installs30);
     document.getElementById("newInstalls90").textContent = formatNumber(installs90);
 
     const installDays = uniqueRecords.map(r => daysAgo(r.installDate)).filter(d => d !== null && d >= 0);
     const avgInstallDays = installDays.length > 0 ? Math.round(installDays.reduce((a, b) => a + b, 0) / installDays.length) : 0;
     document.getElementById("avgDaysSinceInstall").textContent = formatNumber(avgInstallDays);
-
+    
     const installDates = uniqueRecords.map(r => r.installDate).filter(Boolean).sort();
     document.getElementById("oldestInstall").textContent = installDates.length > 0 ? formatDate(installDates[0]) : "N/A";
 
-    // --- Usage Insights ---
-    const usedLast30 = uniqueRecords.filter(r => {
-        const d = daysAgo(r.lastUsed);
-        return d !== null && d >= 0 && d <= 30;
-    }).length;
-
+    const usedLast30 = uniqueRecords.filter(r => { const d = daysAgo(r.lastUsed); return d !== null && d >= 0 && d <= 30; }).length;
     document.getElementById("usedLast30").textContent    = formatNumber(usedLast30);
     document.getElementById("usedLast30Pct").textContent = pct(usedLast30, totalSubs) + " of total";
 
-    const dormant = uniqueRecords.filter(r => {
-        if (!r.lastUsed) return true;
-        const d = daysAgo(r.lastUsed);
-        return d !== null && d > 90;
-    }).length;
-
+    const dormant = uniqueRecords.filter(r => { if (!r.lastUsed) return true; const d = daysAgo(r.lastUsed); return d !== null && d > 90; }).length;
     document.getElementById("dormantCount").textContent = formatNumber(dormant);
     document.getElementById("dormantPct").textContent    = pct(dormant, totalSubs) + " of total";
 
@@ -1303,22 +692,14 @@ function computeKPIs(category) {
     const neverUsed = uniqueRecords.filter(r => !r.lastUsed || r.lastUsed === "").length;
     document.getElementById("neverUsedCount").textContent = formatNumber(neverUsed);
 
-    // --- Cross-Category Overlaps ---
     const crossContainer = document.getElementById("crossCategoryCards");
     crossContainer.innerHTML = "";
-
-    const otherCategories = allCategories.filter(c => c !== category);
-    otherCategories.forEach(otherCat => {
+    allCategories.filter(c => c !== category).forEach(otherCat => {
         const crossCount = (summaryData && summaryData.overlaps[category] && summaryData.overlaps[category][otherCat]) || 0;
-        const cardClass = "cross-" + otherCat.toLowerCase();
-
         crossContainer.insertAdjacentHTML("beforeend", `
-            <div class="kpi-card ${cardClass}">
+            <div class="kpi-card cross-${otherCat.toLowerCase()}">
                 <div class="kpi-icon">⇄</div>
-                <div class="kpi-label">
-                    COMPGUIDs × ${otherCat}
-                    <br><small>Shared with ${otherCat} licenses</small>
-                </div>
+                <div class="kpi-label">COMPGUIDs × ${otherCat}<br><small>Shared with ${otherCat}</small></div>
                 <div class="kpi-value">${formatNumber(crossCount)}</div>
                 <div class="kpi-sub">${pct(crossCount, uniqueCompguids.size)} of unique tags</div>
             </div>
@@ -1328,11 +709,10 @@ function computeKPIs(category) {
     // -------------------------------------------------------------
     // SECTION 2: Calculate Distribution Tables
     // -------------------------------------------------------------
-    
-    // Create maps to hold relationships
     const subToComp = new Map();
     const compToSub = new Map();
     const gstToSub  = new Map();
+    const gstToComp = new Map(); 
 
     categoryRecords.forEach(r => {
         const sub  = r.subscriptionId;
@@ -1342,48 +722,43 @@ function computeKPIs(category) {
         if (sub && comp) {
             if (!subToComp.has(sub)) subToComp.set(sub, new Set());
             subToComp.get(sub).add(comp);
-
             if (!compToSub.has(comp)) compToSub.set(comp, new Set());
             compToSub.get(comp).add(sub);
         }
-
         if (sub && gst) {
             if (!gstToSub.has(gst)) gstToSub.set(gst, new Set());
             gstToSub.get(gst).add(sub);
         }
+        if (gst && comp) {
+            if (!gstToComp.has(gst)) gstToComp.set(gst, new Set());
+            gstToComp.get(gst).add(comp);
+        }
     });
 
-    // Function to calculate Frequency (How many times did a size of X occur?)
-    function getFrequency(relationMap) {
-        const freq = {};
-        relationMap.forEach(set => {
+    function buildDistTable(relationMap, containerId, leftLabel, rightLabel, typeKey, descTitle) {
+        const buckets = {}; 
+        relationMap.forEach((set, key) => {
             const size = set.size;
             if (size > 0) {
-                freq[size] = (freq[size] || 0) + 1;
+                if (!buckets[size]) buckets[size] = [];
+                buckets[size].push(key);
             }
         });
-        return freq;
-    }
 
-    const freqSubToComp = getFrequency(subToComp);
-    const freqCompToSub = getFrequency(compToSub);
-    const freqGstToSub  = getFrequency(gstToSub);
-
-    // Function to render table
-    function renderDistTable(freqData, containerId, leftLabel, rightLabel) {
+        window.distBuckets[typeKey] = buckets;
         const container = document.getElementById(containerId);
         let html = `<table><thead><tr><th>${leftLabel}</th><th>${rightLabel}</th></tr></thead><tbody>`;
         
-        // Sort keys (1, 2, 3...)
-        const keys = Object.keys(freqData).map(Number).sort((a, b) => a - b);
+        const sizes = Object.keys(buckets).map(Number).sort((a, b) => a - b);
         
-        if (keys.length === 0) {
+        if (sizes.length === 0) {
             html += `<tr><td colspan="2" style="text-align:center; color:#94a3b8; padding:20px;">No data</td></tr>`;
         } else {
-            keys.forEach(k => {
-                html += `<tr>
-                            <td><strong>${k}</strong></td>
-                            <td>${formatNumber(freqData[k])}</td>
+            sizes.forEach(size => {
+                const count = buckets[size].length;
+                html += `<tr class="clickable-row" onclick="openRawDataModal('${typeKey}', ${size}, '${descTitle} = ${size}')">
+                            <td><strong>${size}</strong></td>
+                            <td>${formatNumber(count)}</td>
                          </tr>`;
             });
         }
@@ -1391,63 +766,173 @@ function computeKPIs(category) {
         container.innerHTML = html;
     }
 
-    renderDistTable(freqSubToComp, "distSubToComp", "COMPGUID Count", "Total Subscriptions");
-    renderDistTable(freqCompToSub, "distCompToSub", "Subscription Count", "Total COMPGUIDs");
-    renderDistTable(freqGstToSub,  "distGstToSub",  "Subscription Count", "Total GSTINs");
+    buildDistTable(subToComp, "distSubToComp", "COMPGUID Count", "Total Subscriptions", "subToComp", "Subscriptions with exactly X COMPGUIDs");
+    buildDistTable(compToSub, "distCompToSub", "Subscription Count", "Total COMPGUIDs", "compToSub", "COMPGUIDs with exactly X Subscriptions");
+    buildDistTable(gstToSub,  "distGstToSub",  "Subscription Count", "Total GSTINs", "gstToSub", "GSTINs with exactly X Subscriptions");
+    buildDistTable(gstToComp, "distGstToComp", "COMPGUID Count", "Total GSTINs", "gstToComp", "GSTINs with exactly X COMPGUIDs");
 }
 
 /* ==============================================================
-   SORTING
-   ============================================================= */
-function resetSortArrows() {
-    document.querySelectorAll('.sort-arrow').forEach(el => el.className = 'sort-arrow none');
+   DRILL-DOWN MODAL LOGIC
+   ============================================================== */
+function openRawDataModal(distType, size, desc) {
+    // Determine which field we are filtering
+    const fieldMap = {
+        subToComp: 'subscriptionId', // We have Subscriptions grouped by size
+        compToSub: 'compguid',       // We have COMPGUIDs grouped by size
+        gstToSub:  'gstin',          // We have GSTINs grouped by size
+        gstToComp: 'gstin'           // We have GSTINs grouped by size
+    };
+    const filterField = fieldMap[distType];
+    const keySet = new Set(window.distBuckets[distType][size] || []);
+    
+    // Filter raw data
+    popupFilteredData = categoryRecords.filter(r => keySet.has(r[filterField]));
+    popupCurrentPage = 1;
+    
+    document.getElementById("modalTitle").textContent = `Raw Data: ${desc} (Found ${formatNumber(popupFilteredData.length)} rows)`;
+    document.getElementById("rawModal").classList.add("show");
+    
+    renderPopupTable();
 }
 
-function sortTable(field) {
-    if (field === null) return;
+function closeModal() {
+    document.getElementById("rawModal").classList.remove("show");
+    popupFilteredData = [];
+}
 
-    if (sortField === field) {
-        sortDir = sortDir === "asc" ? "desc" : "asc";
-    } else {
-        sortField = field;
-        sortDir = "asc";
+function renderPopupTable() {
+    const tbody = document.getElementById("popupTableBody");
+    tbody.innerHTML = "";
+    
+    const totalRecords = popupFilteredData.length;
+    if (totalRecords === 0) return;
+    
+    const totalPages = Math.ceil(totalRecords / rowsPerPage);
+    if (popupCurrentPage > totalPages) popupCurrentPage = totalPages;
+    
+    const start = (popupCurrentPage - 1) * rowsPerPage;
+    const end = Math.min(start + rowsPerPage, totalRecords);
+    const pageData = popupFilteredData.slice(start, end);
+    
+    pageData.forEach((row, idx) => {
+        tbody.appendChild(createRowHTML(row, start + idx + 1));
+    });
+    
+    renderPopupPagination(totalPages);
+}
+
+function renderPopupPagination(totalPages) {
+    const container = document.getElementById("popupPagination");
+    container.innerHTML = "";
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "page-btn"; prevBtn.textContent = "← Prev";
+    prevBtn.disabled = (popupCurrentPage === 1);
+    prevBtn.onclick = () => { popupCurrentPage--; renderPopupTable(); document.querySelector('.modal-body').scrollTo(0,0); };
+    container.appendChild(prevBtn);
+
+    const maxVisible = 7;
+    let startP = Math.max(1, popupCurrentPage - Math.floor(maxVisible / 2));
+    let endP   = Math.min(totalPages, startP + maxVisible - 1);
+    if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
+
+    for (let p = startP; p <= endP; p++) {
+        const btn = document.createElement("button");
+        btn.className = "page-btn" + (p === popupCurrentPage ? " active-page" : "");
+        btn.textContent = p;
+        btn.onclick = () => { popupCurrentPage = p; renderPopupTable(); document.querySelector('.modal-body').scrollTo(0,0); };
+        container.appendChild(btn);
     }
 
-    resetSortArrows();
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "page-btn"; nextBtn.textContent = "Next →";
+    nextBtn.disabled = (popupCurrentPage === totalPages);
+    nextBtn.onclick = () => { popupCurrentPage++; renderPopupTable(); document.querySelector('.modal-body').scrollTo(0,0); };
+    container.appendChild(nextBtn);
+}
+
+function exportPopupCSV() {
+    if (popupFilteredData.length === 0) return;
+    const headers = ["Subscription ID", "License Category", "License Type", "COMPGUID", "GSTIN", "Install Date", "Last Used", "BLS Expiry", "Status"];
+    const rows = popupFilteredData.map(r => [
+        r.subscriptionId, r.licenseCategory, r.licenseType || "N/A", r.compguid, r.gstin, r.installDate || "N/A", r.lastUsed || "N/A", r.blsExpiry, isExpired(r.blsExpiry) ? "Expired" : "Active"
+    ]);
+
+    let csv = headers.join(",") + "\n";
+    rows.forEach(r => csv += r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url; a.download = `Filtered_Raw_Data_${todayStr()}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+}
+
+/* ==============================================================
+   TABLE ROW GENERATOR (Shared by Main & Popup tables)
+   ============================================================== */
+function createRowHTML(row, index) {
+    const expired = isExpired(row.blsExpiry);
+    const statusBadge = expired ? '<span class="badge badge-expired">Expired</span>' : '<span class="badge badge-active">Active</span>';
+    const licenseBadgeClass = getLicenseBadgeClass(row.licenseCategory);
+    const typeBadgeClass    = getTypeBadgeClass(row.licenseType);
+
+    const daysSinceUsed = daysAgo(row.lastUsed);
+    let usageHtml = "";
+    if (daysSinceUsed === null || row.lastUsed === "") usageHtml = '<span style="color:#94a3b8">Never</span>';
+    else if (daysSinceUsed <= 30) usageHtml = `<span class="usage-indicator usage-active"></span>${daysSinceUsed}d`;
+    else if (daysSinceUsed <= 90) usageHtml = `<span class="usage-indicator usage-moderate"></span>${daysSinceUsed}d`;
+    else usageHtml = `<span class="usage-indicator usage-dormant"></span>${daysSinceUsed}d`;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td>${index}</td>
+        <td><strong>${escapeHtml(row.subscriptionId)}</strong></td>
+        <td><span class="license-badge ${licenseBadgeClass}">${escapeHtml(row.licenseCategory)}</span></td>
+        <td><span class="type-badge ${typeBadgeClass}">${escapeHtml(row.licenseType || "N/A")}</span></td>
+        <td>${escapeHtml(row.compguid)}</td>
+        <td style="font-family:monospace;font-size:11px;">${escapeHtml(row.gstin)}</td>
+        <td>${formatDate(row.installDate)}</td>
+        <td>${formatDate(row.lastUsed)}</td>
+        <td>${formatDate(row.blsExpiry)}</td>
+        <td>${statusBadge}</td>
+        <td>${usageHtml}</td>
+    `;
+    return tr;
+}
+
+/* ==============================================================
+   FILTERS & MAIN TABLE RENDERING
+   ============================================================== */
+function sortTable(field) {
+    if (field === null) return;
+    if (sortField === field) sortDir = sortDir === "asc" ? "desc" : "asc";
+    else { sortField = field; sortDir = "asc"; }
+
+    document.querySelectorAll('.sort-arrow').forEach(el => el.className = 'sort-arrow none');
     const arrow = document.getElementById("sort-" + field);
     if (arrow) arrow.className = "sort-arrow " + sortDir;
 
     filteredData.sort((a, b) => {
         let valA, valB;
-        if (field === "status") {
-            valA = isExpired(a.blsExpiry) ? "Expired" : "Active";
-            valB = isExpired(b.blsExpiry) ? "Expired" : "Active";
-        } else if (field === "daysSinceUsed") {
-            valA = daysAgo(a.lastUsed) ?? 999999;
-            valB = daysAgo(b.lastUsed) ?? 999999;
-        } else {
-            valA = a[field] || "";
-            valB = b[field] || "";
-        }
+        if (field === "status") { valA = isExpired(a.blsExpiry) ? "Expired" : "Active"; valB = isExpired(b.blsExpiry) ? "Expired" : "Active"; }
+        else if (field === "daysSinceUsed") { valA = daysAgo(a.lastUsed) ?? 999999; valB = daysAgo(b.lastUsed) ?? 999999; }
+        else { valA = a[field] || ""; valB = b[field] || ""; }
         if (valA < valB) return sortDir === "asc" ? -1 : 1;
         if (valA > valB) return sortDir === "asc" ? 1 : -1;
         return 0;
     });
 
-    currentPage = 1;
-    renderTable();
+    currentPage = 1; renderTable();
 }
 
-/* ==============================================================
-   FILTERS & TABLE RENDERING (Shows all granular rows)
-   ============================================================== */
 function applyFilters() {
     const search = document.getElementById("searchInput").value.toLowerCase().trim();
     const status = document.getElementById("statusFilter").value;
     const type   = document.getElementById("typeFilter").value;
     const usage  = document.getElementById("usageFilter").value;
 
-    // Use all rows directly for the table to show multiple companies per Subscription
     filteredData = categoryRecords;
 
     if (search) {
@@ -1457,34 +942,16 @@ function applyFilters() {
             (r.gstin && r.gstin.toLowerCase().includes(search))
         );
     }
-
     if (status === "Active") filteredData = filteredData.filter(r => !isExpired(r.blsExpiry));
     else if (status === "Expired") filteredData = filteredData.filter(r => isExpired(r.blsExpiry));
-
     if (type !== "All") filteredData = filteredData.filter(r => r.licenseType === type);
 
-    if (usage === "Last30") {
-        filteredData = filteredData.filter(r => {
-            const d = daysAgo(r.lastUsed);
-            return d !== null && d >= 0 && d <= 30;
-        });
-    } else if (usage === "Last90") {
-        filteredData = filteredData.filter(r => {
-            const d = daysAgo(r.lastUsed);
-            return d !== null && d >= 0 && d <= 90;
-        });
-    } else if (usage === "Dormant") {
-        filteredData = filteredData.filter(r => {
-            if (!r.lastUsed) return true;
-            const d = daysAgo(r.lastUsed);
-            return d !== null && d > 90;
-        });
-    } else if (usage === "NeverUsed") {
-        filteredData = filteredData.filter(r => !r.lastUsed || r.lastUsed.trim() === "");
-    }
+    if (usage === "Last30") filteredData = filteredData.filter(r => { const d = daysAgo(r.lastUsed); return d !== null && d >= 0 && d <= 30; });
+    else if (usage === "Last90") filteredData = filteredData.filter(r => { const d = daysAgo(r.lastUsed); return d !== null && d >= 0 && d <= 90; });
+    else if (usage === "Dormant") filteredData = filteredData.filter(r => { if (!r.lastUsed) return true; const d = daysAgo(r.lastUsed); return d !== null && d > 90; });
+    else if (usage === "NeverUsed") filteredData = filteredData.filter(r => !r.lastUsed || r.lastUsed.trim() === "");
 
-    currentPage = 1;
-    renderTable();
+    currentPage = 1; renderTable();
 }
 
 function renderTable() {
@@ -1495,14 +962,7 @@ function renderTable() {
     document.getElementById("recordCount").textContent = formatNumber(totalRecords) + " records mapped";
 
     if (totalRecords === 0) {
-        tbody.innerHTML = `
-            <tr><td colspan="11">
-                <div class="empty-state">
-                    <div style="font-size:40px;margin-bottom:12px;">📭</div>
-                    <div style="font-size:16px;font-weight:600;margin-bottom:6px;">No records found</div>
-                    <div>Try adjusting your search or filter criteria.</div>
-                </div>
-            </td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><div style="font-size:40px;margin-bottom:12px;">📭</div><div style="font-size:16px;font-weight:600;margin-bottom:6px;">No records found</div><div>Try adjusting your search or filter criteria.</div></div></td></tr>`;
         document.getElementById("pagination").innerHTML = "";
         return;
     }
@@ -1510,46 +970,12 @@ function renderTable() {
     const totalPages = Math.ceil(totalRecords / rowsPerPage);
     if (currentPage > totalPages) currentPage = totalPages;
 
-    const start    = (currentPage - 1) * rowsPerPage;
-    const end      = Math.min(start + rowsPerPage, totalRecords);
+    const start = (currentPage - 1) * rowsPerPage;
+    const end   = Math.min(start + rowsPerPage, totalRecords);
     const pageData = filteredData.slice(start, end);
 
     pageData.forEach((row, idx) => {
-        const expired = isExpired(row.blsExpiry);
-        const statusBadge = expired
-            ? '<span class="badge badge-expired">Expired</span>'
-            : '<span class="badge badge-active">Active</span>';
-
-        const licenseBadgeClass = getLicenseBadgeClass(row.licenseCategory);
-        const typeBadgeClass    = getTypeBadgeClass(row.licenseType);
-
-        const daysSinceUsed = daysAgo(row.lastUsed);
-        let usageHtml = "";
-        if (daysSinceUsed === null || row.lastUsed === "") {
-            usageHtml = '<span style="color:#94a3b8">Never</span>';
-        } else if (daysSinceUsed <= 30) {
-            usageHtml = `<span class="usage-indicator usage-active"></span>${daysSinceUsed}d`;
-        } else if (daysSinceUsed <= 90) {
-            usageHtml = `<span class="usage-indicator usage-moderate"></span>${daysSinceUsed}d`;
-        } else {
-            usageHtml = `<span class="usage-indicator usage-dormant"></span>${daysSinceUsed}d`;
-        }
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${start + idx + 1}</td>
-            <td><strong>${escapeHtml(row.subscriptionId)}</strong></td>
-            <td><span class="license-badge ${licenseBadgeClass}">${escapeHtml(row.licenseCategory)}</span></td>
-            <td><span class="type-badge ${typeBadgeClass}">${escapeHtml(row.licenseType || "N/A")}</span></td>
-            <td>${escapeHtml(row.compguid)}</td>
-            <td style="font-family:monospace;font-size:11px;">${escapeHtml(row.gstin)}</td>
-            <td>${formatDate(row.installDate)}</td>
-            <td>${formatDate(row.lastUsed)}</td>
-            <td>${formatDate(row.blsExpiry)}</td>
-            <td>${statusBadge}</td>
-            <td>${usageHtml}</td>
-        `;
-        tbody.appendChild(tr);
+        tbody.appendChild(createRowHTML(row, start + idx + 1));
     });
 
     renderPagination(totalPages);
@@ -1561,8 +987,7 @@ function renderPagination(totalPages) {
     if (totalPages <= 1) return;
 
     const prevBtn = document.createElement("button");
-    prevBtn.className = "page-btn";
-    prevBtn.textContent = "← Prev";
+    prevBtn.className = "page-btn"; prevBtn.textContent = "← Prev";
     prevBtn.disabled = (currentPage === 1);
     prevBtn.onclick = () => { currentPage--; renderTable(); scrollToTable(); };
     container.appendChild(prevBtn);
@@ -1572,22 +997,19 @@ function renderPagination(totalPages) {
     let endP   = Math.min(totalPages, startP + maxVisible - 1);
     if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
 
-    for (let p = startP; p <= endP; p++) container.appendChild(createPageBtn(p));
+    for (let p = startP; p <= endP; p++) {
+        const btn = document.createElement("button");
+        btn.className = "page-btn" + (p === currentPage ? " active-page" : "");
+        btn.textContent = p;
+        btn.onclick = () => { currentPage = p; renderTable(); };
+        container.appendChild(btn);
+    }
 
     const nextBtn = document.createElement("button");
-    nextBtn.className = "page-btn";
-    nextBtn.textContent = "Next →";
+    nextBtn.className = "page-btn"; nextBtn.textContent = "Next →";
     nextBtn.disabled = (currentPage === totalPages);
     nextBtn.onclick = () => { currentPage++; renderTable(); scrollToTable(); };
     container.appendChild(nextBtn);
-}
-
-function createPageBtn(pageNum) {
-    const btn = document.createElement("button");
-    btn.className = "page-btn" + (pageNum === currentPage ? " active-page" : "");
-    btn.textContent = pageNum;
-    btn.onclick = () => { currentPage = pageNum; renderTable(); };
-    return btn;
 }
 
 function scrollToTable() {
@@ -1595,9 +1017,6 @@ function scrollToTable() {
     if (el) window.scrollTo(0, el.offsetTop - 20);
 }
 
-/* ==============================================================
-   EXPORT TARGET SUB-METRICS TO LOCAL CSV
-   ============================================================== */
 function exportTableCSV() {
     if (filteredData.length === 0) return;
     const headers = ["Subscription ID", "License Category", "License Type", "COMPGUID", "GSTIN", "Install Date", "Last Used", "BLS Expiry", "Status"];
@@ -1607,14 +1026,11 @@ function exportTableCSV() {
 
     let csv = headers.join(",") + "\n";
     rows.forEach(r => csv += r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n");
-
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url  = URL.createObjectURL(blob);
     const a    = document.createElement("a");
-    a.href     = url;
-    a.download = `${currentCategory}_extracted_metrics.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    a.href     = url; a.download = `${currentCategory}_extracted_metrics.csv`;
+    a.click(); URL.revokeObjectURL(url);
 }
 
 /* ==============================================================
