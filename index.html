@@ -1,1306 +1,1296 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscription Data Intelligence System</title>
-    <style>
-        :root {
-            --bg-primary: #0a0e1a;
-            --bg-secondary: #111827;
-            --bg-tertiary: #1e2740;
-            --bg-card: #162032;
-            --bg-hover: #1e2d4a;
-            --bg-input: #0d1321;
-            --border-primary: #2a3555;
-            --border-active: #00b4d8;
-            --accent-blue: #00b4d8;
-            --accent-green: #10b981;
-            --accent-orange: #f59e0b;
-            --accent-red: #ef4444;
-            --accent-purple: #8b5cf6;
-            --accent-pink: #ec4899;
-            --accent-teal: #14b8a6;
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --shadow: 0 4px 24px rgba(0,0,0,0.4);
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>License Subscription Dashboard</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f7fb;
+        color: #1f2937;
+    }
+
+    /* =========================
+       LANDING PAGE
+       ========================= */
+
+    .landing-page {
+        min-height: 100vh;
+        background:
+            linear-gradient(135deg, #0f172a 0%, #172554 55%, #1d4ed8 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .landing-container {
+        width: 100%;
+        max-width: 1200px;
+        text-align: center;
+    }
+
+    .logo {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 20px;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        backdrop-filter: blur(10px);
+    }
+
+    .landing-title {
+        color: white;
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .landing-subtitle {
+        color: #cbd5e1;
+        font-size: 17px;
+        margin-bottom: 45px;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+    }
+
+    .category-card {
+        background: white;
+        border-radius: 18px;
+        padding: 35px 25px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        border: 2px solid transparent;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+    }
+
+    .category-card:hover {
+        transform: translateY(-8px);
+        border-color: #60a5fa;
+        box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+    }
+
+    .category-icon {
+        width: 68px;
+        height: 68px;
+        margin: 0 auto 20px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+        font-weight: bold;
+    }
+
+    .ca-icon {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .accountant-icon {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .gstp-icon {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .regular-icon {
+        background: #f3e8ff;
+        color: #9333ea;
+    }
+
+    .category-card h2 {
+        font-size: 22px;
+        margin-bottom: 9px;
+    }
+
+    .category-card p {
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* Landing card counts */
+    .category-card .card-stats {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .card-stat-item {
+        text-align: center;
+    }
+
+    .card-stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .card-stat-label {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-top: 2px;
+    }
+
+    /* =========================
+       DASHBOARD
+       ========================= */
+
+    .dashboard-page {
+        display: none;
+        min-height: 100vh;
+    }
+
+    .dashboard-header {
+        background: #0f172a;
+        color: white;
+        padding: 18px 35px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .header-logo {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .header-title {
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .header-subtitle {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 3px;
+    }
+
+    .back-button {
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 10px 16px;
+        border-radius: 9px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .back-button:hover {
+        background: rgba(255,255,255,0.18);
+    }
+
+    .dashboard-content {
+        max-width: 1500px;
+        margin: auto;
+        padding: 30px;
+    }
+
+    /* Dashboard title */
+
+    .dashboard-title-section {
+        margin-bottom: 25px;
+    }
+
+    .dashboard-title {
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .dashboard-description {
+        color: #64748b;
+        margin-top: 6px;
+        font-size: 14px;
+    }
+
+    /* KPI Cards */
+
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 30px;
+    }
+
+    .kpi-card {
+        background: white;
+        border-radius: 14px;
+        padding: 21px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 4px 12px rgba(15,23,42,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kpi-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #2563eb;
+    }
+
+    .kpi-card.expired::before {
+        background: #ef4444;
+    }
+
+    .kpi-card.active::before {
+        background: #22c55e;
+    }
+
+    .kpi-card.comp::before {
+        background: #8b5cf6;
+    }
+
+    .kpi-card.gstin::before {
+        background: #f59e0b;
+    }
+
+    .kpi-card.cross::before {
+        background: #06b6d4;
+    }
+
+    .kpi-card.cross-ca::before {
+        background: #2563eb;
+    }
+
+    .kpi-card.cross-accountant::before {
+        background: #16a34a;
+    }
+
+    .kpi-card.cross-gstp::before {
+        background: #d97706;
+    }
+
+    .kpi-card.cross-regular::before {
+        background: #9333ea;
+    }
+
+    .kpi-label {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+
+    .kpi-value {
+        font-size: 30px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .kpi-icon {
+        position: absolute;
+        right: 18px;
+        top: 18px;
+        font-size: 20px;
+        opacity: 0.6;
+    }
+
+    /* Filters */
+
+    .filter-section {
+        background: white;
+        padding: 20px;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+        margin-bottom: 22px;
+    }
+
+    .filter-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 14px;
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 12px;
+    }
+
+    .filter-input,
+    .filter-select {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 11px 13px;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .filter-input:focus,
+    .filter-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    /* Table */
+
+    .table-section {
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .table-title {
+        font-weight: 600;
+    }
+
+    .record-count {
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+    }
+
+    th {
+        background: #f8fafc;
+        color: #475569;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        padding: 13px 15px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 14px 15px;
+        border-top: 1px solid #eef2f7;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    tr:hover td {
+        background: #f8fafc;
+    }
+
+    .badge {
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .badge-expired {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .license-badge {
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .license-badge-ca {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .license-badge-accountant {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .license-badge-gstp {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .license-badge-regular {
+        background: #f3e8ff;
+        color: #7c3aed;
+    }
+
+    /* Empty */
+
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #64748b;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 18px;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .page-btn {
+        padding: 8px 14px;
+        border: 1px solid #d1d5db;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        color: #374151;
+    }
+
+    .page-btn:hover {
+        background: #f3f4f6;
+    }
+
+    .page-btn.active-page {
+        background: #2563eb;
+        color: white;
+        border-color: #2563eb;
+    }
+
+    .page-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 1000px) {
+        .category-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .kpi-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
+    @media (max-width: 650px) {
+        .landing-title {
+            font-size: 30px;
         }
 
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--border-primary); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
-
-        /* ===== HEADER ===== */
-        .header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            border-bottom: 1px solid var(--border-primary);
-            padding: 24px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
+        .category-grid {
+            grid-template-columns: 1fr;
         }
 
-        .header-content {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 15px;
+        .kpi-grid {
+            grid-template-columns: 1fr;
         }
 
-        .header-title { display: flex; align-items: center; gap: 12px; }
-
-        .logo {
-            width: 44px; height: 44px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 0 20px rgba(0,180,216,0.3);
+        .filter-grid {
+            grid-template-columns: 1fr;
         }
 
-        .header h1 {
-            font-size: 1.5rem; font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        .dashboard-header {
+            padding: 15px;
         }
 
-        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-        .container { max-width: 1600px; margin: 0 auto; padding: 24px; }
-
-        /* ===== BUTTONS ===== */
-        .btn {
-            padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;
-            font-size: 0.85rem; font-weight: 600;
-            display: inline-flex; align-items: center; gap: 6px;
-            transition: all 0.25s ease; text-transform: uppercase;
-            letter-spacing: 0.5px; white-space: nowrap;
-        }
-        .btn:active { transform: scale(0.97); }
-
-        .btn-primary { background: linear-gradient(135deg, var(--accent-blue), #0077b6); color: white; box-shadow: 0 2px 10px rgba(0,180,216,0.3); }
-        .btn-primary:hover { box-shadow: 0 4px 20px rgba(0,180,216,0.5); transform: translateY(-1px); }
-
-        .btn-success { background: linear-gradient(135deg, var(--accent-green), #059669); color: white; }
-        .btn-success:hover { box-shadow: 0 4px 20px rgba(16,185,129,0.4); transform: translateY(-1px); }
-
-        .btn-warning { background: linear-gradient(135deg, var(--accent-orange), #d97706); color: white; }
-        .btn-warning:hover { box-shadow: 0 4px 20px rgba(245,158,11,0.4); transform: translateY(-1px); }
-
-        .btn-danger { background: linear-gradient(135deg, var(--accent-red), #dc2626); color: white; }
-        .btn-danger:hover { box-shadow: 0 4px 20px rgba(239,68,68,0.4); transform: translateY(-1px); }
-
-        .btn-purple { background: linear-gradient(135deg, var(--accent-purple), #7c3aed); color: white; }
-        .btn-purple:hover { box-shadow: 0 4px 20px rgba(139,92,246,0.4); transform: translateY(-1px); }
-
-        .btn-ghost { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-primary); }
-        .btn-ghost:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-
-        .btn-sm { padding: 6px 14px; font-size: 0.75rem; }
-        .btn-xs { padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; }
-
-        /* ===== CARDS ===== */
-        .card {
-            background: var(--bg-secondary); border: 1px solid var(--border-primary);
-            border-radius: 16px; padding: 24px; margin-bottom: 24px;
-            box-shadow: var(--shadow); transition: border-color 0.3s;
-        }
-        .card:hover { border-color: rgba(0,180,216,0.3); }
-
-        .card-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 20px; padding-bottom: 16px;
-            border-bottom: 1px solid var(--border-primary);
-            flex-wrap: wrap; gap: 10px;
+        .dashboard-content {
+            padding: 18px;
         }
 
-        .card-title {
-            font-size: 1.15rem; font-weight: 700;
-            display: flex; align-items: center; gap: 10px;
+        .header-title {
+            font-size: 17px;
         }
-
-        .card-title .icon {
-            width: 36px; height: 36px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-        }
-
-        .icon-blue { background: rgba(0,180,216,0.15); }
-        .icon-green { background: rgba(16,185,129,0.15); }
-        .icon-purple { background: rgba(139,92,246,0.15); }
-        .icon-teal { background: rgba(20,184,166,0.15); }
-
-        /* ===== STATS ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px; margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: var(--bg-card); border: 1px solid var(--border-primary);
-            border-radius: 14px; padding: 22px; position: relative;
-            overflow: hidden; transition: all 0.3s;
-        }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
-
-        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-        .stat-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
-        .stat-card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent-green), var(--accent-teal)); }
-        .stat-card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); }
-        .stat-card:nth-child(4)::before { background: linear-gradient(90deg, var(--accent-teal), var(--accent-green)); }
-
-        .stat-icon { font-size: 2rem; margin-bottom: 10px; }
-        .stat-number { font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: 6px; }
-
-        .stat-card:nth-child(1) .stat-number { color: var(--accent-blue); }
-        .stat-card:nth-child(2) .stat-number { color: var(--accent-green); }
-        .stat-card:nth-child(3) .stat-number { color: var(--accent-purple); }
-        .stat-card:nth-child(4) .stat-number { color: var(--accent-teal); }
-
-        .stat-label {
-            color: var(--text-muted); font-size: 0.8rem;
-            text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
-        }
-
-        /* ===== SEARCH ===== */
-        .search-wrapper { display: flex; gap: 10px; margin-bottom: 16px; }
-
-        .search-input-wrap { flex: 1; position: relative; }
-
-        .search-input-wrap .search-icon {
-            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-            color: var(--text-muted); font-size: 1.1rem;
-        }
-
-        .search-input {
-            width: 100%; padding: 16px 20px 16px 48px;
-            background: var(--bg-input); border: 2px solid var(--border-primary);
-            color: var(--text-primary); border-radius: 12px;
-            font-size: 1rem; font-family: inherit; transition: all 0.3s;
-        }
-        .search-input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 20px rgba(0,180,216,0.15); }
-        .search-input::placeholder { color: var(--text-muted); }
-
-        .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-
-        .pill {
-            padding: 8px 18px; border-radius: 24px; background: var(--bg-tertiary);
-            color: var(--text-secondary); cursor: pointer; font-size: 0.82rem;
-            font-weight: 600; border: 1px solid transparent; transition: all 0.25s; user-select: none;
-        }
-        .pill:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
-
-        .pill.active {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            color: white; border-color: transparent;
-            box-shadow: 0 2px 10px rgba(0,180,216,0.3);
-        }
-
-        .search-meta { color: var(--text-muted); font-size: 0.82rem; }
-
-        .search-results { display: none; margin-top: 20px; animation: fadeSlideIn 0.3s ease; }
-        .search-results.active { display: block; }
-
-        @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== RESULT BLOCKS ===== */
-        .result-block {
-            background: var(--bg-card); border: 1px solid var(--border-primary);
-            border-radius: 14px; padding: 22px; margin-bottom: 16px;
-            animation: fadeSlideIn 0.3s ease;
-        }
-
-        .result-block-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
-        }
-
-        .result-block-title {
-            font-size: 0.9rem; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
-        }
-
-        .result-block-value {
-            font-size: 1.5rem; font-weight: 800; color: var(--accent-blue);
-            font-family: 'Consolas', 'Courier New', monospace;
-        }
-
-        .result-mini-stats {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 12px; margin-bottom: 16px;
-        }
-
-        .mini-stat {
-            background: var(--bg-secondary); border-radius: 10px; padding: 16px;
-            text-align: center; border: 1px solid var(--border-primary);
-        }
-
-        .mini-stat-num { font-size: 1.8rem; font-weight: 800; line-height: 1; }
-        .mini-stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
-
-        /* ===== DISTRIBUTION ===== */
-        .dist-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px;
-        }
-
-        .dist-panel {
-            background: var(--bg-card); border: 1px solid var(--border-primary);
-            border-radius: 14px; overflow: hidden;
-        }
-
-        .dist-panel-header {
-            padding: 18px 22px; display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid var(--border-primary); background: rgba(0,0,0,0.2);
-        }
-
-        .dist-panel-title { font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
-
-        .count-badge {
-            padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: white;
-        }
-        .count-badge.green { background: var(--accent-green); }
-        .count-badge.purple { background: var(--accent-purple); }
-        .count-badge.teal { background: var(--accent-teal); }
-
-        .dist-list { max-height: 450px; overflow-y: auto; padding: 8px; }
-
-        .dist-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px; margin: 4px 0; border-radius: 10px;
-            transition: all 0.2s; cursor: pointer; border: 1px solid transparent;
-        }
-        .dist-item:hover { background: var(--bg-hover); border-color: var(--border-primary); transform: translateX(4px); }
-
-        .dist-index { color: var(--text-muted); font-size: 0.8rem; min-width: 32px; font-weight: 600; }
-
-        .dist-key {
-            flex: 1; font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.88rem; color: var(--text-primary); word-break: break-all;
-        }
-
-        .dist-value {
-            padding: 4px 14px; border-radius: 20px; font-size: 0.8rem;
-            font-weight: 700; min-width: 80px; text-align: center; white-space: nowrap;
-        }
-        .dist-value.blue { background: rgba(0,180,216,0.15); color: var(--accent-blue); }
-        .dist-value.green { background: rgba(16,185,129,0.15); color: var(--accent-green); }
-        .dist-value.purple { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
-        .dist-value.teal { background: rgba(20,184,166,0.15); color: var(--accent-teal); }
-
-        /* ===== FORM ===== */
-        .form-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px; align-items: end;
-        }
-
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-
-        .form-label {
-            font-size: 0.78rem; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;
-        }
-
-        .form-input {
-            padding: 12px 16px; background: var(--bg-input);
-            border: 1px solid var(--border-primary); color: var(--text-primary);
-            border-radius: 10px; font-size: 0.92rem;
-            font-family: 'Consolas', monospace; transition: all 0.3s;
-        }
-        .form-input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 12px rgba(0,180,216,0.15); }
-        .form-input::placeholder { color: var(--text-muted); }
-
-        textarea.form-input { min-height: 140px; resize: vertical; font-size: 0.85rem; }
-
-        .form-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; font-style: italic; }
-
-        /* ===== TABS ===== */
-        .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border-primary); overflow-x: auto; }
-
-        .tab {
-            padding: 14px 28px; color: var(--text-muted); cursor: pointer;
-            font-size: 0.88rem; font-weight: 600;
-            border-bottom: 3px solid transparent; margin-bottom: -2px;
-            transition: all 0.3s; white-space: nowrap;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .tab:hover { color: var(--text-primary); }
-        .tab.active { color: var(--accent-blue); border-bottom-color: var(--accent-blue); }
-
-        .tab-content { display: none; padding-top: 24px; animation: fadeSlideIn 0.3s ease; }
-        .tab-content.active { display: block; }
-
-        /* ===== TABLE ===== */
-        .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-primary); }
-
-        table { width: 100%; border-collapse: collapse; }
-
-        thead { background: var(--bg-tertiary); }
-
-        th {
-            padding: 14px 18px; text-align: left; font-size: 0.78rem;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            color: var(--accent-blue); font-weight: 700;
-            border-bottom: 2px solid var(--border-primary);
-            cursor: pointer; user-select: none; transition: background 0.2s; white-space: nowrap;
-        }
-        th:hover { background: var(--bg-hover); }
-
-        td {
-            padding: 12px 18px; border-bottom: 1px solid rgba(42,53,85,0.5);
-            font-family: 'Consolas', monospace; font-size: 0.88rem;
-        }
-        tr:hover { background: var(--bg-hover); }
-
-        .clickable { color: var(--accent-blue); cursor: pointer; text-decoration: none; }
-        .clickable:hover { text-decoration: underline; }
-
-        .row-actions { display: flex; gap: 4px; }
-
-        .highlight {
-            background: var(--accent-orange); color: #000;
-            padding: 1px 4px; border-radius: 3px; font-weight: 600;
-        }
-
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.75); z-index: 1000;
-            justify-content: center; align-items: center;
-            padding: 20px; backdrop-filter: blur(4px);
-        }
-        .modal-overlay.active { display: flex; }
-
-        .modal {
-            background: var(--bg-secondary); border: 1px solid var(--border-primary);
-            border-radius: 20px; width: 100%; max-width: 900px;
-            max-height: 85vh; overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: modalIn 0.3s ease;
-        }
-
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.95) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .modal-header {
-            padding: 24px 28px; border-bottom: 1px solid var(--border-primary);
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; background: var(--bg-secondary);
-            z-index: 1; border-radius: 20px 20px 0 0;
-        }
-
-        .modal-header h2 { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
-
-        .modal-close {
-            width: 36px; height: 36px; border-radius: 10px;
-            border: 1px solid var(--border-primary); background: transparent;
-            color: var(--text-secondary); cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; transition: all 0.2s;
-        }
-        .modal-close:hover { background: var(--accent-red); color: white; border-color: var(--accent-red); }
-
-        .modal-body { padding: 28px; }
-
-        .modal-footer {
-            padding: 20px 28px; border-top: 1px solid var(--border-primary);
-            display: flex; justify-content: flex-end; gap: 10px;
-        }
-
-        /* ===== DETAIL ===== */
-        .detail-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 14px; margin-bottom: 20px;
-        }
-
-        .detail-box {
-            background: var(--bg-card); border: 1px solid var(--border-primary);
-            border-radius: 12px; padding: 18px;
-        }
-
-        .detail-box .label {
-            font-size: 0.72rem; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 6px; font-weight: 600;
-        }
-
-        .detail-box .value {
-            font-family: 'Consolas', monospace; color: var(--text-primary);
-            font-size: 1rem; word-break: break-all; font-weight: 600;
-        }
-
-        .section-heading {
-            font-size: 0.95rem; font-weight: 700; color: var(--accent-blue);
-            margin: 24px 0 12px; display: flex; align-items: center; gap: 8px;
-        }
-
-        .item-list {
-            list-style: none; background: var(--bg-card);
-            border-radius: 12px; border: 1px solid var(--border-primary); overflow: hidden;
-        }
-
-        .item-list li {
-            padding: 12px 18px; display: flex; justify-content: space-between;
-            align-items: center; border-bottom: 1px solid rgba(42,53,85,0.4);
-            transition: background 0.2s;
-        }
-        .item-list li:last-child { border-bottom: none; }
-        .item-list li:hover { background: var(--bg-hover); }
-
-        .item-list .idx { color: var(--text-muted); font-size: 0.8rem; min-width: 30px; }
-        .item-list .val { flex: 1; font-family: 'Consolas', monospace; font-size: 0.88rem; }
-
-        /* ===== PAGINATION ===== */
-        .pagination {
-            display: flex; justify-content: center; align-items: center;
-            gap: 6px; margin-top: 20px; flex-wrap: wrap;
-        }
-
-        .pagination button {
-            padding: 8px 14px; background: var(--bg-tertiary);
-            color: var(--text-secondary); border: 1px solid var(--border-primary);
-            border-radius: 8px; cursor: pointer; font-size: 0.82rem;
-            transition: all 0.2s; font-weight: 600;
-        }
-        .pagination button:hover { background: var(--bg-hover); color: var(--text-primary); }
-        .pagination button.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
-        .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
-
-        .page-info { color: var(--text-muted); font-size: 0.82rem; margin: 0 12px; }
-
-        /* ===== TOAST ===== */
-        .toast-container {
-            position: fixed; top: 90px; right: 24px; z-index: 2000;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-
-        .toast {
-            padding: 14px 22px; border-radius: 12px;
-            display: flex; align-items: center; gap: 10px;
-            min-width: 320px; box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-            animation: toastIn 0.35s ease; font-size: 0.9rem; font-weight: 500;
-        }
-        .toast.success { background: #065f46; border: 1px solid var(--accent-green); color: #a7f3d0; }
-        .toast.error { background: #7f1d1d; border: 1px solid var(--accent-red); color: #fca5a5; }
-        .toast.info { background: #1e3a5f; border: 1px solid var(--accent-blue); color: #93c5fd; }
-
-        @keyframes toastIn { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100px); } }
-
-        /* ===== EMPTY STATE ===== */
-        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); }
-        .empty-state .icon { font-size: 3.5rem; margin-bottom: 16px; display: block; }
-        .empty-state .title { font-size: 1.15rem; color: var(--text-secondary); margin-bottom: 8px; }
-        .empty-state .desc { font-size: 0.88rem; }
-
-        .gstin-format { color: var(--accent-teal); font-weight: 600; }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .container { padding: 12px; }
-            .card { padding: 16px; }
-            .form-grid { grid-template-columns: 1fr; }
-            .dist-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .header h1 { font-size: 1.1rem; }
-            .search-wrapper { flex-direction: column; }
-            .header-content { justify-content: center; text-align: center; }
-        }
-    </style>
+    }
+</style>
 </head>
+
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-content">
-            <div class="header-title">
-                <div class="logo">📊</div>
-                <div>
-                    <h1>Subscription Data Intelligence</h1>
-                    <div style="font-size:0.78rem;color:var(--text-muted);letter-spacing:1px;">SEARCH · ANALYZE · MANAGE</div>
+<!-- ============================================================
+     LANDING PAGE
+     ============================================================ -->
+
+<div id="landingPage" class="landing-page">
+
+    <div class="landing-container">
+
+        <div class="logo">LD</div>
+
+        <h1 class="landing-title">
+            License Dashboard
+        </h1>
+
+        <p class="landing-subtitle">
+            Select a license category to view its subscription dashboard
+        </p>
+
+        <div class="category-grid">
+
+            <!-- CA -->
+            <div class="category-card" onclick="openDashboard('CA')">
+                <div class="category-icon ca-icon">
+                    CA
+                </div>
+
+                <h2>CA</h2>
+
+                <p>
+                    View all subscriptions and COMPGUIDs
+                    tagged with CA licenses.
+                </p>
+
+                <div class="card-stats">
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-ca-total">0</div>
+                        <div class="card-stat-label">Total</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-ca-active" style="color:#22c55e">0</div>
+                        <div class="card-stat-label">Active</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-ca-expired" style="color:#ef4444">0</div>
+                        <div class="card-stat-label">Expired</div>
+                    </div>
                 </div>
             </div>
-            <div class="header-actions">
-                <button class="btn btn-success btn-sm" onclick="exportCSV()">📥 CSV</button>
-                <button class="btn btn-purple btn-sm" onclick="exportJSON()">📥 JSON</button>
-                <button class="btn btn-warning btn-sm" onclick="loadSampleData()">📦 Demo</button>
-                <button class="btn btn-danger btn-sm" onclick="clearAllData()">🗑️ Clear</button>
+
+            <!-- Accountant -->
+            <div class="category-card" onclick="openDashboard('Accountant')">
+                <div class="category-icon accountant-icon">
+                    AC
+                </div>
+
+                <h2>Accountant</h2>
+
+                <p>
+                    View all subscriptions and COMPGUIDs
+                    tagged with Accountant licenses.
+                </p>
+
+                <div class="card-stats">
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-accountant-total">0</div>
+                        <div class="card-stat-label">Total</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-accountant-active" style="color:#22c55e">0</div>
+                        <div class="card-stat-label">Active</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-accountant-expired" style="color:#ef4444">0</div>
+                        <div class="card-stat-label">Expired</div>
+                    </div>
+                </div>
             </div>
+
+            <!-- GSTP -->
+            <div class="category-card" onclick="openDashboard('GSTP')">
+                <div class="category-icon gstp-icon">
+                    GP
+                </div>
+
+                <h2>GSTP</h2>
+
+                <p>
+                    View all subscriptions and COMPGUIDs
+                    tagged with GSTP licenses.
+                </p>
+
+                <div class="card-stats">
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-gstp-total">0</div>
+                        <div class="card-stat-label">Total</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-gstp-active" style="color:#22c55e">0</div>
+                        <div class="card-stat-label">Active</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-gstp-expired" style="color:#ef4444">0</div>
+                        <div class="card-stat-label">Expired</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regular -->
+            <div class="category-card" onclick="openDashboard('Regular')">
+                <div class="category-icon regular-icon">
+                    RG
+                </div>
+
+                <h2>Regular</h2>
+
+                <p>
+                    View all subscriptions and COMPGUIDs
+                    tagged with Regular licenses.
+                </p>
+
+                <div class="card-stats">
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-regular-total">0</div>
+                        <div class="card-stat-label">Total</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-regular-active" style="color:#22c55e">0</div>
+                        <div class="card-stat-label">Active</div>
+                    </div>
+                    <div class="card-stat-item">
+                        <div class="card-stat-value" id="landing-regular-expired" style="color:#ef4444">0</div>
+                        <div class="card-stat-label">Expired</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     DASHBOARD PAGE
+     ============================================================ -->
+
+<div id="dashboardPage" class="dashboard-page">
+
+    <header class="dashboard-header">
+
+        <div class="header-left">
+
+            <div class="header-logo">
+                LD
+            </div>
+
+            <div>
+                <div class="header-title">
+                    License Dashboard
+                </div>
+
+                <div class="header-subtitle" id="headerCategory">
+                    CA Dashboard
+                </div>
+            </div>
+
+        </div>
+
+        <button class="back-button" onclick="goBack()">
+            ← Back to Categories
+        </button>
+
     </header>
 
-    <div class="container">
 
-        <!-- DASHBOARD -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">📋</div>
-                <div class="stat-number" id="statRecords">0</div>
-                <div class="stat-label">Total Records</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🆔</div>
-                <div class="stat-number" id="statSubIds">0</div>
-                <div class="stat-label">Subscription IDs</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🔑</div>
-                <div class="stat-number" id="statCompguids">0</div>
-                <div class="stat-label">Unique COMPGUIDs</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">🏢</div>
-                <div class="stat-number" id="statGstins">0</div>
-                <div class="stat-label">Unique GSTINs</div>
-            </div>
-        </div>
+    <main class="dashboard-content">
 
-        <!-- GLOBAL SEARCH -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title"><span class="icon icon-blue">🔍</span> Global Search</div>
-                <div class="search-meta" id="searchMeta"></div>
-            </div>
+        <section class="dashboard-title-section">
 
-            <div class="search-wrapper">
-                <div class="search-input-wrap">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="globalSearch"
-                           placeholder="Search by Subscription ID, COMPGUID, or GSTIN..."
-                           oninput="debounceSearch()" onkeydown="if(event.key==='Enter') performSearch()">
+            <h1 class="dashboard-title" id="dashboardTitle">
+                CA Dashboard
+            </h1>
+
+            <p class="dashboard-description">
+                Subscription, COMPGUID and GSTIN overview for the selected license category.
+            </p>
+
+        </section>
+
+
+        <!-- ====================================================
+             KPI CARDS
+             ==================================================== -->
+
+        <section class="kpi-grid" id="kpiGrid">
+
+            <div class="kpi-card">
+                <div class="kpi-icon">▣</div>
+                <div class="kpi-label">
+                    Total Subscription IDs
                 </div>
-                <button class="btn btn-primary" onclick="performSearch()">Search</button>
-                <button class="btn btn-ghost" onclick="clearSearch()">✕ Clear</button>
-            </div>
-
-            <div class="filter-pills">
-                <span class="pill active" data-filter="all" onclick="setFilter('all',this)">🌐 All Fields</span>
-                <span class="pill" data-filter="subscriptionId" onclick="setFilter('subscriptionId',this)">🆔 Subscription ID</span>
-                <span class="pill" data-filter="compguid" onclick="setFilter('compguid',this)">🔑 COMPGUID</span>
-                <span class="pill" data-filter="gstin" onclick="setFilter('gstin',this)">🏢 GSTIN</span>
-            </div>
-
-            <div class="search-results" id="searchResults"></div>
-        </div>
-
-        <!-- DISTRIBUTION ANALYSIS -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title"><span class="icon icon-purple">📈</span> Distribution Analysis</div>
-                <button class="btn btn-ghost btn-sm" onclick="refreshDistribution()">🔄 Refresh</button>
-            </div>
-
-            <div class="dist-grid">
-                <!-- COMPGUID → Sub IDs -->
-                <div class="dist-panel">
-                    <div class="dist-panel-header">
-                        <div class="dist-panel-title">🔑 COMPGUID → Subscription IDs</div>
-                        <span class="count-badge purple" id="distCompguidCount">0</span>
-                    </div>
-                    <div class="dist-list" id="distCompguid">
-                        <div class="empty-state"><span class="icon">📭</span><div class="desc">No data available</div></div>
-                    </div>
-                </div>
-
-                <!-- Sub ID → COMPGUIDs -->
-                <div class="dist-panel">
-                    <div class="dist-panel-header">
-                        <div class="dist-panel-title">🆔 Subscription ID → COMPGUIDs</div>
-                        <span class="count-badge green" id="distSubIdCount">0</span>
-                    </div>
-                    <div class="dist-list" id="distSubId">
-                        <div class="empty-state"><span class="icon">📭</span><div class="desc">No data available</div></div>
-                    </div>
-                </div>
-
-                <!-- GSTIN → Sub IDs -->
-                <div class="dist-panel">
-                    <div class="dist-panel-header">
-                        <div class="dist-panel-title">🏢 GSTIN → Subscription IDs</div>
-                        <span class="count-badge teal" id="distGstinCount">0</span>
-                    </div>
-                    <div class="dist-list" id="distGstin">
-                        <div class="empty-state"><span class="icon">📭</span><div class="desc">No data available</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- DATA MANAGEMENT -->
-        <div class="card">
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('addRecord',this)">➕ Add Record</div>
-                <div class="tab" onclick="switchTab('bulkImport',this)">📋 Bulk Import</div>
-                <div class="tab" onclick="switchTab('allRecords',this)">📄 All Records</div>
-            </div>
-
-            <!-- ADD RECORD -->
-            <div class="tab-content active" id="tab-addRecord">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Subscription ID / Serial Number</label>
-                        <input type="text" class="form-input" id="addSubId" placeholder="e.g., SUB-001234">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">COMPGUID</label>
-                        <input type="text" class="form-input" id="addCompguid" placeholder="e.g., GUID-ABCDEF">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">GSTIN</label>
-                        <input type="text" class="form-input" id="addGstin" placeholder="e.g., 27AAPFU0939F1ZV">
-                    </div>
-                    <div class="form-group" style="justify-content:flex-end;">
-                        <button class="btn btn-primary" onclick="addRecord()">➕ Add Record</button>
-                    </div>
+                <div class="kpi-value" id="totalSubscriptions">
+                    0
                 </div>
             </div>
 
-            <!-- BULK IMPORT -->
-            <div class="tab-content" id="tab-bulkImport">
-                <div class="form-group">
-                    <label class="form-label">Paste Bulk Data (CSV Format)</label>
-                    <textarea class="form-input" id="bulkData"
-                              placeholder="SubscriptionID, COMPGUID, GSTIN&#10;SUB-001, GUID-AAA, 27AAPFU0939F1ZV&#10;SUB-002, GUID-BBB, 29GGGGG1314R9Z6"></textarea>
+
+            <div class="kpi-card expired">
+                <div class="kpi-icon">✕</div>
+                <div class="kpi-label">
+                    Expired Subscriptions
+                    <br>
+                    <small>BLS Expiry ≤ Today</small>
                 </div>
-                <div class="form-hint">
-                    Format: SubscriptionID, COMPGUID, GSTIN — one record per line. First line can be a header. Supports comma, tab, or pipe (|) delimiters.
-                </div>
-                <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-                    <button class="btn btn-success" onclick="bulkImport()">📥 Import Data</button>
-                    <button class="btn btn-warning" onclick="loadSampleData()">📦 Load Sample Data</button>
-                    <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+
+                <div class="kpi-value" id="expiredSubscriptions">
+                    0
                 </div>
             </div>
 
-            <!-- ALL RECORDS -->
-            <div class="tab-content" id="tab-allRecords">
-                <div class="table-wrap">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th onclick="sortTable('index')"># ⇅</th>
-                                <th onclick="sortTable('subscriptionId')">Subscription ID ⇅</th>
-                                <th onclick="sortTable('compguid')">COMPGUID ⇅</th>
-                                <th onclick="sortTable('gstin')">GSTIN ⇅</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <tr><td colspan="5"><div class="empty-state"><span class="icon">📭</span><div class="title">No Records</div><div class="desc">Add data to get started</div></div></td></tr>
-                        </tbody>
-                    </table>
+
+            <div class="kpi-card active">
+                <div class="kpi-icon">✓</div>
+                <div class="kpi-label">
+                    Active Subscriptions
+                    <br>
+                    <small>BLS Expiry ≥ Today</small>
                 </div>
-                <div class="pagination" id="pagination"></div>
+
+                <div class="kpi-value" id="activeSubscriptions">
+                    0
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- EDIT MODAL -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>✏️ Edit Record</h2>
-                <button class="modal-close" onclick="closeEditModal()">✕</button>
+
+            <div class="kpi-card comp">
+                <div class="kpi-icon">◈</div>
+                <div class="kpi-label">
+                    Total COMPGUID
+                </div>
+
+                <div class="kpi-value" id="totalCompguid">
+                    0
+                </div>
             </div>
-            <div class="modal-body">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Subscription ID / Serial Number</label>
-                        <input type="text" class="form-input" id="editSubId">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">COMPGUID</label>
-                        <input type="text" class="form-input" id="editCompguid">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">GSTIN</label>
-                        <input type="text" class="form-input" id="editGstin">
-                    </div>
+
+
+            <div class="kpi-card gstin">
+                <div class="kpi-icon">G</div>
+                <div class="kpi-label">
+                    Total GSTIN
                 </div>
-                <input type="hidden" id="editIndex">
+
+                <div class="kpi-value" id="totalGstin">
+                    0
+                </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
-                <button class="btn btn-success" onclick="saveEdit()">💾 Save Changes</button>
+
+
+            <!-- Cross-category cards are created dynamically -->
+
+            <div id="crossCategoryCards" style="display: contents;"></div>
+
+        </section>
+
+
+        <!-- ====================================================
+             FILTERS
+             ==================================================== -->
+
+        <section class="filter-section">
+
+            <div class="filter-title">
+                Search & Filter
             </div>
-        </div>
-    </div>
 
-    <!-- DETAIL MODAL -->
-    <div class="modal-overlay" id="detailModal">
-        <div class="modal" style="max-width:950px;">
-            <div class="modal-header">
-                <h2>🔎 Detail View</h2>
-                <button class="modal-close" onclick="closeDetailModal()">✕</button>
+            <div class="filter-grid">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="filter-input"
+                    placeholder="Search Subscription ID, COMPGUID or GSTIN..."
+                    oninput="applyFilters()"
+                >
+
+                <select
+                    id="statusFilter"
+                    class="filter-select"
+                    onchange="applyFilters()"
+                >
+                    <option value="All">All Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Expired">Expired</option>
+                </select>
+
+                <select
+                    id="licenseFilter"
+                    class="filter-select"
+                    onchange="applyFilters()"
+                >
+                    <option value="All">All License Categories</option>
+                    <option value="CA">CA</option>
+                    <option value="Accountant">Accountant</option>
+                    <option value="GSTP">GSTP</option>
+                    <option value="Regular">Regular</option>
+                </select>
+
             </div>
-            <div class="modal-body" id="detailBody"></div>
-            <div class="modal-footer">
-                <button class="btn btn-ghost" onclick="closeDetailModal()">Close</button>
+
+        </section>
+
+
+        <!-- ====================================================
+             DATA TABLE
+             ==================================================== -->
+
+        <section class="table-section">
+
+            <div class="table-header">
+
+                <div class="table-title">
+                    Subscription Details
+                </div>
+
+                <div class="record-count" id="recordCount">
+                    0 records
+                </div>
+
             </div>
-        </div>
-    </div>
-
-    <!-- TOAST -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <script>
-        let records = [];
-        let activeFilter = 'all';
-        let sortState = { field: null, dir: 'asc' };
-        let page = 1;
-        const perPage = 25;
-        let searchTimer = null;
-
-        // ===== INIT =====
-        (function init() {
-            try {
-                const saved = localStorage.getItem('subDataV3');
-                if (saved) records = JSON.parse(saved);
-            } catch(e) { records = []; }
-            refreshAll();
-        })();
-
-        function save() { localStorage.setItem('subDataV3', JSON.stringify(records)); }
-
-        function refreshAll() { updateStats(); refreshDistribution(); renderTable(); save(); }
-
-        // ===== TOAST =====
-        function toast(msg, type='info') {
-            const c = document.getElementById('toastContainer');
-            const t = document.createElement('div');
-            t.className = `toast ${type}`;
-            const icons = { success:'✅', error:'❌', info:'ℹ️' };
-            t.innerHTML = `<span>${icons[type]||'ℹ️'}</span><span>${msg}</span>`;
-            c.appendChild(t);
-            setTimeout(() => { t.style.animation='toastOut 0.3s ease forwards'; setTimeout(()=>t.remove(),300); }, 3500);
-        }
-
-        // ===== STATS =====
-        function updateStats() {
-            document.getElementById('statRecords').textContent = records.length;
-            document.getElementById('statSubIds').textContent = new Set(records.map(r=>r.subscriptionId)).size;
-            document.getElementById('statCompguids').textContent = new Set(records.map(r=>r.compguid)).size;
-            document.getElementById('statGstins').textContent = new Set(records.filter(r=>r.gstin).map(r=>r.gstin)).size;
-        }
-
-        // ===== TABS =====
-        function switchTab(id, el) {
-            document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById(`tab-${id}`).classList.add('active');
-            if (id==='allRecords') renderTable();
-        }
-
-        // ===== ADD RECORD =====
-        function addRecord() {
-            const subId = document.getElementById('addSubId').value.trim();
-            const compguid = document.getElementById('addCompguid').value.trim();
-            const gstin = document.getElementById('addGstin').value.trim();
-
-            if (!subId || !compguid) { toast('Subscription ID and COMPGUID are required!','error'); return; }
-
-            records.push({ subscriptionId: subId, compguid, gstin });
-            ['addSubId','addCompguid','addGstin'].forEach(id=>document.getElementById(id).value='');
-            toast('Record added successfully!','success');
-            refreshAll();
-        }
-
-        // ===== BULK IMPORT =====
-        function bulkImport() {
-            const raw = document.getElementById('bulkData').value.trim();
-            if (!raw) { toast('Please paste data to import!','error'); return; }
-
-            const lines = raw.split('\n').filter(l=>l.trim());
-            let imported=0, skipped=0, start=0;
-
-            const first = lines[0].toLowerCase();
-            if (first.includes('subscription') || first.includes('compguid') || first.includes('gstin') || first.includes('serial')) start=1;
-
-            for (let i=start; i<lines.length; i++) {
-                const parts = lines[i].split(/[,\t|]/).map(p=>p.trim()).filter(p=>p);
-                if (parts.length >= 2) {
-                    records.push({
-                        subscriptionId: parts[0],
-                        compguid: parts[1],
-                        gstin: parts[2] || ''
-                    });
-                    imported++;
-                } else { skipped++; }
-            }
-
-            document.getElementById('bulkData').value='';
-            toast(`Imported ${imported} records${skipped?`, skipped ${skipped} invalid lines`:''}`, 'success');
-            refreshAll();
-        }
-
-        // ===== SAMPLE DATA =====
-        function loadSampleData() {
-            const samples = [
-                { subscriptionId:'SUB-1001', compguid:'COMP-X1A2B3', gstin:'27AAPFU0939F1ZV' },
-                { subscriptionId:'SUB-1001', compguid:'COMP-Y4D5E6', gstin:'27AAPFU0939F1ZV' },
-                { subscriptionId:'SUB-1001', compguid:'COMP-Z7G8H9', gstin:'29GGGGG1314R9Z6' },
-                { subscriptionId:'SUB-1002', compguid:'COMP-X1A2B3', gstin:'07AAACP1234C1Z5' },
-                { subscriptionId:'SUB-1002', compguid:'COMP-M1N2O3', gstin:'07AAACP1234C1Z5' },
-                { subscriptionId:'SUB-1003', compguid:'COMP-Y4D5E6', gstin:'27AAPFU0939F1ZV' },
-                { subscriptionId:'SUB-1003', compguid:'COMP-P4Q5R6', gstin:'33AABCU9603R1ZM' },
-                { subscriptionId:'SUB-1003', compguid:'COMP-S7T8U9', gstin:'33AABCU9603R1ZM' },
-                { subscriptionId:'SUB-1004', compguid:'COMP-X1A2B3', gstin:'29GGGGG1314R9Z6' },
-                { subscriptionId:'SUB-1004', compguid:'COMP-V1W2X3', gstin:'29GGGGG1314R9Z6' },
-                { subscriptionId:'SUB-1005', compguid:'COMP-Y4D5E6', gstin:'07AAACP1234C1Z5' },
-                { subscriptionId:'SUB-1005', compguid:'COMP-Z7G8H9', gstin:'36AADCS0472N1Z4' },
-                { subscriptionId:'SUB-1005', compguid:'COMP-A1B2C3', gstin:'36AADCS0472N1Z4' },
-                { subscriptionId:'SUB-1006', compguid:'COMP-X1A2B3', gstin:'27AAPFU0939F1ZV' },
-                { subscriptionId:'SUB-1006', compguid:'COMP-D4E5F6', gstin:'24AABCT1332E1ZH' },
-                { subscriptionId:'SUB-1007', compguid:'COMP-M1N2O3', gstin:'24AABCT1332E1ZH' },
-                { subscriptionId:'SUB-1007', compguid:'COMP-G7H8I9', gstin:'19AABCI1234F1Z4' },
-                { subscriptionId:'SUB-1008', compguid:'COMP-P4Q5R6', gstin:'19AABCI1234F1Z4' },
-                { subscriptionId:'SUB-1008', compguid:'COMP-X1A2B3', gstin:'27AAPFU0939F1ZV' },
-                { subscriptionId:'SUB-1008', compguid:'COMP-J1K2L3', gstin:'33AABCU9603R1ZM' },
-                { subscriptionId:'SUB-1009', compguid:'COMP-Y4D5E6', gstin:'36AADCS0472N1Z4' },
-                { subscriptionId:'SUB-1009', compguid:'COMP-Z7G8H9', gstin:'07AAACP1234C1Z5' },
-                { subscriptionId:'SUB-1010', compguid:'COMP-X1A2B3', gstin:'29GGGGG1314R9Z6' },
-                { subscriptionId:'SUB-1010', compguid:'COMP-N4O5P6', gstin:'24AABCT1332E1ZH' },
-                { subscriptionId:'SUB-1010', compguid:'COMP-A1B2C3', gstin:'19AABCI1234F1Z4' },
-            ];
-            records = records.concat(samples);
-            toast(`Loaded ${samples.length} sample records!`, 'success');
-            refreshAll();
-        }
-
-        function clearAllData() {
-            if (!confirm('Delete ALL records? This cannot be undone.')) return;
-            records = [];
-            toast('All data cleared.','info');
-            refreshAll(); clearSearch();
-        }
-
-        // ===== DISTRIBUTION =====
-        function refreshDistribution() {
-            buildDist('compguid','subscriptionId','distCompguid','distCompguidCount','purple','Sub ID');
-            buildDist('subscriptionId','compguid','distSubId','distSubIdCount','green','COMPGUID');
-            buildGstinDist();
-        }
-
-        function buildDist(keyField, valField, containerId, countId, color, label) {
-            const map = {};
-            records.forEach(r => {
-                if (!r[keyField]) return;
-                if (!map[r[keyField]]) map[r[keyField]] = new Set();
-                map[r[keyField]].add(r[valField]);
-            });
-            const entries = Object.entries(map).sort((a,b)=>b[1].size-a[1].size);
-            document.getElementById(countId).textContent = entries.length;
-            const el = document.getElementById(containerId);
-
-            if (!entries.length) {
-                el.innerHTML = '<div class="empty-state"><span class="icon">📭</span><div class="desc">No data available</div></div>';
-                return;
-            }
-            el.innerHTML = entries.map((e,i)=>`
-                <div class="dist-item" onclick="showDistDetail('${keyField}','${escAttr(e[0])}')">
-                    <span class="dist-index">${i+1}.</span>
-                    <span class="dist-key">${esc(e[0])}</span>
-                    <span class="dist-value ${color}">${e[1].size} ${label}${e[1].size>1?'s':''}</span>
-                </div>
-            `).join('');
-        }
-
-        function buildGstinDist() {
-            const map = {};
-            records.forEach(r => {
-                if (!r.gstin) return;
-                if (!map[r.gstin]) map[r.gstin] = new Set();
-                map[r.gstin].add(r.subscriptionId);
-            });
-            const entries = Object.entries(map).sort((a,b)=>b[1].size-a[1].size);
-            document.getElementById('distGstinCount').textContent = entries.length;
-            const el = document.getElementById('distGstin');
-
-            if (!entries.length) {
-                el.innerHTML = '<div class="empty-state"><span class="icon">📭</span><div class="desc">No GSTIN data</div></div>';
-                return;
-            }
-            el.innerHTML = entries.map((e,i)=>`
-                <div class="dist-item" onclick="showDistDetail('gstin','${escAttr(e[0])}')">
-                    <span class="dist-index">${i+1}.</span>
-                    <span class="dist-key gstin-format">${esc(e[0])}</span>
-                    <span class="dist-value teal">${e[1].size} Sub ID${e[1].size>1?'s':''}</span>
-                </div>
-            `).join('');
-        }
-
-        // ===== DETAIL MODAL =====
-        function showDistDetail(fieldType, fieldValue) {
-            const related = records.filter(r => r[fieldType] === fieldValue);
-            const uSubs = [...new Set(related.map(r=>r.subscriptionId))];
-            const uComps = [...new Set(related.map(r=>r.compguid))];
-            const uGstins = [...new Set(related.filter(r=>r.gstin).map(r=>r.gstin))];
-
-            const labels = { subscriptionId:'Subscription ID', compguid:'COMPGUID', gstin:'GSTIN' };
-
-            let html = `
-                <div class="detail-grid">
-                    <div class="detail-box"><div class="label">${labels[fieldType]}</div><div class="value">${esc(fieldValue)}</div></div>
-                    <div class="detail-box"><div class="label">Total Records</div><div class="value" style="color:var(--accent-blue)">${related.length}</div></div>
-                    <div class="detail-box"><div class="label">Subscription IDs</div><div class="value" style="color:var(--accent-green)">${uSubs.length}</div></div>
-                    <div class="detail-box"><div class="label">COMPGUIDs</div><div class="value" style="color:var(--accent-purple)">${uComps.length}</div></div>
-                    <div class="detail-box"><div class="label">GSTINs</div><div class="value" style="color:var(--accent-teal)">${uGstins.length}</div></div>
-                </div>
-            `;
-
-            if (fieldType !== 'subscriptionId') {
-                html += `<div class="section-heading">🆔 Associated Subscription IDs (${uSubs.length})</div>
-                <ul class="item-list">${uSubs.map((v,i)=>`<li><span class="idx">${i+1}.</span><span class="val clickable" onclick="closeDetailModal();searchFor('${escAttr(v)}','subscriptionId')">${esc(v)}</span></li>`).join('')}</ul>`;
-            }
-
-            if (fieldType !== 'compguid') {
-                html += `<div class="section-heading">🔑 Associated COMPGUIDs (${uComps.length})</div>
-                <ul class="item-list">${uComps.map((v,i)=>`<li><span class="idx">${i+1}.</span><span class="val clickable" onclick="closeDetailModal();searchFor('${escAttr(v)}','compguid')">${esc(v)}</span></li>`).join('')}</ul>`;
-            }
-
-            if (fieldType !== 'gstin' && uGstins.length) {
-                html += `<div class="section-heading">🏢 Associated GSTINs (${uGstins.length})</div>
-                <ul class="item-list">${uGstins.map((v,i)=>`<li><span class="idx">${i+1}.</span><span class="val clickable gstin-format" onclick="closeDetailModal();searchFor('${escAttr(v)}','gstin')">${esc(v)}</span></li>`).join('')}</ul>`;
-            }
-
-            html += `<div class="section-heading">📋 All Records (${related.length})</div>
-            <div class="table-wrap"><table><thead><tr><th>#</th><th>Subscription ID</th><th>COMPGUID</th><th>GSTIN</th></tr></thead><tbody>
-            ${related.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.subscriptionId)}</td><td>${esc(r.compguid)}</td><td class="gstin-format">${esc(r.gstin||'—')}</td></tr>`).join('')}
-            </tbody></table></div>`;
-
-            document.getElementById('detailBody').innerHTML = html;
-            document.getElementById('detailModal').classList.add('active');
-        }
-
-        function closeDetailModal() { document.getElementById('detailModal').classList.remove('active'); }
-
-        // ===== SEARCH =====
-        function setFilter(f, el) {
-            activeFilter = f;
-            document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-            el.classList.add('active');
-            const v = document.getElementById('globalSearch').value.trim();
-            if (v) performSearch();
-        }
-
-        function debounceSearch() {
-            clearTimeout(searchTimer);
-            searchTimer = setTimeout(()=>{
-                const v = document.getElementById('globalSearch').value.trim();
-                if (v.length >= 2) performSearch();
-                else if (!v.length) clearSearch();
-            }, 300);
-        }
-
-        function searchFor(value, filter) {
-            document.getElementById('globalSearch').value = value;
-            const pill = document.querySelector(`[data-filter="${filter}"]`);
-            if (pill) setFilter(filter, pill);
-            else performSearch();
-            window.scrollTo({top:0,behavior:'smooth'});
-        }
-
-        function performSearch() {
-            const q = document.getElementById('globalSearch').value.trim().toLowerCase();
-            if (!q) { clearSearch(); return; }
-
-            const resDiv = document.getElementById('searchResults');
-            resDiv.classList.add('active');
-
-            const filtered = records.filter(r => {
-                switch(activeFilter) {
-                    case 'subscriptionId': return r.subscriptionId.toLowerCase().includes(q);
-                    case 'compguid': return r.compguid.toLowerCase().includes(q);
-                    case 'gstin': return (r.gstin||'').toLowerCase().includes(q);
-                    default: return r.subscriptionId.toLowerCase().includes(q) || r.compguid.toLowerCase().includes(q) || (r.gstin||'').toLowerCase().includes(q);
-                }
-            });
-
-            if (!filtered.length) {
-                resDiv.innerHTML = `<div class="result-block"><div class="empty-state"><span class="icon">🔍</span><div class="title">No results found</div><div class="desc">No matches for "<strong>${esc(q)}</strong>"</div></div></div>`;
-                document.getElementById('searchMeta').textContent = '0 results';
-                return;
-            }
-
-            const mSubIds = [...new Set(filtered.map(r=>r.subscriptionId))];
-            const mCompguids = [...new Set(filtered.map(r=>r.compguid))];
-            const mGstins = [...new Set(filtered.filter(r=>r.gstin).map(r=>r.gstin))];
-
-            const compToSub = {};
-            filtered.forEach(r=>{ if(!compToSub[r.compguid]) compToSub[r.compguid]=new Set(); compToSub[r.compguid].add(r.subscriptionId); });
-
-            const subToComp = {};
-            filtered.forEach(r=>{ if(!subToComp[r.subscriptionId]) subToComp[r.subscriptionId]=new Set(); subToComp[r.subscriptionId].add(r.compguid); });
-
-            const gstinToSub = {};
-            filtered.forEach(r=>{ if(!r.gstin) return; if(!gstinToSub[r.gstin]) gstinToSub[r.gstin]=new Set(); gstinToSub[r.gstin].add(r.subscriptionId); });
-
-            document.getElementById('searchMeta').textContent = `${filtered.length} results found`;
-
-            let html = `
-                <!-- SUMMARY -->
-                <div class="result-block">
-                    <div class="result-block-header">
-                        <div><div class="result-block-title">Search Results</div><div class="result-block-value">"${esc(q)}" — ${filtered.length} records</div></div>
-                    </div>
-                    <div class="result-mini-stats">
-                        <div class="mini-stat"><div class="mini-stat-num" style="color:var(--accent-blue)">${mSubIds.length}</div><div class="mini-stat-label">Subscription IDs</div></div>
-                        <div class="mini-stat"><div class="mini-stat-num" style="color:var(--accent-purple)">${mCompguids.length}</div><div class="mini-stat-label">COMPGUIDs</div></div>
-                        <div class="mini-stat"><div class="mini-stat-num" style="color:var(--accent-teal)">${mGstins.length}</div><div class="mini-stat-label">GSTINs</div></div>
-                    </div>
-                </div>
-
-                <!-- COMPGUID DIST -->
-                <div class="result-block">
-                    <div class="result-block-header">
-                        <div><div class="result-block-title">COMPGUID Distribution</div><div class="result-block-value">Count of COMPGUID: ${Object.keys(compToSub).length}</div></div>
-                    </div>
-                    <ul class="item-list">
-                        ${Object.entries(compToSub).sort((a,b)=>b[1].size-a[1].size).map((e,i)=>`
-                            <li>
-                                <span class="idx">${i+1}.</span>
-                                <span class="val clickable" onclick="searchFor('${escAttr(e[0])}','compguid')">${hi(e[0],q)}</span>
-                                <span class="dist-value purple">${e[1].size} Sub ID${e[1].size>1?'s':''}</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                </div>
-
-                <!-- SUBSCRIPTION ID DIST -->
-                <div class="result-block">
-                    <div class="result-block-header">
-                        <div><div class="result-block-title">Subscription ID Distribution</div><div class="result-block-value">Count of Subscription ID: ${Object.keys(subToComp).length}</div></div>
-                    </div>
-                    <ul class="item-list">
-                        ${Object.entries(subToComp).sort((a,b)=>b[1].size-a[1].size).map((e,i)=>`
-                            <li>
-                                <span class="idx">${i+1}.</span>
-                                <span class="val clickable" onclick="searchFor('${escAttr(e[0])}','subscriptionId')">${hi(e[0],q)}</span>
-                                <span class="dist-value green">${e[1].size} COMPGUID${e[1].size>1?'s':''}</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                </div>
-
-                <!-- GSTIN DIST -->
-                <div class="result-block">
-                    <div class="result-block-header">
-                        <div><div class="result-block-title">GSTIN Distribution</div><div class="result-block-value">Count of GSTIN: ${Object.keys(gstinToSub).length}</div></div>
-                    </div>
-                    ${Object.keys(gstinToSub).length ? `
-                    <ul class="item-list">
-                        ${Object.entries(gstinToSub).sort((a,b)=>b[1].size-a[1].size).map((e,i)=>`
-                            <li>
-                                <span class="idx">${i+1}.</span>
-                                <span class="val clickable gstin-format" onclick="searchFor('${escAttr(e[0])}','gstin')">${hi(e[0],q)}</span>
-                                <span class="dist-value teal">${e[1].size} Sub ID${e[1].size>1?'s':''}</span>
-                            </li>
-                        `).join('')}
-                    </ul>` : '<div class="empty-state"><div class="desc">No GSTIN data in results</div></div>'}
-                </div>
-
-                <!-- RECORDS TABLE -->
-                <div class="result-block">
-                    <div class="result-block-header">
-                        <div><div class="result-block-title">Matched Records</div><div class="result-block-value">${filtered.length} records</div></div>
-                    </div>
-                    <div class="table-wrap">
-                        <table>
-                            <thead><tr><th>#</th><th>Subscription ID</th><th>COMPGUID</th><th>GSTIN</th></tr></thead>
-                            <tbody>
-                                ${filtered.slice(0,200).map((r,i)=>`
-                                    <tr>
-                                        <td>${i+1}</td>
-                                        <td>${hi(r.subscriptionId,q)}</td>
-                                        <td>${hi(r.compguid,q)}</td>
-                                        <td class="gstin-format">${hi(r.gstin||'—',q)}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                    ${filtered.length>200?`<div style="text-align:center;padding:12px;color:var(--text-muted);font-size:0.85rem;">Showing first 200 of ${filtered.length} records</div>`:''}
-                </div>
-            `;
-
-            resDiv.innerHTML = html;
-        }
-
-        function clearSearch() {
-            document.getElementById('globalSearch').value='';
-            document.getElementById('searchResults').classList.remove('active');
-            document.getElementById('searchResults').innerHTML='';
-            document.getElementById('searchMeta').textContent='';
-        }
-
-        // ===== TABLE =====
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            if (!records.length) {
-                tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><span class="icon">📭</span><div class="title">No Records</div><div class="desc">Add data to get started</div></div></td></tr>';
-                document.getElementById('pagination').innerHTML='';
-                return;
-            }
-
-            let sorted = records.map((r,i)=>({...r,_i:i}));
-            if (sortState.field) {
-                sorted.sort((a,b)=>{
-                    let va,vb;
-                    if (sortState.field==='index') { va=a._i; vb=b._i; }
-                    else { va=(a[sortState.field]||'').toLowerCase(); vb=(b[sortState.field]||'').toLowerCase(); }
-                    if (va<vb) return sortState.dir==='asc'?-1:1;
-                    if (va>vb) return sortState.dir==='asc'?1:-1;
-                    return 0;
-                });
-            }
-
-            const totalPages = Math.ceil(sorted.length/perPage);
-            if (page>totalPages) page=totalPages;
-            const start = (page-1)*perPage;
-            const pageData = sorted.slice(start, start+perPage);
-
-            tbody.innerHTML = pageData.map((r,i)=>`
-                <tr>
-                    <td>${start+i+1}</td>
-                    <td><span class="clickable" onclick="searchFor('${escAttr(r.subscriptionId)}','subscriptionId')">${esc(r.subscriptionId)}</span></td>
-                    <td><span class="clickable" onclick="searchFor('${escAttr(r.compguid)}','compguid')">${esc(r.compguid)}</span></td>
-                    <td><span class="clickable gstin-format" onclick="searchFor('${escAttr(r.gstin||'')}','gstin')">${esc(r.gstin||'—')}</span></td>
-                    <td>
-                        <div class="row-actions">
-                            <button class="btn btn-warning btn-xs" onclick="editRecord(${r._i})">✏️</button>
-                            <button class="btn btn-danger btn-xs" onclick="deleteRecord(${r._i})">🗑️</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-
-            renderPagination(totalPages);
-        }
-
-        function renderPagination(total) {
-            const div = document.getElementById('pagination');
-            if (total<=1) { div.innerHTML=''; return; }
-
-            let html = `<button onclick="goPage(1)" ${page===1?'disabled':''}>«</button>`;
-            html += `<button onclick="goPage(${page-1})" ${page===1?'disabled':''}>‹</button>`;
-
-            let s=Math.max(1,page-3), e=Math.min(total,s+6);
-            if (e-s<6) s=Math.max(1,e-6);
-
-            for (let i=s;i<=e;i++) html += `<button class="${i===page?'active':''}" onclick="goPage(${i})">${i}</button>`;
-
-            html += `<span class="page-info">${page} / ${total}</span>`;
-            html += `<button onclick="goPage(${page+1})" ${page===total?'disabled':''}>›</button>`;
-            html += `<button onclick="goPage(${total})" ${page===total?'disabled':''}>»</button>`;
-
-            div.innerHTML = html;
-        }
-
-        function goPage(p) { page=p; renderTable(); }
-
-        function sortTable(field) {
-            if (sortState.field===field) sortState.dir = sortState.dir==='asc'?'desc':'asc';
-            else { sortState.field=field; sortState.dir='asc'; }
-            renderTable();
-        }
-
-        // ===== EDIT / DELETE =====
-        function editRecord(idx) {
-            const r = records[idx];
-            document.getElementById('editSubId').value = r.subscriptionId;
-            document.getElementById('editCompguid').value = r.compguid;
-            document.getElementById('editGstin').value = r.gstin||'';
-            document.getElementById('editIndex').value = idx;
-            document.getElementById('editModal').classList.add('active');
-        }
-
-        function saveEdit() {
-            const idx = parseInt(document.getElementById('editIndex').value);
-            const subId = document.getElementById('editSubId').value.trim();
-            const compguid = document.getElementById('editCompguid').value.trim();
-            const gstin = document.getElementById('editGstin').value.trim();
-
-            if (!subId||!compguid) { toast('Subscription ID and COMPGUID are required!','error'); return; }
-
-            records[idx] = { subscriptionId:subId, compguid, gstin };
-            closeEditModal();
-            toast('Record updated!','success');
-            refreshAll();
-        }
-
-        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
-
-        function deleteRecord(idx) {
-            if (!confirm('Delete this record?')) return;
-            records.splice(idx,1);
-            toast('Record deleted.','info');
-            refreshAll();
-        }
-
-        // ===== EXPORT =====
-        function exportCSV() {
-            if (!records.length) { toast('No data to export!','error'); return; }
-            let csv = 'SubscriptionID,COMPGUID,GSTIN\n';
-            records.forEach(r=>{ csv += `"${r.subscriptionId}","${r.compguid}","${r.gstin||''}"\n`; });
-            download(csv,'subscription_data.csv','text/csv');
-            toast('CSV exported!','success');
-        }
-
-        function exportJSON() {
-            if (!records.length) { toast('No data to export!','error'); return; }
-            download(JSON.stringify(records,null,2),'subscription_data.json','application/json');
-            toast('JSON exported!','success');
-        }
-
-        function download(content,filename,type) {
-            const blob = new Blob([content],{type});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(a.href);
-        }
-
-        // ===== UTILITIES =====
-        function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-        function escAttr(s) { return (s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
-
-        function hi(text, query) {
-            if (!query) return esc(text);
-            const escaped = esc(text);
-            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
-            return escaped.replace(regex,'<span class="highlight">$1</span>');
-        }
-
-        // ===== KEYBOARD =====
-        document.addEventListener('keydown', e=>{
-            if (e.key==='Escape') { closeEditModal(); closeDetailModal(); }
-            if (e.ctrlKey && e.key==='f') { e.preventDefault(); document.getElementById('globalSearch').focus(); }
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Subscription ID</th>
+                            <th>License Category</th>
+                            <th>COMPGUID</th>
+                            <th>GSTIN</th>
+                            <th>BLS Expiry</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="dataTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+/* ==============================================================
+   SAMPLE RAW DATA
+
+   Replace this array with your actual data.
+
+   "licenseCategory" is the column from your raw data which
+   contains CA / Accountant / GSTP / Regular.
+   ============================================================== */
+
+const rawData = [
+    { subscriptionId: "SUB1001", licenseCategory: "CA",         compguid: "COMP001", gstin: "09AAAAA1111A1Z1", blsExpiry: "2026-12-31" },
+    { subscriptionId: "SUB1002", licenseCategory: "CA",         compguid: "COMP002", gstin: "09BBBBB2222B1Z2", blsExpiry: "2024-06-15" },
+    { subscriptionId: "SUB1003", licenseCategory: "CA",         compguid: "COMP003", gstin: "09CCCCC3333C1Z3", blsExpiry: "2025-09-20" },
+    { subscriptionId: "SUB1004", licenseCategory: "CA",         compguid: "COMP001", gstin: "09DDDDD4444D1Z4", blsExpiry: "2023-01-10" },
+    { subscriptionId: "SUB1005", licenseCategory: "Accountant", compguid: "COMP004", gstin: "09EEEEE5555E1Z5", blsExpiry: "2026-03-25" },
+    { subscriptionId: "SUB1006", licenseCategory: "Accountant", compguid: "COMP005", gstin: "09FFFFF6666F1Z6", blsExpiry: "2024-11-30" },
+    { subscriptionId: "SUB1007", licenseCategory: "Accountant", compguid: "COMP002", gstin: "09GGGGG7777G1Z7", blsExpiry: "2025-07-14" },
+    { subscriptionId: "SUB1008", licenseCategory: "Accountant", compguid: "COMP006", gstin: "09HHHHH8888H1Z8", blsExpiry: "2023-05-01" },
+    { subscriptionId: "SUB1009", licenseCategory: "GSTP",       compguid: "COMP007", gstin: "09IIIII9999I1Z9", blsExpiry: "2026-08-18" },
+    { subscriptionId: "SUB1010", licenseCategory: "GSTP",       compguid: "COMP003", gstin: "09JJJJJ1010J1Z0", blsExpiry: "2024-02-28" },
+    { subscriptionId: "SUB1011", licenseCategory: "GSTP",       compguid: "COMP008", gstin: "09KKKKK1111K1Z1", blsExpiry: "2025-12-01" },
+    { subscriptionId: "SUB1012", licenseCategory: "GSTP",       compguid: "COMP009", gstin: "09LLLLL1212L1Z2", blsExpiry: "2023-09-15" },
+    { subscriptionId: "SUB1013", licenseCategory: "Regular",    compguid: "COMP010", gstin: "09MMMMM1313M1Z3", blsExpiry: "2026-05-10" },
+    { subscriptionId: "SUB1014", licenseCategory: "Regular",    compguid: "COMP001", gstin: "09NNNNN1414N1Z4", blsExpiry: "2024-08-22" },
+    { subscriptionId: "SUB1015", licenseCategory: "Regular",    compguid: "COMP011", gstin: "09OOOOO1515O1Z5", blsExpiry: "2025-04-05" },
+    { subscriptionId: "SUB1016", licenseCategory: "Regular",    compguid: "COMP012", gstin: "09PPPPP1616P1Z6", blsExpiry: "2023-12-31" },
+    { subscriptionId: "SUB1017", licenseCategory: "CA",         compguid: "COMP013", gstin: "09QQQQQ1717Q1Z7", blsExpiry: "2026-01-15" },
+    { subscriptionId: "SUB1018", licenseCategory: "CA",         compguid: "COMP004", gstin: "09RRRRR1818R1Z8", blsExpiry: "2025-06-30" },
+    { subscriptionId: "SUB1019", licenseCategory: "Accountant", compguid: "COMP014", gstin: "09SSSSS1919S1Z9", blsExpiry: "2026-10-12" },
+    { subscriptionId: "SUB1020", licenseCategory: "Accountant", compguid: "COMP010", gstin: "09TTTTT2020T1Z0", blsExpiry: "2024-04-18" },
+    { subscriptionId: "SUB1021", licenseCategory: "GSTP",       compguid: "COMP015", gstin: "09UUUUU2121U1Z1", blsExpiry: "2026-11-25" },
+    { subscriptionId: "SUB1022", licenseCategory: "GSTP",       compguid: "COMP001", gstin: "09VVVVV2222V1Z2", blsExpiry: "2025-02-14" },
+    { subscriptionId: "SUB1023", licenseCategory: "Regular",    compguid: "COMP016", gstin: "09WWWWW2323W1Z3", blsExpiry: "2026-07-04" },
+    { subscriptionId: "SUB1024", licenseCategory: "Regular",    compguid: "COMP003", gstin: "09XXXXX2424X1Z4", blsExpiry: "2024-09-09" },
+    { subscriptionId: "SUB1025", licenseCategory: "CA",         compguid: "COMP017", gstin: "09YYYYY2525Y1Z5", blsExpiry: "2023-03-20" },
+    { subscriptionId: "SUB1026", licenseCategory: "CA",         compguid: "COMP007", gstin: "09ZZZZZ2626Z1Z6", blsExpiry: "2026-04-08" },
+    { subscriptionId: "SUB1027", licenseCategory: "Accountant", compguid: "COMP018", gstin: "09AAAAB2727A1Z7", blsExpiry: "2025-11-19" },
+    { subscriptionId: "SUB1028", licenseCategory: "Regular",    compguid: "COMP005", gstin: "09BBBBC2828B1Z8", blsExpiry: "2026-02-02" },
+    { subscriptionId: "SUB1029", licenseCategory: "GSTP",       compguid: "COMP019", gstin: "09CCCCD2929C1Z9", blsExpiry: "2024-12-25" },
+    { subscriptionId: "SUB1030", licenseCategory: "CA",         compguid: "COMP020", gstin: "09DDDDE3030D1Z0", blsExpiry: "2025-08-08" }
+];
+
+
+/* ==============================================================
+   GLOBAL STATE
+   ============================================================== */
+
+const allCategories = ["CA", "Accountant", "GSTP", "Regular"];
+let currentCategory = "";
+let filteredData     = [];
+let currentPage      = 1;
+const rowsPerPage    = 15;
+
+
+/* ==============================================================
+   UTILITY HELPERS
+   ============================================================== */
+
+function today() {
+    const d = new Date();
+    return d.toISOString().split("T")[0];   // YYYY-MM-DD
+}
+
+function isExpired(dateStr) {
+    return dateStr <= today();
+}
+
+function formatDate(dateStr) {
+    const d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+function getLicenseBadgeClass(cat) {
+    switch (cat) {
+        case "CA":         return "license-badge-ca";
+        case "Accountant": return "license-badge-accountant";
+        case "GSTP":       return "license-badge-gstp";
+        case "Regular":    return "license-badge-regular";
+        default:           return "license-badge-ca";
+    }
+}
+
+
+/* ==============================================================
+   LANDING PAGE – populate summary counts
+   ============================================================== */
+
+function populateLandingCounts() {
+    allCategories.forEach(cat => {
+        const catKey   = cat.toLowerCase();
+        const catData  = rawData.filter(r => r.licenseCategory === cat);
+        const total    = catData.length;
+        const expired  = catData.filter(r => isExpired(r.blsExpiry)).length;
+        const active   = total - expired;
+
+        const elTotal   = document.getElementById(`landing-${catKey}-total`);
+        const elActive  = document.getElementById(`landing-${catKey}-active`);
+        const elExpired = document.getElementById(`landing-${catKey}-expired`);
+
+        if (elTotal)   elTotal.textContent   = total;
+        if (elActive)  elActive.textContent  = active;
+        if (elExpired) elExpired.textContent  = expired;
+    });
+}
+
+
+/* ==============================================================
+   OPEN / CLOSE DASHBOARD
+   ============================================================== */
+
+function openDashboard(category) {
+    currentCategory = category;
+
+    document.getElementById("landingPage").style.display    = "none";
+    document.getElementById("dashboardPage").style.display  = "block";
+
+    document.getElementById("headerCategory").textContent   = category + " Dashboard";
+    document.getElementById("dashboardTitle").textContent    = category + " Dashboard";
+
+    // reset filters
+    document.getElementById("searchInput").value   = "";
+    document.getElementById("statusFilter").value  = "All";
+    document.getElementById("licenseFilter").value = "All";
+
+    computeKPIs(category);
+    applyFilters();
+}
+
+function goBack() {
+    document.getElementById("dashboardPage").style.display = "none";
+    document.getElementById("landingPage").style.display   = "flex";
+    currentCategory = "";
+}
+
+
+/* ==============================================================
+   COMPUTE KPIs
+   ============================================================== */
+
+function computeKPIs(category) {
+
+    const catData   = rawData.filter(r => r.licenseCategory === category);
+    const totalSubs = catData.length;
+    const expSubs   = catData.filter(r => isExpired(r.blsExpiry)).length;
+    const actSubs   = totalSubs - expSubs;
+
+    const uniqueCompguids = new Set(catData.map(r => r.compguid));
+    const uniqueGstins    = new Set(catData.map(r => r.gstin));
+
+    document.getElementById("totalSubscriptions").textContent  = totalSubs;
+    document.getElementById("expiredSubscriptions").textContent = expSubs;
+    document.getElementById("activeSubscriptions").textContent  = actSubs;
+    document.getElementById("totalCompguid").textContent        = uniqueCompguids.size;
+    document.getElementById("totalGstin").textContent           = uniqueGstins.size;
+
+    // ---- Cross-category COMPGUIDs ----
+    // For each OTHER category, count how many COMPGUIDs from
+    // the current category also appear in that other category.
+
+    const crossContainer = document.getElementById("crossCategoryCards");
+    crossContainer.innerHTML = "";
+
+    const otherCategories = allCategories.filter(c => c !== category);
+
+    otherCategories.forEach(otherCat => {
+
+        const otherCompguids = new Set(
+            rawData
+                .filter(r => r.licenseCategory === otherCat)
+                .map(r => r.compguid)
+        );
+
+        // intersection
+        let crossCount = 0;
+        uniqueCompguids.forEach(cg => {
+            if (otherCompguids.has(cg)) crossCount++;
         });
 
-        document.getElementById('editModal').addEventListener('click', function(e){ if(e.target===this) closeEditModal(); });
-        document.getElementById('detailModal').addEventListener('click', function(e){ if(e.target===this) closeDetailModal(); });
-    </script>
+        const cardClass = "cross-" + otherCat.toLowerCase();
+
+        const cardHTML = `
+            <div class="kpi-card ${cardClass}">
+                <div class="kpi-icon">⇄</div>
+                <div class="kpi-label">
+                    COMPGUIDs × ${otherCat}
+                    <br>
+                    <small>Associated with ${otherCat} licenses</small>
+                </div>
+                <div class="kpi-value">${crossCount}</div>
+            </div>
+        `;
+
+        crossContainer.insertAdjacentHTML("beforeend", cardHTML);
+    });
+}
+
+
+/* ==============================================================
+   FILTERS & TABLE RENDERING
+   ============================================================== */
+
+function applyFilters() {
+
+    const search  = document.getElementById("searchInput").value.toLowerCase().trim();
+    const status  = document.getElementById("statusFilter").value;
+    const license = document.getElementById("licenseFilter").value;
+
+    // start with current category data
+    filteredData = rawData.filter(r => r.licenseCategory === currentCategory);
+
+    // search
+    if (search) {
+        filteredData = filteredData.filter(r =>
+            r.subscriptionId.toLowerCase().includes(search) ||
+            r.compguid.toLowerCase().includes(search) ||
+            r.gstin.toLowerCase().includes(search)
+        );
+    }
+
+    // status
+    if (status === "Active") {
+        filteredData = filteredData.filter(r => !isExpired(r.blsExpiry));
+    } else if (status === "Expired") {
+        filteredData = filteredData.filter(r => isExpired(r.blsExpiry));
+    }
+
+    // license sub-filter (in case user wants to narrow – though all are same cat)
+    if (license !== "All") {
+        filteredData = filteredData.filter(r => r.licenseCategory === license);
+    }
+
+    currentPage = 1;
+    renderTable();
+}
+
+
+function renderTable() {
+
+    const tbody = document.getElementById("dataTableBody");
+    tbody.innerHTML = "";
+
+    const totalRecords = filteredData.length;
+    document.getElementById("recordCount").textContent = totalRecords + " record" + (totalRecords !== 1 ? "s" : "");
+
+    if (totalRecords === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    <div class="empty-state">
+                        <div style="font-size:40px;margin-bottom:12px;">📭</div>
+                        <div style="font-size:16px;font-weight:600;margin-bottom:6px;">No records found</div>
+                        <div>Try adjusting your search or filter criteria.</div>
+                    </div>
+                </td>
+            </tr>`;
+        document.getElementById("pagination").innerHTML = "";
+        return;
+    }
+
+    const totalPages = Math.ceil(totalRecords / rowsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const start = (currentPage - 1) * rowsPerPage;
+    const end   = Math.min(start + rowsPerPage, totalRecords);
+    const pageData = filteredData.slice(start, end);
+
+    pageData.forEach((row, idx) => {
+        const expired = isExpired(row.blsExpiry);
+        const statusBadge = expired
+            ? '<span class="badge badge-expired">Expired</span>'
+            : '<span class="badge badge-active">Active</span>';
+
+        const licenseBadgeClass = getLicenseBadgeClass(row.licenseCategory);
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${start + idx + 1}</td>
+            <td><strong>${row.subscriptionId}</strong></td>
+            <td><span class="license-badge ${licenseBadgeClass}">${row.licenseCategory}</span></td>
+            <td>${row.compguid}</td>
+            <td style="font-family:monospace;font-size:12px;">${row.gstin}</td>
+            <td>${formatDate(row.blsExpiry)}</td>
+            <td>${statusBadge}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    renderPagination(totalPages);
+}
+
+
+function renderPagination(totalPages) {
+
+    const container = document.getElementById("pagination");
+    container.innerHTML = "";
+
+    if (totalPages <= 1) return;
+
+    // Prev button
+    const prevBtn       = document.createElement("button");
+    prevBtn.className   = "page-btn";
+    prevBtn.textContent = "← Prev";
+    prevBtn.disabled    = (currentPage === 1);
+    prevBtn.onclick     = () => { currentPage--; renderTable(); };
+    container.appendChild(prevBtn);
+
+    // Page numbers
+    const maxVisible = 7;
+    let startP = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let endP   = Math.min(totalPages, startP + maxVisible - 1);
+    if (endP - startP < maxVisible - 1) startP = Math.max(1, endP - maxVisible + 1);
+
+    if (startP > 1) {
+        container.appendChild(createPageBtn(1));
+        if (startP > 2) {
+            const dots = document.createElement("span");
+            dots.textContent = "…";
+            dots.style.padding = "8px 4px";
+            dots.style.color = "#94a3b8";
+            container.appendChild(dots);
+        }
+    }
+
+    for (let p = startP; p <= endP; p++) {
+        container.appendChild(createPageBtn(p));
+    }
+
+    if (endP < totalPages) {
+        if (endP < totalPages - 1) {
+            const dots = document.createElement("span");
+            dots.textContent = "…";
+            dots.style.padding = "8px 4px";
+            dots.style.color = "#94a3b8";
+            container.appendChild(dots);
+        }
+        container.appendChild(createPageBtn(totalPages));
+    }
+
+    // Next button
+    const nextBtn       = document.createElement("button");
+    nextBtn.className   = "page-btn";
+    nextBtn.textContent = "Next →";
+    nextBtn.disabled    = (currentPage === totalPages);
+    nextBtn.onclick     = () => { currentPage++; renderTable(); };
+    container.appendChild(nextBtn);
+}
+
+function createPageBtn(pageNum) {
+    const btn       = document.createElement("button");
+    btn.className   = "page-btn" + (pageNum === currentPage ? " active-page" : "");
+    btn.textContent = pageNum;
+    btn.onclick     = () => { currentPage = pageNum; renderTable(); };
+    return btn;
+}
+
+
+/* ==============================================================
+   INIT
+   ============================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+    populateLandingCounts();
+});
+
+</script>
+
 </body>
 </html>
